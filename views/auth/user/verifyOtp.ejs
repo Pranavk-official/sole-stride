@@ -1,0 +1,188 @@
+<style>
+    .otp-field {
+        flex-direction: row;
+        column-gap: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .otp-field input {
+        height: 45px;
+        width: 42px;
+        border-radius: 6px;
+        outline: none;
+        font-size: 1.125rem;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    .otp-field input:focus {
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .otp-field input::-webkit-inner-spin-button,
+    .otp-field input::-webkit-outer-spin-button {
+        display: none;
+    }
+
+    .resend {
+        font-size: 16px;
+    }
+</style>
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section-margin my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <div class="hover">
+                        <h4>Verify OTP</h4>
+                        <p>Your code was sent to you via email</p>
+                        <!-- <a class="button button-account" href="register.html">Create an Account</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner bg-body-secondary">
+                    <h4>Verify</h4>
+                    <form action="/verify-otp" method="POST" class="card-body p-5 text-center">
+
+                        <div class="otp-field mb-4">
+                            <input name="val1" type="number" />
+                            <input name="val2" type="number" disabled />
+                            <input name="val3" type="number" disabled />
+                            <input name="val4" type="number" disabled />
+                            <input name="val5" type="number" disabled />
+                            <input name="val6" type="number" disabled />
+                        </div>
+
+                        <button class="btn btn-primary mb-3">
+                            Verify
+                        </button>
+
+                        <p class="resend text-muted mb-0">
+                            Didn't receive code?
+                            <span class="link-dark link-opacity-25" style="text-decoration: underline;"
+                                id="resend">Request again</span>
+                            <span class="font-monospace badge rounded-pill bg-info p-auto" id="timer"></span>
+                        </p>
+                        <!-- <div>Time left = <span id="timer"></span></div> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+
+<script>
+    // let timer = document.getElementById('timer')
+    const resendButton = document.getElementById('resend')
+    resendButton.disabled = true;
+    let timerOn = true;
+
+    function timer(remaining) {
+        var m = Math.floor(remaining / 60);
+        var s = remaining % 60;
+
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        document.getElementById('timer').innerHTML = m + ':' + s;
+        remaining -= 1;
+
+        if (remaining >= 0 && timerOn) {
+            setTimeout(function () {
+                timer(remaining);
+            }, 1000);
+            return;
+        }
+
+        if (!timerOn) {
+            // Do validate stuff here
+            return;
+        }
+        document.getElementById('timer').classList.add('d-none');
+        // Do timeout stuff here
+        // alert('Timeout for otp');
+        resendButton.disabled = false;
+        resendButton.style.cursor = 'pointer';
+
+        resendButton.classList.remove('link-dark', 'link-opacity-25');
+        resendButton.classList.add('link-primary', 'link-opacity-50', 'link-underline');
+        // window.location.reload()
+    }
+
+    timer(10);
+
+    const inputs = document.querySelectorAll(".otp-field > input");
+    const button = document.querySelector(".btn");
+
+    window.addEventListener("load", () => inputs[0].focus());
+    button.setAttribute("disabled", "disabled");
+
+    inputs[0].addEventListener("paste", function (event) {
+        event.preventDefault();
+
+        const pastedValue = (event.clipboardData || window.clipboardData).getData(
+            "text"
+        );
+        const otpLength = inputs.length;
+
+        for (let i = 0; i < otpLength; i++) {
+            if (i < pastedValue.length) {
+                inputs[i].value = pastedValue[i];
+                inputs[i].removeAttribute("disabled");
+                inputs[i].focus;
+            } else {
+                inputs[i].value = ""; // Clear any remaining inputs
+                inputs[i].focus;
+            }
+        }
+    });
+
+    inputs.forEach((input, index1) => {
+        input.addEventListener("keyup", (e) => {
+            const currentInput = input;
+            const nextInput = input.nextElementSibling;
+            const prevInput = input.previousElementSibling;
+
+            if (currentInput.value.length > 1) {
+                currentInput.value = "";
+                return;
+            }
+
+            if (
+                nextInput &&
+                nextInput.hasAttribute("disabled") &&
+                currentInput.value !== ""
+            ) {
+                nextInput.removeAttribute("disabled");
+                nextInput.focus();
+            }
+
+            if (e.key === "Backspace") {
+                inputs.forEach((input, index2) => {
+                    if (index1 <= index2 && prevInput) {
+                        input.setAttribute("disabled", true);
+                        input.value = "";
+                        prevInput.focus();
+                    }
+                });
+            }
+
+            button.classList.remove("active");
+            button.setAttribute("disabled", "disabled");
+
+            const inputsNo = inputs.length;
+            if (!inputs[inputsNo - 1].disabled && inputs[inputsNo - 1].value !== "") {
+                button.classList.add("active");
+                button.removeAttribute("disabled");
+
+                return;
+            }
+        });
+    });
+
+</script>
