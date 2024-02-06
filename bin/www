@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-
+require('dotenv').config()
+const { hostname } = require('os');
 var app = require('../app');
 var debug = require('debug')('ecommerce:server');
 var http = require('http');
@@ -87,4 +88,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`Listening to PORT: ${port}\n\nLocal: http://localhost:${port}`);
 }

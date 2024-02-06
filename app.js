@@ -1,16 +1,21 @@
+require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const expressLayouts = require('express-ejs-layouts');
 const logger = require('morgan');
-
+const connectDB = require('./src/config/db');
 const authRouter = require('./src/routes/auth');
 const adminRouter = require('./src/routes/admin');
+const shopRouter = require('./src/routes/shop');
 const usersRouter = require('./src/routes/users');
 
 const app = express();
-
+connectDB();
 // view engine setup
+app.use(expressLayouts)
+app.set('layout', './layouts/userLayout.ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -23,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', authRouter);
 app.use('/', usersRouter);
+app.use('/', shopRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
