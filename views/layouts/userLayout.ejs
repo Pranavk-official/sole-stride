@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from demo.bootstrapious.com/sell/2-0-1/index3.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 06 Feb 2024 03:20:37 GMT -->
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -62,31 +60,7 @@
     <%- include('../partials/user/footer.ejs') %>
 
         <!-- JavaScript files-->
-        <script>
-            // ------------------------------------------------------- //
-            //   Inject SVG Sprite -
-            //   see more here
-            //   https://css-tricks.com/ajaxing-svg-sprite/
-            // ------------------------------------------------------ //
-            function injectSvgSprite(path) {
-                var ajax = new XMLHttpRequest();
-                ajax.open("https://demo.bootstrapious.com/sell/2-0-1/GET", path, true);
-                ajax.send();
-                ajax.onload = function (e) {
-                    var div = document.createElement("div");
-                    div.className = "d-none";
-                    div.innerHTML = ajax.responseText;
-                    document.body.insertBefore(div, document.body.childNodes[0]);
-                };
-            }
-            // this is set to Bootstrapious website as you cannot
-            // inject local SVG sprite (using only 'icons/orion-svg-sprite.a4dea202.svg' path)
-            // while using file:// protocol
-            // pls don't forget to change to your domain :)
-            injectSvgSprite(
-                "https://demo.bootstrapious.com/sell/1-2-0/icons/orion-svg-sprite.svg"
-            );
-        </script>
+
         <!-- jQuery-->
         <script src="https://demo.bootstrapious.com/sell/2-0-1/vendor/jquery/jquery.min.js"></script>
         <!-- Bootstrap JavaScript Bundle (Popper.js included)-->
@@ -110,7 +84,6 @@
         </script>
         <script defer src="https://demo.bootstrapious.com/sell/2-0-1/js/theme.30e7c8f9.js"></script>
         <script src="https://demo.bootstrapious.com/sell/2-0-1/vendor/jquery.cookie/jquery.cookie.js"></script>
-        <script src="https://demo.bootstrapious.com/sell/2-0-1/js/demo.9833433a.js"></script>
 </body>
 
 </html>

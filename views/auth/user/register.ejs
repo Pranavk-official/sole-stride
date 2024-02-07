@@ -1,4 +1,28 @@
-<!--================Login Box Area =================-->
+<style>
+    :root {
+        --error-color: #dc3545;
+        --success-color: #28a745;
+        --warning-color: #ffc107;
+    }
+
+    .form-group input:focus {
+        outline: none;
+    }
+
+    .form-group.error input {
+        border-color: var(--error-color);
+    }
+
+    .form-group.success input {
+        border-color: var(--success-color);
+    }
+
+
+    .form-group small {
+        color: var(--error-color);
+    }
+</style>
+<!--================ Register Box Area =================-->
 <section class="login_box_area section-margin my-5">
     <div class="container">
         <div class="row">
@@ -8,39 +32,57 @@
                         <h4>Already have an account?</h4>
                         <p>There are advances being made in science and technology everyday, and a good example of
                             this is the</p>
-                        <a class="button button-account" href="login.html">Login Now</a>
+                        <a class="btn btn-outline-light" href="/login">Login Now</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="login_form_inner register_form_inner bg-body-secondary">
+                <div class="login_form_inner register_form_inner  bg-body-secondary">
                     <h3>Create an account</h3>
-                    <form class="row login_form" action="#/" id="register_form">
+                    <form class="row login_form" action="/register" method="POST" id="register_form">
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Username"
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+                            <small></small>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col form-group">
+                                    <input type="text" class="form-control" id="firstName" name="firstName"
+                                        placeholder="First Name" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'First Name'">
+                                </div>
+                                <div class="col form-group">
+                                    <input type="text" class="form-control" id="lastName" name="lastName"
+                                        placeholder="Last Name" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Last Name'">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-12 form-group">
                             <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'">
+                            <small></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <input type="text" class="form-control" id="password" name="password" placeholder="Password"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                            <small></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <input type="text" class="form-control" id="confirmPassword" name="confirmPassword"
                                 placeholder="Confirm Password" onfocus="this.placeholder = ''"
                                 onblur="this.placeholder = 'Confirm Password'">
+                            <small></small>
                         </div>
-                        <div class="col-md-12 form-group">
+                        <!-- <div class="col-md-12 form-group">
                             <div class="creat_account">
                                 <input type="checkbox" id="f-option2" name="selector">
                                 <label for="f-option2">Keep me logged in</label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-12 form-group">
-                            <button type="submit" value="submit" class="btn btn-outline-success w-100">Register</button>
+                            <button type="submit" value="submit" class="btn btn-outline-primary w-100">Register</button>
                         </div>
                     </form>
                 </div>
@@ -48,4 +90,6 @@
         </div>
     </div>
 </section>
-<!--================End Login Box Area =================-->
+<!--================End Register Box Area =================-->
+
+<script src="/javascripts/registerValidation.js"></script>
