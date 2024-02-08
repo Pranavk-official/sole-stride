@@ -312,11 +312,18 @@ module.exports = {
       if (req.user || !req.session.verifyToken) {
         return res.status(500).json({ "success": false, 'message': "Error: Session Time Out Try Again !" });
       }
-      const userID = req.session.passwordResetToken ? req.session.passwordResetToken : req.session.verificationToken;
+      const userId = req.session.passwordResetToken ? req.session.passwordResetToken : req.session.verificationToken;
       
-      const user = await User.findOne()
-      return res.status(500).json({ "success": false, 'message': "Error: Session Time Out Try Again !" });
-    } catch (error) {}
+      const user = await User.findOne({_id: userId, isAdmin: false, isBlocked: false })
+      const otpSend = await sendOtpEmail(user,res)
+      if (otpSend) {
+        return res.status(201).json({ "success": true });
+      }
+      
+      return res.status(500).json({ "success": false, 'message': "Server facing some issues try again !" });
+    } catch (error) {
+      return res.status(500).json({ "success": false, 'message': `${error}` });
+    }
   },
 
   getForgotPass: async (req, res) => {
