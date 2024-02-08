@@ -1,20 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
-const { registerValidation } = require("../validators/userValidator");
+const { registerValidation, loginValidation } = require("../validators/userValidator");
 const { isVerified, isLoggedOut } = require("../middlewares/authMiddleware");
 router
   .route("/login")
   .get(isLoggedOut, authController.getLogin)
-  .post(authController.userLogin);
+  .post(isVerified, loginValidation, authController.userLogin);
+
+router.get('/logout', authController.userLogout)
+router.get('/admin/logout', authController.userLogout)
 
 router
   .route("/register")
   .get(isLoggedOut, authController.getRegister)
-  .post( registerValidation, authController.userRegister);
+  .post(registerValidation, authController.userRegister);
 
-router.get("/verify-otp", authController.getVerifyOtp);
-router.get("/forgot-password", authController.getForgotPass);
+router
+  .route("/verify-otp")
+  .get(authController.getVerifyOtp)
+  .post(authController.verifyOtp);
+
+
+router
+  .route("/resend-otp")
+  .get(authController.resendOTP)
+
+router
+  .route("/forgot-password")
+  .get(authController.getForgotPass);
 
 router
   .route("/admin/login")

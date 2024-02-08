@@ -3,6 +3,7 @@ const OTP = require('../model/otpSchema')
 
 module.exports = {
     isLoggedIn: (req, res, next) => {
+        // console.log(req.user, req.isAuthenticated());
         if(req.isAuthenticated() && !req.user.isAdmin) {
             next()
         } else {
@@ -19,7 +20,7 @@ module.exports = {
 
 
     isVerified: (req, res, next) => {
-        console.log(req.body)
+        // console.log(req.body)
         next()
         // if(req.isAuthenticated() && !req.user.isVerified) {
         //     res.redirect('/user/verify')

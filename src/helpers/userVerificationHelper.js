@@ -5,18 +5,18 @@ const nodemailer = require('nodemailer');
 
 const sendOtpEmail = async ({ _id, email }, res) => {
 
-    const otp = `${Math.floor(1000 + Math.random() * 9000)}`
+    const otp = `${Math.floor(100000 + Math.random() * 900000)}`
 
     console.log('otp', otp);
 
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: "smtp-relay.brevo.com",
         port: 587,
         secure: false,
         requireTLS: true,
         auth: {
-            user: process.env.USER_AUTH_FROM_EMAIL,
-            pass: process.env.USER_AUTH_SMTP_PASS
+            user: process.env.BREVO_MAIL,
+            pass: process.env.BREVO_KEY
         }
     });
 
@@ -25,9 +25,9 @@ const sendOtpEmail = async ({ _id, email }, res) => {
 
     const mailOptions = {
 
-        from: 'sejibaby54@gmail.com',
+        from: process.env.BREVO_MAIL,
         to: email,
-        subject: 'For email verification from Male Fashion',
+        subject: 'For email verification from SoleStride',
         html: `<P> Your OTP for verification is ${otp} . Don't share your otp !</p> <p> The otp is only valid for 5 minutes</p> `
     };
 
@@ -58,7 +58,7 @@ const sendOtpEmail = async ({ _id, email }, res) => {
 
 
 
-    await transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
             return false;

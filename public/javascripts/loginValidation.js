@@ -22,14 +22,14 @@ const checkPassword = () => {
   const password = passwordEl.value.trim();
 
   if (!isRequired(password)) {
-    showError(passwordEl, "Password cannot be blank.");
+    showError(passwordEl.parentElement, "Password cannot be blank.");
   } else if (!isPasswordSecure(password)) {
     showError(
-      passwordEl,
+      passwordEl.parentElement,
       "Password must have at least  8 characters including at least  1 lowercase character,  1 uppercase character,  1 number, and  1 special character in (!@#$%^&*)"
     );
   } else {
-    showSuccess(passwordEl);
+    showSuccess(passwordEl.parentElement);
     valid = true;
   }
 

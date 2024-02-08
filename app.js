@@ -54,8 +54,10 @@ app.use(nocache())
 app.use(passport.initialize())
 app.use(passport.session())
 
+
+
 app.use("/", authRouter);
-app.use("/", usersRouter);
+app.use("/user/", usersRouter);
 app.use("/", shopRouter);
 app.use("/admin", adminRouter);
 
@@ -70,6 +72,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
+
 
 // error handler
 app.use(function (err, req, res, next) {

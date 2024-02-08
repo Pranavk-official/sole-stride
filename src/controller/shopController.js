@@ -4,7 +4,8 @@ module.exports = {
             title: 'SoleStride - Home'
         }
         res.render('index', {
-            locals
+            locals,
+            user: req.user 
         })
     },
     getCart: async (req,res) => {
@@ -12,7 +13,8 @@ module.exports = {
             title: 'SoleStride - Cart'
         }
         res.render('shop/cart', {
-            locals
+            locals,
+            user: req.user
         })
     },
     getProduct: async (req,res) => {
@@ -36,22 +38,6 @@ module.exports = {
             title: 'SoleStride - Product'
         }
         res.render('shop/productsList', {
-            locals
-        })
-    },
-    getOrder: async (req,res) => {
-        const locals = {
-            title: 'SoleStride - Order'
-        }
-        res.render('shop/order', {
-            locals
-        })
-    },
-    getOrders: async (req,res) => {
-        const locals = {
-            title: 'SoleStride - Orders'
-        }
-        res.render('shop/orders', {
             locals
         })
     },

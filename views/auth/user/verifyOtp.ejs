@@ -45,8 +45,8 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="login_form_inner bg-body-secondary">
-                    <h4>Verify</h4>
+                <div class="login_form_inner bg-body-secondary ">
+                    <h4 class="pt-5">Verify</h4>
                     <form action="/verify-otp" method="POST" class="card-body p-5 text-center">
 
                         <div class="otp-field mb-4">
@@ -65,7 +65,7 @@
                         <p class="resend text-muted mb-0">
                             Didn't receive code?
                             <span class="link-dark link-opacity-25" style="text-decoration: underline;"
-                                id="resend">Request again</span>
+                                id="resend" onclick="resendOTP()">Request again</span>
                             <span class="font-monospace badge rounded-pill bg-info p-auto" id="timer"></span>
                         </p>
                         <!-- <div>Time left = <span id="timer"></span></div> -->
@@ -76,6 +76,8 @@
     </div>
 </section>
 <!--================End Login Box Area =================-->
+<script defer src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     // let timer = document.getElementById('timer')
@@ -186,3 +188,67 @@
     });
 
 </script>
+<!-- <script>
+    import axios from 'axios';
+    import Swal from 'sweetalert2';
+
+    async function resendOTP() {
+        try {
+            const response = await axios.get(currentURL + "/resend-otp", {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response);
+
+                const res = response.data;
+                console.log(res);
+
+                if (res.success) {
+                    minutes = 2;
+                    seconds = 0;
+
+                    localStorage.setItem('timerMinutes', minutes);
+                    localStorage.setItem('timerSeconds', seconds);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'New OTP sent',
+                        timer: 3000,
+                        showConfirmButton: false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.message || 'Failed to send OTP',
+                    });
+                }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to send OTP',
+                });
+            }
+
+        } catch (error) {
+            console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to send OTP',
+            });
+        }
+    };
+
+
+</script> -->

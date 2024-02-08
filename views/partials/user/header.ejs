@@ -6,11 +6,11 @@
         <div class="container-fluid">
             <!-- Navbar Header  -->
             <a class="navbar-brand" href="/">
-                <h4 class="h3 text-decoration-underline">SoleStride <span class="text-primary fs-20">.</span></h4> 
+                <h4 class="h3 text-decoration-underline">SoleStride <span class="text-primary fs-20">.</span></h4>
             </a>
-            <button class="navbar-toggler navbar-toggler-right align-items-center" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right align-items-center" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
                 <i class="bi bi-list h3"></i>
             </button>
             <!-- Navbar Collapse -->
@@ -89,105 +89,119 @@
                         <i class="bi bi-search"></i>
                     </div>
                     <!-- User Not Logged - link to login page-->
-                    <div class="nav-item navbar-icon-link">
-                        <a href="/user" class="navbar-icon-link">
-                            <i class="bi bi-person"></i>
-                            <span
-                                class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">Log
-                                in
-                            </span>
-                        </a>
-                    </div>
-                    <!-- Cart Dropdown-->
-                    <div class="nav-item dropdown">
-                        <a class="navbar-icon-link d-lg-none" href="/user/cart">
-                            <i class="bi bi-cart3"></i>
-                            <span
-                                class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View
-                                cart</span></a>
-                        <div class="d-none d-lg-block">
-                            <a class="navbar-icon-link" id="cartdetails"
-                                href="/cart" data-bs-target="#"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-cart3"></i>
-                                <div class="navbar-icon-link-badge">3</div>
+                    <% if (typeof user !== undefined) { %>
+                        <div class="nav-item navbar-icon-link">
+                            <a href="/user/profile" class="navbar-icon-link">
+                                <i class="bi bi-person text-success"></i>
+                                <span
+                                    class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
+                                    Account
+                                </span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4"
-                                aria-labelledby="cartdetails">
-                                <div class="navbar-cart-product-wrapper">
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-ian-dooley-347968-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Skull
-                                                        Tee</a><small class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00 </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-kyle-loftus-596319-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Transparent
-                                                        Blouse</a><small class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00 </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-serrah-galos-494312-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">White
-                                                        Tee</a><small class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00 </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- total price-->
-                                <div class="navbar-cart-total">
-                                    <span class="text-uppercase text-muted">Total</span><strong
-                                        class="text-uppercase">$75.00</strong>
-                                </div>
-                                <!-- buttons-->
-                                <div class="d-flex justify-content-between">
-                                    <a class="btn btn-link text-dark me-3"
-                                        href="/cart">View Cart <i
-                                            class="fa-arrow-right fa"></i></a><a class="btn btn-outline-dark"
-                                        href="/checkout">Checkout</a>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+                        <% } else { %>
+                            <div class="nav-item navbar-icon-link">
+                                <a href="/login" class="navbar-icon-link">
+                                    <i class="bi bi-person"></i>
+                                    <span
+                                        class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">Log
+                                        in
+                                    </span>
+                                </a>
+                            </div>
+                            <% } %>
+                                <!-- Cart Dropdown-->
+                                <div class="nav-item dropdown">
+                                    <a class="navbar-icon-link d-lg-none" href="/user/cart">
+                                        <i class="bi bi-cart3"></i>
+                                        <span
+                                            class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View
+                                            cart</span></a>
+                                    <div class="d-none d-lg-block">
+                                        <a class="navbar-icon-link" id="cartdetails" href="/cart" data-bs-target="#"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-cart3"></i>
+                                            <!-- <div class="navbar-icon-link-badge">3</div> -->
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4"
+                                            aria-labelledby="cartdetails">
+                                            <div class="navbar-cart-product-wrapper">
+                                                <!-- cart item-->
+                                                <div class="navbar-cart-product">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
+                                                                class="img-fluid navbar-cart-product-image"
+                                                                src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-ian-dooley-347968-unsplash.jpg"
+                                                                alt="..." /></a>
+                                                        <div class="w-100">
+                                                            <a class="navbar-cart-product-close" href="#"><i
+                                                                    class="bi bi-x-lg">
+                                                                </i></a>
+                                                            <div class="ps-3">
+                                                                <a class="navbar-cart-product-link"
+                                                                    href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Skull
+                                                                    Tee</a><small class="d-block text-muted">Quantity: 1
+                                                                </small><strong class="d-block text-sm">$75.00 </strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- cart item-->
+                                                <div class="navbar-cart-product">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
+                                                                class="img-fluid navbar-cart-product-image"
+                                                                src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-kyle-loftus-596319-unsplash.jpg"
+                                                                alt="..." /></a>
+                                                        <div class="w-100">
+                                                            <a class="navbar-cart-product-close" href="#"><i
+                                                                    class="bi bi-x-lg">
+                                                                </i></a>
+                                                            <div class="ps-3">
+                                                                <a class="navbar-cart-product-link"
+                                                                    href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Transparent
+                                                                    Blouse</a><small
+                                                                    class="d-block text-muted">Quantity: 1
+                                                                </small><strong class="d-block text-sm">$75.00 </strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- cart item-->
+                                                <div class="navbar-cart-product">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
+                                                                class="img-fluid navbar-cart-product-image"
+                                                                src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-serrah-galos-494312-unsplash.jpg"
+                                                                alt="..." /></a>
+                                                        <div class="w-100">
+                                                            <a class="navbar-cart-product-close" href="#"><i
+                                                                    class="bi bi-x-lg">
+                                                                </i></a>
+                                                            <div class="ps-3">
+                                                                <a class="navbar-cart-product-link"
+                                                                    href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">White
+                                                                    Tee</a><small class="d-block text-muted">Quantity: 1
+                                                                </small><strong class="d-block text-sm">$75.00 </strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- total price-->
+                                            <div class="navbar-cart-total">
+                                                <span class="text-uppercase text-muted">Total</span><strong
+                                                    class="text-uppercase">$75.00</strong>
+                                            </div>
+                                            <!-- buttons-->
+                                            <div class="d-flex justify-content-between">
+                                                <a class="btn btn-link text-dark me-3" href="/cart">View Cart <i
+                                                        class="fa-arrow-right fa"></i></a><a
+                                                    class="btn btn-outline-dark" href="/checkout">Checkout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                 </div>
             </div>
         </div>

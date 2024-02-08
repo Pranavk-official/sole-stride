@@ -32,7 +32,7 @@ module.exports = {
         errorMessage: "Username must be between   3 and   30 characters long",
         options: { min: 3, max: 30 },
       },
-      custom: {options: usernameExists},
+      custom: { options: usernameExists },
     },
     firstName: {
       trim: true,
@@ -66,7 +66,7 @@ module.exports = {
         errorMessage: "Email is required",
       },
       isEmail: true,
-      custom: {options: emailExists},
+      custom: { options: emailExists },
     },
     password: {
       trim: true,
@@ -89,6 +89,30 @@ module.exports = {
       },
       isLength: {
         errorMessage: "Confirm password must be at least 8 characters long",
+        options: { min: 8 },
+      },
+    },
+  }),
+
+  loginValidation: checkSchema({
+    email: {
+      trim: true,
+      normalizeEmail: true,
+      errorMessage: "Enter a valid email address",
+      exists: {
+        errorMessage: "Email is required",
+      },
+      isEmail: true,
+    },
+    password: {
+      trim: true,
+      escape: true,
+      errorMessage: "Password must be at least 8 characters long",
+      exists: {
+        errorMessage: "Password is required",
+      },
+      isLength: {
+        errorMessage: "Password must be at least 8 characters long",
         options: { min: 8 },
       },
     },
