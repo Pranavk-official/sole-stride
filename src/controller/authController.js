@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const passport = require('passport');
 
 /**
  * Models
@@ -142,10 +143,18 @@ module.exports = {
     const { username, firstName, lastName, email, password, confirmPassword } =
       req.body;
 
+    const existingUser = await User.findOne({email});
+
+    if (existingUser) {
+      req.flash("error", "Email already in use");
+      return res.redirect("/register");
+    }
+
     if (password !== confirmPassword) {
       req.flash("error", "Passwords do not match");
       return res.redirect("/register");
     }
+
 
     const user = new User({
       username,
@@ -166,6 +175,7 @@ module.exports = {
     }
   },
   userLogin: async (req, res) => {
+    console.log(req.body);
     passport.authenticate("user-local", (err, user, info) => {
       if (err) {
         console.log(err);

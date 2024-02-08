@@ -49,12 +49,12 @@ const checkPassword = () => {
   if (!isRequired(password)) {
     showError(passwordEl, "Password cannot be blank.");
   } else if (!isPasswordSecure(password)) {
-    showError(
+    showErrorPass(
       passwordEl,
       "Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)"
     );
   } else {
-    showSuccess(passwordEl);
+    showSuccessPass(passwordEl);
     valid = true;
   }
 
@@ -68,11 +68,11 @@ const checkConfirmPassword = () => {
   const password = passwordEl.value.trim();
 
   if (!isRequired(confirmPassword)) {
-    showError(confirmPasswordEl, "Please enter the password again");
+    showErrorPass(confirmPasswordEl, "Please enter the password again");
   } else if (password !== confirmPassword) {
-    showError(confirmPasswordEl, "The password does not match");
+    showErrorPass(confirmPasswordEl, "The password does not match");
   } else {
-    showSuccess(confirmPasswordEl);
+    showSuccessPass(confirmPasswordEl);
     valid = true;
   }
 
@@ -110,6 +110,21 @@ const showError = (input, message) => {
   error.textContent = message;
 };
 
+const showErrorPass = (input, message) => {
+  // get the form-field element
+  const formField = input.parentElement;
+  const formFields = formField.parentElement;
+  // add the error class
+  formField.classList.remove("success", "is-valid");
+  input.classList.remove("success", "is-valid");
+  formField.classList.add("error", "is-invalid");
+  input.classList.add("error", "is-invalid");
+
+  // show the error message
+  const error = formFields.querySelector("small");
+  error.textContent = message;
+};
+
 const showSuccess = (input) => {
   // get the form-field element
   const formField = input.parentElement;
@@ -122,6 +137,21 @@ const showSuccess = (input) => {
 
   // hide the error message
   const error = formField.querySelector("small");
+  error.textContent = "";
+};
+const showSuccessPass = (input) => {
+  // get the form-field element
+  const formField = input.parentElement;
+  const formFields = formField.parentElement;
+
+  // remove the error class
+  formField.classList.remove("error", "is-invalid");
+  input.classList.remove("error", "is-invalid");
+  formField.classList.add("success", "is-valid");
+  input.classList.add("success", "is-valid");
+
+  // hide the error message
+  const error = formFields.querySelector("small");
   error.textContent = "";
 };
 
@@ -174,7 +204,7 @@ form.addEventListener(
       case "password":
         checkPassword();
         break;
-      case "confirm-password":
+      case "confirmPassword":
         checkConfirmPassword();
         break;
     }
@@ -199,7 +229,7 @@ togglePassword.addEventListener("click", function (e) {
 togglePasswordConfirm.addEventListener("click", function (e) {
   // toggle the type attribute
   const type = password.getAttribute("type") === "password" ? "text" : "password";
-  password.setAttribute("type", type);
+  confirmPassword.setAttribute("type", type);
   // toggle the eye / eye slash icon
   this.classList.toggle("bi-eye");
 });

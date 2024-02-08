@@ -10,7 +10,10 @@ const flash = require('connect-flash');
 const MongoStore = require('connect-mongo');
 const nocache = require('nocache');
 const methodOverride = require('method-override');
+
 const connectDB = require("./src/config/db");
+const passport = require('./src/config/passport-config')
+
 const authRouter = require("./src/routes/auth");
 const adminRouter = require("./src/routes/admin");
 const shopRouter = require("./src/routes/shop");
@@ -46,6 +49,10 @@ app.use(
 
 app.use(flash())
 app.use(nocache())
+
+// passport session
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use("/", authRouter);
 app.use("/", usersRouter);
