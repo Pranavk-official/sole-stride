@@ -163,3 +163,17 @@ form.addEventListener(
     }
   })
 );
+
+// Password Toggle
+
+const togglePassword = document.querySelector("#togglePassword");
+
+
+togglePassword.addEventListener("click", function (e) {
+  // toggle the type attribute
+  const type =
+    passwordEl.getAttribute("type") === "password" ? "text" : "password";
+  passwordEl.setAttribute("type", type);
+  // toggle the eye / eye slash icon
+  this.classList.toggle("bi-eye");
+});

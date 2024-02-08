@@ -1,0 +1,26 @@
+:root {
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+}
+
+.form-group input:focus {
+    outline: none;
+}
+
+.form-group.error input {
+    border-color: var(--error-color);
+}
+
+.form-group.success input {
+    border-color: var(--success-color);
+}
+
+
+.form-group small {
+    color: var(--error-color);
+}
+
+small {
+    height: 1rem;
+}

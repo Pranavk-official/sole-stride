@@ -1,27 +1,3 @@
-<style>
-    :root {
-        --error-color: #dc3545;
-        --success-color: #28a745;
-        --warning-color: #ffc107;
-    }
-
-    .form-group input:focus {
-        outline: none;
-    }
-
-    .form-group.error input {
-        border-color: var(--error-color);
-    }
-
-    .form-group.success input {
-        border-color: var(--success-color);
-    }
-
-
-    .form-group small {
-        color: var(--error-color);
-    }
-</style>
 <!--================ Register Box Area =================-->
 <section class="login_box_area section-margin my-5">
     <div class="container">
@@ -65,14 +41,23 @@
                             <small></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="password" name="password" placeholder="Password"
-                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                            <div class="d-flex align-items-center">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Password'">
+                                <i class="bi bi-eye-slash" id="togglePassword"
+                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+                            </div>
                             <small></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="confirmPassword" name="confirmPassword"
-                                placeholder="Confirm Password" onfocus="this.placeholder = ''"
-                                onblur="this.placeholder = 'Confirm Password'">
+                            <div class="d-flex align-items-center">
+                                <input type="password" class="form-control password" id="confirmPassword"
+                                    name="confirmPassword" placeholder="Confirm Password"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'">
+                                <i class="bi bi-eye-slash" id="togglePasswordConfirm"
+                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+                            </div>
                             <small></small>
                         </div>
                         <!-- <div class="col-md-12 form-group">

@@ -100,8 +100,10 @@ const showError = (input, message) => {
   // get the form-field element
   const formField = input.parentElement;
   // add the error class
-  formField.classList.remove("success");
-  formField.classList.add("error");
+  formField.classList.remove("success", "is-valid");
+  input.classList.remove("success", "is-valid");
+  formField.classList.add("error", "is-invalid");
+  input.classList.add("error", "is-invalid");
 
   // show the error message
   const error = formField.querySelector("small");
@@ -113,8 +115,10 @@ const showSuccess = (input) => {
   const formField = input.parentElement;
 
   // remove the error class
-  formField.classList.remove("error");
-  formField.classList.add("success");
+  formField.classList.remove("error", "is-invalid");
+  input.classList.remove("error", "is-invalid");
+  formField.classList.add("success", "is-valid");
+  input.classList.add("success", "is-valid");
 
   // hide the error message
   const error = formField.querySelector("small");
@@ -139,7 +143,7 @@ form.addEventListener("submit", function (e) {
 
   // submit to the server if the form is valid
   if (isFormValid) {
-    form.submit()
+    form.submit();
   }
 });
 
@@ -176,3 +180,26 @@ form.addEventListener(
     }
   })
 );
+
+// Password Toggle
+
+const togglePassword = document.querySelector("#togglePassword");
+const togglePasswordConfirm = document.querySelector("#togglePasswordConfirm");
+const password = document.querySelector("#password");
+const confirmPassword = document.querySelector("#confirmPassword");
+
+togglePassword.addEventListener("click", function (e) {
+  // toggle the type attribute
+  const type =
+    password.getAttribute("type") === "password" ? "text" : "password";
+  password.setAttribute("type", type);
+  // toggle the eye / eye slash icon
+  this.classList.toggle("bi-eye");
+});
+togglePasswordConfirm.addEventListener("click", function (e) {
+  // toggle the type attribute
+  const type = password.getAttribute("type") === "password" ? "text" : "password";
+  password.setAttribute("type", type);
+  // toggle the eye / eye slash icon
+  this.classList.toggle("bi-eye");
+});
