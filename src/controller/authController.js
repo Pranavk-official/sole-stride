@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const passport = require("passport");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 /**
  * Models
@@ -8,11 +8,14 @@ const bcrypt = require('bcrypt')
 const User = require("../model/userSchema");
 const OTP = require("../model/otpSchema");
 const { sendOtpEmail } = require("../helpers/userVerificationHelper");
-const { isVerified } = require("../middlewares/authMiddleware");
+
 
 const adminLayout = "./layouts/adminLayout";
 
 module.exports = {
+  /**
+   * Admin Authentication
+   */
   getAdminLogin: async (req, res) => {
     const locals = {
       title: "SoleStride - Login",
@@ -84,8 +87,8 @@ module.exports = {
       return res.redirect("/admin/login");
     }
   },
-  adminLogin: async (req, res) => {
-    console.log(req.body);
+  adminLogin: async (req, res, next) => {
+    // console.log(req.body);
     passport.authenticate("admin-local", (err, user, info) => {
       if (err) {
         console.log(err);
@@ -107,7 +110,7 @@ module.exports = {
     })(req, res, next);
   },
   /**
-   * User Registrationand Authentication
+   * User Registration and Authentication
    */
   getLogin: async (req, res) => {
     const locals = {
@@ -192,6 +195,16 @@ module.exports = {
   },
   userLogin: async (req, res, next) => {
     console.log(req.user);
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      req.flash(
+        "error",
+        errors.array().map((err) => err.msg)
+      );
+      // return res.status(422).json({ errors: errors.array() });
+      return res.redirect("/login");
+    }
 
     const user = await User.findOne({ email: req.body.email, isAdmin: false });
 
@@ -217,7 +230,6 @@ module.exports = {
           req.flash("error", "User verification falied try again by loggin in");
           return res.redirect("/login");
         }
-
       } else {
         passport.authenticate("user-local", (err, user, info) => {
           if (err) {
@@ -226,7 +238,7 @@ module.exports = {
           }
           if (!user) {
             console.log(info);
-            req.flash("error", info.message);
+            req.flash("error", "Invalid Credentials");
             return res.redirect("/login");
           }
           req.logIn(user, (err) => {
@@ -239,10 +251,9 @@ module.exports = {
         })(req, res, next);
       }
     } else {
-      req.flash('error', 'Invalid Credentials')
-      return res.redirect('/loginz')
+      req.flash("error", "Invalid Credentials");
+      return res.redirect("/login");
     }
-
   },
   /**
    * User Verification
@@ -252,9 +263,11 @@ module.exports = {
       title: "SoleStride - Register",
     };
 
-    if (req.user || !req.session.verifyToken) {
+    console.log(req.session);
+ 
+    if ( !req.session.verif) {
       return res.redirect("/");
-    }
+    }  
 
     res.render("auth/user/verifyOtp", {
       locals,
@@ -262,8 +275,9 @@ module.exports = {
       error: req.flash("error"),
     });
   },
+  
   verifyOtp: async (req, res) => {
-    console.log(req.body);
+
     const { val1, val2, val3, val4, val5, val6 } = req.body;
     const otp = val1 + val2 + val3 + val4 + val5 + val6;
 
@@ -283,49 +297,87 @@ module.exports = {
 
           if (updateUser) {
             req.flash("success", "User verificaion successfull, Please Login");
-            console.log('success');
+            console.log("success");
             delete req.session.verifyToken;
             return res.redirect("/login");
           }
         } else {
           req.flash("error", "Please enter a valid OTP!!!!!!");
-          console.log('errorr, otp not valid');
+          console.log("errorr, otp not valid");
           return res.redirect("/verify-otp");
         }
       } else {
         req.flash("error", "OTP expired, Try again by logging in!!!!!!");
-        console.log('errorr, otp expired');
+        console.log("errorr, otp expired");
         return res.redirect("/login");
+      }
+    } else if (req.session.forgotPassToken) {
+      const userId = req.session.forgotPassToken;
+      if (userId) {
+        const otpData = await OTP.findOne({ userId });
+        if (otpData && (await bcrypt.compare(otp, otpData.otp))) {
+          req.flash("success", "Enter your new password");
+
+          delete req.session.forgotPassToken;
+          req.session.resetVerified = true;
+          req.session.passwordResetToken = userId;
+          return res.redirect("/reset-password");
+        } else {
+          req.flash("error", "Invalid OTP, Try again!!!!!!");
+          console.log("error,  invalid otp");
+          return res.redirect("/forgot-password");
+        }
+      } else {
+        req.flash("error", "Session Timeout, Try again!!!!!!");
+        console.log("error, otp verify faild");
+        return res.redirect("/forgot-password");
       }
     } else {
       req.flash(
         "error",
         "Session Timeout, OTP verification failed, Try again by logging in!!!!!!"
-        );
-        console.log('errorr, otp verify faild');
+      );
+      console.log("error, otp verify faild");
       return res.redirect("/login");
     }
   },
 
+  /**
+   * Resend OTP
+   */
   resendOTP: async (req, res) => {
     try {
       if (req.user || !req.session.verifyToken) {
-        return res.status(500).json({ "success": false, 'message': "Error: Session Time Out Try Again !" });
+        return res.status(500).json({
+          success: false,
+          message: "Error: Session Time Out Try Again !",
+        });
       }
-      const userId = req.session.passwordResetToken ? req.session.passwordResetToken : req.session.verificationToken;
-      
-      const user = await User.findOne({_id: userId, isAdmin: false, isBlocked: false })
-      const otpSend = await sendOtpEmail(user,res)
+      const userId = req.session.passwordResetToken
+        ? req.session.passwordResetToken
+        : req.session.verifyToken;
+
+      const user = await User.findOne({
+        _id: userId,
+        isAdmin: false,
+        isBlocked: false,
+      });
+      const otpSend = await sendOtpEmail(user, res);
       if (otpSend) {
-        return res.status(201).json({ "success": true });
+        return res.status(201).json({ success: true });
       }
-      
-      return res.status(500).json({ "success": false, 'message': "Server facing some issues try again !" });
+
+      return res.status(500).json({
+        success: false,
+        message: "Server facing some issues try again !",
+      });
     } catch (error) {
-      return res.status(500).json({ "success": false, 'message': `${error}` });
+      return res.status(500).json({ success: false, message: `${error}` });
     }
   },
-
+  /**
+   * Forgot Password
+   */
   getForgotPass: async (req, res) => {
     const locals = {
       title: "SoleStride - Forgot Password",
@@ -336,7 +388,130 @@ module.exports = {
       error: req.flash("error"),
     });
   },
+  forgotPass: async (req, res) => {
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      req.flash(
+        "error",
+        errors.array().map((err) => err.msg)
+      );
+      // return res.status(422).json({ errors: errors.array() });
+      return res.redirect("/forgot-password");
+    }
 
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    const userId = user._id
+    if (user) {
+      const otpSend = sendOtpEmail(user, res);
+      
+      req.session.forgotPass = true
+      if (otpSend) {
+        req.flash("success", "OTP send to mail");
+        req.session.forgotPass = true
+        req.session.forgotPassToken = userId;
+        return res.redirect("/forgot-password/verify-otp");
+      }
+      req.flash("error", "Failed to send otp try again!!!!");
+      return res.redirect("/forgot-password");
+    }
+  },
+  getForgotPassOtp: async (req, res) => {
+    const locals = {
+      title: "SoleStride - Register",
+    };
+
+    console.log(req.session);
+
+    if ( !req.session.forgotPass) {
+      return res.redirect("/");
+    }  
+    
+
+    res.render("auth/user/verifyOtp", {
+      locals,
+      success: req.flash("success"),
+      error: req.flash("error"),
+    });
+  },
+
+  getResetPass: async (req, res) => {
+    if (req.user || !req.session.resetVerified) {
+      return res.redirect("/");
+    }
+
+    res.render("auth/user/resetPass", {
+      error: req.flash("error"),
+      success: req.flash("success"),
+    });
+  },
+  resetPass: async (req, res) => {
+    // console.log(req.body);
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      req.flash(
+        "error",
+        errors.array().map((err) => err.msg)
+      );
+      return res.redirect("/reset-password");
+    }
+
+    if (req.session.resetVerified && req.session.passwordResetToken) {
+      const userId = req.session.passwordResetToken;
+      const { password, confirmPassword } = req.body;
+
+      if (password !== confirmPassword) {
+        req.flash("error", "Passwords do not match, Try again");
+        return res.redirect("/reset-password");
+      }
+
+      const user = await User.findById(userId);
+
+      if (user) {
+        const updatedUser = await User.updateOne(
+          { id: user._id },
+          {
+            $set: {
+              password: password,
+            },
+          }
+        );
+
+        if (updatedUser) {
+          console.log("User password reseted");
+
+          delete req.session.resetVerified;
+          delete req.session.passwordResetToken;
+
+          req.flash(
+            "success",
+            "Password reset successfully, Please login with the new password"
+          );
+          return res.redirect("/login");
+        }
+      } else {
+        console.log("Failed to reset password try again");
+
+        delete req.session.resetVerified;
+        delete req.session.passwordResetToken;
+
+        req.flash("error", "Failed to reset password try again");
+        return res.redirect("/forgot-password");
+      }
+    } else {
+      console.log("Session timed out try again");
+
+      req.flash("error", "Session timed out try again");
+      return res.redirect("/forgot-password");
+    }
+  },
+
+  /**
+   * User Logout
+   */
   userLogout: async (req, res) => {
     req.logOut((err) => {
       if (err) {

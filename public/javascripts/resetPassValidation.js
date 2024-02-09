@@ -1,47 +1,8 @@
-const usernameEl = document.querySelector("#username");
-const firstNameEl = document.querySelector("#firstName");
-const lastNameEl = document.querySelector("#lastName");
-const emailEl = document.querySelector("#email");
 const passwordEl = document.querySelector("#password");
 const confirmPasswordEl = document.querySelector("#confirmPassword");
 
-const form = document.querySelector("#register_form");
+const form = document.querySelector("#reset-password-form");
 
-const checkUsername = () => {
-  let valid = false;
-
-  const min = 3,
-    max = 25;
-
-  const username = usernameEl.value.trim();
-
-  if (!isRequired(username)) {
-    showError(usernameEl, "Username cannot be blank.");
-  } else if (!isBetween(username.length, min, max)) {
-    showError(
-      usernameEl,
-      `Username must be between ${min} and ${max} characters.`
-    );
-  } else {
-    showSuccess(usernameEl);
-    valid = true;
-  }
-  return valid;
-};
-
-const checkEmail = () => {
-  let valid = false;
-  const email = emailEl.value.trim();
-  if (!isRequired(email)) {
-    showError(emailEl, "Email cannot be blank.");
-  } else if (!isEmailValid(email)) {
-    showError(emailEl, "Email is not valid.");
-  } else {
-    showSuccess(emailEl);
-    valid = true;
-  }
-  return valid;
-};
 
 const checkPassword = () => {
   let valid = false;
@@ -82,48 +43,6 @@ const checkConfirmPassword = () => {
   }
 
   return valid;
-};
-
-const checkFirstName = () => {
-  let valid = false;
-  const firstName = firstNameEl.value.trim();
-
-  if (!isRequired(firstName)) {
-    showError(firstNameEl, "First name cannot be blank.");
-  } else if (!isAlpha(firstName)) {
-    showError(firstNameEl, "First name should only contain letters.");
-  } else {
-    showSuccess(firstNameEl);
-    valid = true;
-  }
-  return valid;
-};
-
-const checkLastName = () => {
-  let valid = false;
-  const lastName = lastNameEl.value.trim();
-
-  if (!isRequired(lastName)) {
-    showError(lastNameEl, "Last name cannot be blank.");
-  } else if (!isAlpha(lastName)) {
-    showError(lastNameEl, "Last name should only contain letters.");
-  } else {
-    showSuccess(lastNameEl);
-    valid = true;
-  }
-  return valid;
-};
-
-// Helper function to check if the input contains only alphabets
-const isAlpha = (value) => {
-  const regex = /^[a-zA-Z]+$/;
-  return regex.test(value);
-};
-
-const isEmailValid = (email) => {
-  const re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
 };
 
 const isPasswordSecure = (password) => {
@@ -169,18 +88,11 @@ const showSuccess = (input) => {
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  let isUsernameValid = checkUsername(),
-    isFirstNameValid = checkFirstName(),
-    isLastNameValid = checkLastName(),
-    isEmailValid = checkEmail(),
+  let 
     isPasswordValid = checkPassword(),
     isConfirmPasswordValid = checkConfirmPassword();
 
   let isFormValid =
-    isUsernameValid &&
-    isFirstNameValid &&
-    isLastNameValid &&
-    isEmailValid &&
     isPasswordValid &&
     isConfirmPasswordValid;
 
@@ -207,18 +119,6 @@ form.addEventListener(
   "input",
   debounce(function (e) {
     switch (e.target.id) {
-      case "username":
-        checkUsername();
-        break;
-      case "firstName":
-        checkFirstName();
-        break;
-      case "lastName":
-        checkLastName();
-        break;
-      case "email":
-        checkEmail();
-        break;
       case "password":
         checkPassword();
         break;

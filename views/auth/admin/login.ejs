@@ -62,23 +62,21 @@
                         <div class="col-md-12 form-group">
                             <input type="email" class="form-control" id="email" name="email" placeholder="Email"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
-                            <small></small>
+                            <small class="h-3"></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" onfocus="this.placeholder = ''"
-                                onblur="this.placeholder = 'Password'">
-                            <small></small>
-                        </div>
-                        <!-- <div class="col-md-12 form-group">
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option2" name="selector">
-                                <label for="f-option2">Keep me logged in</label>
+                            <div class="d-flex align-items-center">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Password'">
+                                <i class="bi bi-eye-slash" id="togglePassword"
+                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
                             </div>
-                        </div> -->
+                            <small class="h-3"></small>
+                        </div>
                         <div class="col-md-12 form-group">
                             <button type="submit" value="submit" class="btn btn-outline-primary w-100">Log In</button>
-                            <a class="text-primary" href="#">Forgot Password?</a>
+                            <!-- <a class="text-primary" href="#">Forgot Password?</a> -->
                         </div>
                     </form>
                 </div>

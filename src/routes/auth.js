@@ -1,15 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
-const { registerValidation, loginValidation } = require("../validators/userValidator");
-const { isVerified, isLoggedOut } = require("../middlewares/authMiddleware");
+const {
+  registerValidation,
+  loginValidation,
+  forgotPassValidation,
+  resetPassValidation,
+} = require("../validators/userValidator");
+const {
+  isVerified,
+  isLoggedOut,
+  isAdminLoggedOut,
+} = require("../middlewares/authMiddleware");
+
+
 router
   .route("/login")
   .get(isLoggedOut, authController.getLogin)
   .post(isVerified, loginValidation, authController.userLogin);
-
-router.get('/logout', authController.userLogout)
-router.get('/admin/logout', authController.userLogout)
 
 router
   .route("/register")
@@ -18,26 +26,37 @@ router
 
 router
   .route("/verify-otp")
-  .get(authController.getVerifyOtp)
+  .get( isLoggedOut, authController.getVerifyOtp )
   .post(authController.verifyOtp);
 
-
 router
-  .route("/resend-otp")
-  .get(authController.resendOTP)
+  .route("/forgot-password/verify-otp")
+  .get( isLoggedOut, authController.getForgotPassOtp )
+
+
+router.route("/resend-otp").get(authController.resendOTP);
 
 router
   .route("/forgot-password")
-  .get(authController.getForgotPass);
+  .get(isLoggedOut, authController.getForgotPass)
+  .post(forgotPassValidation, authController.forgotPass);
+
+router
+  .route("/reset-password")
+  .get(isLoggedOut, authController.getResetPass)
+  .post(resetPassValidation, authController.resetPass);
 
 router
   .route("/admin/login")
-  .get(authController.getAdminLogin)
-  .post(authController.adminLogin);
+  .get(isAdminLoggedOut, authController.getAdminLogin)
+  .post(loginValidation, authController.adminLogin);
 
 router
   .route("/admin/register")
-  .get(authController.getAdminRegister)
+  .get(isAdminLoggedOut, authController.getAdminRegister)
   .post(registerValidation, authController.adminRegister);
+
+router.get("/logout", authController.userLogout);
+router.get("/admin/logout", authController.userLogout);
 
 module.exports = router;

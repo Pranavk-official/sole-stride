@@ -5,7 +5,9 @@ module.exports = {
         }
         res.render('index', {
             locals,
-            user: req.user 
+            user: req.user ,
+            error: req.flash('error'),
+            success: req.flash('success')
         })
     },
     getCart: async (req,res) => {

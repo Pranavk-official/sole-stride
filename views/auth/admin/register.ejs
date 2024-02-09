@@ -28,26 +28,28 @@
     <div class="container">
         <div class="row">
             <div class="row">
-                <% if (error && error.length > 0) { %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <% error.forEach(element => { %>
-                        <span><%- element %></span>
-                    <% }) %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% } %>
-                <% if (success && success.length > 0) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <% success.forEach(element => { %>
-                        <span><%- element %></span>
-                    <% }) %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% } %>
+                <% if (error && error.length> 0) { %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <% error.forEach(element=> { %>
+                            <span><%- element %></span>
+                            <% }) %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                    </div>
+                    <% } %>
+                        <% if (success && success.length> 0) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <% success.forEach(element=> { %>
+                                    <span><%- element %></span>
+                                    <% }) %>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                            </div>
+                            <% } %>
             </div>
             <div class="col-lg-6">
                 <div class="login_box_img bg-body-success">
-                    
+
                     <div class="hover">
                         <h4>Already have an account?</h4>
                         <p>There are advances being made in science and technology everyday, and a good example of
@@ -87,23 +89,26 @@
                             <small></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" onfocus="this.placeholder = ''"
-                                onblur="this.placeholder = 'Password'">
+                            <div class="d-flex align-items-center">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Password'">
+                                <i class="bi bi-eye-slash" id="togglePassword"
+                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+                            </div>
                             <small></small>
                         </div>
                         <div class="col-md-12 form-group">
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                placeholder="Confirm Password" onfocus="this.placeholder = ''"
-                                onblur="this.placeholder = 'Confirm Password'">
+                            <div class="d-flex align-items-center">
+                                <input type="password" class="form-control password" id="confirmPassword"
+                                    name="confirmPassword" placeholder="Confirm Password"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'">
+                                <i class="bi bi-eye-slash" id="togglePasswordConfirm"
+                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+                            </div>
                             <small></small>
                         </div>
-                        <!-- <div class="col-md-12 form-group">
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option2" name="selector">
-                                <label for="f-option2">Keep me logged in</label>
-                            </div>
-                        </div> -->
+
                         <div class="col-md-12 form-group">
                             <button type="submit" value="submit" class="btn btn-outline-primary w-100">Register</button>
                         </div>

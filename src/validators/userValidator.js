@@ -71,25 +71,40 @@ module.exports = {
     password: {
       trim: true,
       escape: true,
-      errorMessage: "Password must be at least 8 characters long",
+      errorMessage: "Password must be at least  8 characters long",
       exists: {
         errorMessage: "Password is required",
       },
       isLength: {
-        errorMessage: "Password must be at least 8 characters long",
+        errorMessage: "Password must be at least  8 characters long",
         options: { min: 8 },
+      },
+      matches: {
+        options:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        errorMessage:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       },
     },
     confirmPassword: {
       trim: true,
       escape: true,
-      errorMessage: "Confirm password is required",
+      errorMessage: "Confirm password must be at least   8 characters long",
       exists: {
         errorMessage: "Confirm password is required",
       },
       isLength: {
-        errorMessage: "Confirm password must be at least 8 characters long",
+        errorMessage: "Confirm password must be at least   8 characters long",
         options: { min: 8 },
+      },
+      custom: {
+        options: (confirmPassword, { req }) => {
+          if (confirmPassword !== req.body.password) {
+            throw new Error("Passwords must be the same");
+          }
+          // Optionally, you can return true if they match
+          return true;
+        },
       },
     },
   }),
@@ -107,13 +122,77 @@ module.exports = {
     password: {
       trim: true,
       escape: true,
-      errorMessage: "Password must be at least 8 characters long",
+      errorMessage: "Password must be at least  8 characters long",
       exists: {
         errorMessage: "Password is required",
       },
       isLength: {
-        errorMessage: "Password must be at least 8 characters long",
+        errorMessage: "Password must be at least  8 characters long",
         options: { min: 8 },
+      },
+      matches: {
+        options:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        errorMessage:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      },
+    },
+  }),
+
+  forgotPassValidation: checkSchema({
+    email: {
+      trim: true,
+      normalizeEmail: true,
+      errorMessage: "Enter a valid email address",
+      exists: {
+        errorMessage: "Email is required",
+      },
+      isEmail: true,
+      custom: {
+        options: async (email) => {
+          const user = await User.findOne({email});
+          if (!user) {
+            throw new Error("User does not exist");
+          }
+        },
+      },
+    },
+  }),
+  resetPassValidation: checkSchema({
+    password: {
+      trim: true,
+      escape: true,
+      errorMessage: "Password must be at least  8 characters long",
+      exists: {
+        errorMessage: "Password is required",
+      },
+      isLength: {
+        errorMessage: "Password must be at least  8 characters long",
+        options: { min: 8 },
+      },
+      matches: {
+        options:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        errorMessage:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      },
+    },
+    confirmPassword: {
+      trim: true,
+      escape: true,
+      errorMessage: "Password must be at least  8 characters long",
+      exists: {
+        errorMessage: "Password is required",
+      },
+      isLength: {
+        errorMessage: "Password must be at least  8 characters long",
+        options: { min: 8 },
+      },
+      matches: {
+        options:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        errorMessage:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       },
     },
   }),

@@ -59,7 +59,7 @@
             <div class="col-lg-6">
                 <div class="login_form_inner bg-body-secondary ">
                     <h4 class="pt-5">Verify</h4>
-                    <form action="/verify-otp" method="POST" class="card-body p-5 text-center">
+                    <form action="/forgot-pass/verify-otp" method="POST" class="card-body p-5 text-center">
 
                         <div class="otp-field mb-4">
                             <input name="val1" type="number" />
@@ -124,7 +124,7 @@
         resendButton.style.cursor = 'pointer';
 
         resendButton.classList.remove('link-dark', 'link-opacity-25');
-        resendButton.classList.add('badge', 'rounded-pill', 'bg-primary');
+        resendButton.classList.add('link-primary', 'link-opacity-50', 'link-underline', 'badge', 'rounded-pill', 'bg-primary');
         // window.location.reload()
     }
 

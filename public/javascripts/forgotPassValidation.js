@@ -1,7 +1,7 @@
 const emailEl = document.querySelector("#email");
 const passwordEl = document.querySelector("#password");
 
-const form = document.querySelector("#login-form");
+const form = document.querySelector("#forgot-pass-form");
 
 const checkEmail = () => {
   let valid = false;
@@ -17,24 +17,6 @@ const checkEmail = () => {
   return valid;
 };
 
-const checkPassword = () => {
-  let valid = false;
-  const password = passwordEl.value.trim();
-
-  if (!isRequired(password)) {
-    showError(passwordEl.parentElement, "Password cannot be blank.");
-  } else if (!isPasswordSecure(password)) {
-    showError(
-      passwordEl.parentElement,
-      "Password must have at least  8 characters including at least  1 lowercase character,  1 uppercase character,  1 number, and  1 special character in (!@#$%^&*)"
-    );
-  } else {
-    showSuccess(passwordEl.parentElement);
-    valid = true;
-  }
-
-  return valid;
-};
 
 // ... (keep the existing isEmailValid, isPasswordSecure, isRequired, isBetween, showError, and showSuccess functions)
 // Function to check if a string is not empty
@@ -50,13 +32,6 @@ const isEmailValid = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
-// Function to validate a password
-const isPasswordSecure = (password) => {
-  const re = new RegExp(
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"
-  );
-  return re.test(password);
-};
 
 const showError = (input, message) => {
   // get the form-field element
@@ -88,38 +63,24 @@ const showSuccess = (input) => {
 };
 
 // Event listener for form submit
-document.querySelector("#login-form").addEventListener("submit", function (e) {
+document.querySelector("#forgot-pass-form").addEventListener("submit", function (e) {
   e.preventDefault();
 
   // Get the username and password inputs
   const emailInput = document.querySelector("#email");
-  const passwordInput = document.querySelector("#password");
 
   // Validate the username (which is also used for email in this case)
   if (!isRequired(emailInput.value)) {
-    showError(usernameInput, "Email cannot be blank.");
+    showError(emailInput, "Email cannot be blank.");
   } else if (!isEmailValid(usernameInput.value)) {
     showError(emailInput, "Email is not valid.");
   } else {
     showSuccess(emailInput);
   }
 
-  // Validate the password
-  if (!isRequired(passwordInput.value)) {
-    showError(passwordInput, "Password cannot be blank.");
-  } else if (!isPasswordSecure(passwordInput.value)) {
-    showError(
-      passwordInput,
-      "Password must have at least  8 characters, including at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)."
-    );
-  } else {
-    showSuccess(passwordInput);
-  }
-
   // Check if both inputs are valid before submitting the form
   if (
-    emailInput.classList.contains("is-valid") &&
-    passwordInput.classList.contains("is-valid")
+    emailInput.classList.contains("is-valid") 
   ) {
     this.submit();
   }
@@ -128,10 +89,9 @@ document.querySelector("#login-form").addEventListener("submit", function (e) {
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  let isEmailValid = checkEmail(),
-    isPasswordValid = checkPassword();
+  let isEmailValid = checkEmail()
 
-  let isFormValid = isEmailValid && isPasswordValid;
+  let isFormValid = isEmailValid ;
 
   if (isFormValid) {
     // Submit the form to the server
@@ -161,23 +121,7 @@ form.addEventListener(
       case "email":
         checkEmail();
         break;
-      case "password":
-        checkPassword();
-        break;
     }
   })
 );
 
-// Password Toggle
-
-const togglePassword = document.querySelector("#togglePassword");
-
-
-togglePassword.addEventListener("click", function (e) {
-  // toggle the type attribute
-  const type =
-    passwordEl.getAttribute("type") === "password" ? "text" : "password";
-  passwordEl.setAttribute("type", type);
-  // toggle the eye / eye slash icon
-  this.classList.toggle("bi-eye");
-});
