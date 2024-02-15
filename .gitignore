@@ -132,7 +132,7 @@ dist
 
 # uploads folder
 
-./public/uploads/banners/
-./public/uploads/category-images/
-./public/uploads/product-images/
-./public/uploads/profile-images/
+./public/uploads/banners/*
+./public/uploads/category-images/*
+./public/uploads/product-images/*
+./public/uploads/profile-images/*
