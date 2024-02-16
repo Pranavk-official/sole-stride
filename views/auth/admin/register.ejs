@@ -1,122 +1,122 @@
 <style>
-    :root {
-        --error-color: #dc3545;
-        --success-color: #28a745;
-        --warning-color: #ffc107;
-    }
+  :root {
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+  }
 
-    .form-group input:focus {
-        outline: none;
-    }
+  .form-group input:focus {
+    outline: none;
+  }
 
-    .form-group.error input {
-        border-color: var(--error-color);
-    }
+  .form-group.error input {
+    border-color: var(--error-color);
+  }
 
-    .form-group.success input {
-        border-color: var(--success-color);
-    }
+  .form-group.success input {
+    border-color: var(--success-color);
+  }
 
-
-    .form-group small {
-        color: var(--error-color);
-    }
+  .form-group small {
+    color: var(--error-color);
+  }
 </style>
 
 <!--================Login Box Area =================-->
-<section class="login_box_area section-margin my-5">
-    <div class="container">
-        <div class="row">
-            <div class="row">
-                <% if (error && error.length> 0) { %>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <% error.forEach(element=> { %>
-                            <span><%- element %></span>
-                            <% }) %>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                    </div>
-                    <% } %>
-                        <% if (success && success.length> 0) { %>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <% success.forEach(element=> { %>
-                                    <span><%- element %></span>
-                                    <% }) %>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                            </div>
-                            <% } %>
-            </div>
-            <div class="col-lg-6">
-                <div class="login_box_img bg-body-success">
-
-                    <div class="hover">
-                        <h4>Already have an account?</h4>
-                        <p>There are advances being made in science and technology everyday, and a good example of
-                            this is the</p>
-                        <a class="btn btn-outline-light" href="/admin/login">Login Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login_form_inner register_form_inner  bg-body-secondary">
-                    <h3>Create an account</h3>
-                    <form class="row login_form" action="/admin/register" method="POST" id="register_form">
-                        <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username"
-                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
-                            <small></small>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col form-group">
-                                    <input type="text" class="form-control" id="firstName" name="firstName"
-                                        placeholder="First Name" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'First Name'">
-                                    <small></small>
-                                </div>
-                                <div class="col form-group">
-                                    <input type="text" class="form-control" id="lastName" name="lastName"
-                                        placeholder="Last Name" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'Last Name'">
-                                    <small></small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
-                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'">
-                            <small></small>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="d-flex align-items-center">
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Password'">
-                                <i class="bi bi-eye-slash" id="togglePassword"
-                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                            </div>
-                            <small></small>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="d-flex align-items-center">
-                                <input type="password" class="form-control password" id="confirmPassword"
-                                    name="confirmPassword" placeholder="Confirm Password"
-                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'">
-                                <i class="bi bi-eye-slash" id="togglePasswordConfirm"
-                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                            </div>
-                            <small></small>
-                        </div>
-
-                        <div class="col-md-12 form-group">
-                            <button type="submit" value="submit" class="btn btn-outline-primary w-100">Register</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<section class="admin-login_box_area section-margin my-5">
+  <div class="container">
+    <div class="row">
+      <div class="row">
+        <% if (error && error.length> 0) { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <% error.forEach(element=> { %>
+          <span><%- element %></span>
+          <% }) %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <% } %>
+        <% if (success && success.length> 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <% success.forEach(element=> { %>
+          <span><%- element %></span>
+          <% }) %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-login_box_img bg-body-success">
+          <div class="hover">
+            <h4>Already have an account?</h4>
+            <p>
+              There are advances being made in science and technology everyday,
+              and a good example of this is the
+            </p>
+            <a class="btn btn-outline-light" href="/admin/login">Login Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-login_form_inner register_form_inner bg-body-secondary">
+          <h3>Create an account</h3>
+          <form class="row admin-login_form" action="/admin/register" method="POST" id="register_form">
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" />
+              <small></small>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col form-group">
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" />
+                  <small></small>
+                </div>
+                <div class="col form-group">
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" />
+                  <small></small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" />
+              <small></small>
+            </div>
+            <div class="col-md-12 form-group">
+              <div class="d-flex align-items-center">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" />
+                <i class="bi bi-eye-slash" id="togglePassword" style="
+                    position: relative;
+                    z-index: 8;
+                    left: -30px;
+                    width: 0%;
+                    cursor: pointer;
+                  "></i>
+              </div>
+              <small></small>
+            </div>
+            <div class="col-md-12 form-group">
+              <div class="d-flex align-items-center">
+                <input type="password" class="form-control password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" />
+                <i class="bi bi-eye-slash" id="togglePasswordConfirm" style="
+                    position: relative;
+                    z-index: 8;
+                    left: -30px;
+                    width: 0%;
+                    cursor: pointer;
+                  "></i>
+              </div>
+              <small></small>
+            </div>
+
+            <div class="col-md-12 form-group">
+              <button type="submit" value="submit" class="btn btn-outline-primary w-100">
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 <!--================End Login Box Area =================-->
 <script src="/javascripts/registerValidation.js"></script>

@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
+
 const {
   registerValidation,
   loginValidation,
   forgotPassValidation,
   resetPassValidation,
 } = require("../validators/userValidator");
+
 const {
   isVerified,
   isLoggedOut,

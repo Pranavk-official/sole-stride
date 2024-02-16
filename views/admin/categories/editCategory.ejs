@@ -1,0 +1,97 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" href="/admin/category">Categories</a>
+        </li>
+        <li class="breadcrumb-item" aria-current="page">
+          Edit Category - <%- category.name %>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <%= locals.title ? locals.title : 'Dashboard' %>
+  </h1>
+
+</div>
+
+<div class="card container py-5 w mb-5 col-lg-6">
+  <h3 class="mb-3 card-title text-center">Edit Category</h3>
+  <form class="card-body rounded-3 bg-body-tertiary" id="edit-category">
+    <!-- Name input -->
+    <div class="err mb-3 text-danger"></div>
+    <div class="row mb-3">
+      <div class="form-group my-3">
+        <label class="form-label" for="">Category Name</label>
+        <input type="text" class="form-control " name="name" value="<%- category.name %>">
+      </div>
+      <div class="form-group mb-3">
+        <label class="form-label" for="">Status</label>
+        <select class="form-select" name="status" aria-label="List or Unlist the Banner">
+          <% if (category.isActive) { %>
+          <option value="true">Listed</option>
+          <option value="false">Unlisted</option>
+          <% } else { %>
+          <option value="false">Unlisted</option>
+          <option value="true">Listed</option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="form-group my-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <label class="form-label" for="">Category Image</label>
+          <div class="d-flex align-items-center justify-content-center">
+            <img id="category_prev" class="border my-1 rounded img-fluid img-thumbnail" src="/uploads/category-images/<%- category.image.filename %>" alt="">
+          </div>
+        </div>
+        <input id="category" type="file" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-control " class="mb-3" />
+        <input id="cropped_category" type="hidden" name="" value="">
+        <input id="" type="hidden" name="imageName" value="<%= category.image.filename %>">
+        <input id="" type="hidden" name="category_id" value="<%= category._id %>">
+      </div>
+
+    </div>
+    <!-- Submit button -->
+    <div class="button-grp">
+      <button type="submit" class="btn btn-sm btn-primary px-3">Submit</button>
+      <button type="reset" class="btn btn-sm btn-warning px-3">Clear</button>
+    </div>
+  </form>
+  <div style="display: none;" class="crop-banner card container p-2 shadow" id="category-crp-container">
+    <div class="d-flex flex-column">
+      <img src="" id="categoryIMG" style="object-fit: cover;" class="img-fluid">
+      <button id="cropImageBtn" class="btn btn-primary mt-3">Crop Image</button>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .error {
+    color: rgb(255, 0, 0)
+  }
+
+  .crop-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 30rem;
+
+  }
+</style>

@@ -1,89 +1,85 @@
 <style>
-    :root {
-        --error-color: #dc3545;
-        --success-color: #28a745;
-        --warning-color: #ffc107;
-    }
+  :root {
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+  }
 
-    .form-group input:focus {
-        outline: none;
-    }
+  .form-group input:focus {
+    outline: none;
+  }
 
-    .form-group.error input {
-        border-color: var(--error-color);
-    }
+  .form-group.error input {
+    border-color: var(--error-color);
+  }
 
-    .form-group.success input {
-        border-color: var(--success-color);
-    }
+  .form-group.success input {
+    border-color: var(--success-color);
+  }
 
 
-    .form-group small {
-        color: var(--error-color);
-    }
+  .form-group small {
+    color: var(--error-color);
+  }
 </style>
 
 <!--================Login Box Area =================-->
-<section class="login_box_area section-margin my-5">
-    <div class="container">
-        <div class="row">
-            <div class="row">
-                <% if (error && error.length > 0) { %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <% error.forEach(element => { %>
-                        <span><%- element %></span>
-                    <% }) %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% } %>
-                <% if (success && success.length > 0) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <% success.forEach(element => { %>
-                        <span><%- element %></span>
-                    <% }) %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% } %>
-            </div>
-            <div class="col-lg-6">
-                <div class="login_box_img">
-                    <div class="hover">
-                        <h4>New to our website?</h4>
-                        <p>There are advances being made in science and technology everyday, and a good example of
-                            this is the</p>
-                        <a class="btn btn-outline-light" href="/admin/register">Create an Account</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login_form_inner bg-body-secondary">
-                    <h3>Log in to enter</h3>
-                    <form class="row login_form" action="/admin/login" method="POST" id="login-form">
-                        <div class="col-md-12 form-group">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
-                            <small class="h-3"></small>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="d-flex align-items-center">
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Password'">
-                                <i class="bi bi-eye-slash" id="togglePassword"
-                                    style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                            </div>
-                            <small class="h-3"></small>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <button type="submit" value="submit" class="btn btn-outline-primary w-100">Log In</button>
-                            <!-- <a class="text-primary" href="#">Forgot Password?</a> -->
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+<section class="admin-login_box_area section-margin my-5">
+  <div class="container">
+    <div class="row">
+      <div class="row">
+        <% if (error && error.length > 0) { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <% error.forEach(element => { %>
+          <span><%- element %></span>
+          <% }) %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <% } %>
+        <% if (success && success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <% success.forEach(element => { %>
+          <span><%- element %></span>
+          <% }) %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-login_box_img">
+          <div class="hover">
+            <h4>New to our website?</h4>
+            <p>There are advances being made in science and technology everyday, and a good example of
+              this is the</p>
+            <a class="btn btn-outline-light" href="/admin/register">Create an Account</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="admin-login_form_inner bg-body-secondary">
+          <h3>Log in to enter</h3>
+          <form class="row admin-login_form" action="/admin/login" method="POST" id="login-form">
+            <div class="col-md-12 form-group">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
+              <small class="h-3"></small>
+            </div>
+            <div class="col-md-12 form-group">
+              <div class="d-flex align-items-center">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                <i class="bi bi-eye-slash" id="togglePassword" style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+              </div>
+              <small class="h-3"></small>
+            </div>
+            <div class="col-md-12 form-group">
+              <button type="submit" value="submit" class="btn btn-outline-primary w-100">Log In</button>
+              <!-- <a class="text-primary" href="#">Forgot Password?</a> -->
+            </div>
+          </form>
+        </div>
+      </div>
+
     </div>
+  </div>
 </section>
 <!--================End Login Box Area =================-->
 

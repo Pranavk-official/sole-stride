@@ -1,10 +1,19 @@
+const Banner = require('../model/bannerSchema')
+const Category = require('../model/categorySchema')
+
 module.exports = {
     getHome: async (req,res) => {
         const locals = {
             title: 'SoleStride - Home'
         }
+        const banners = await Banner.find({ isActive: true });
+        const categories = await Category.find({ isActive: true });
+
+        console.log(categories);
         res.render('index', {
             locals,
+            banners,
+            categories,
             user: req.user ,
             error: req.flash('error'),
             success: req.flash('success')

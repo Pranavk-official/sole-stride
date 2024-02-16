@@ -263,9 +263,9 @@ module.exports = {
       title: "SoleStride - Register",
     };
 
-    console.log(req.session);
+    // console.log(req.session);
  
-    if ( !req.session.verif) {
+    if ( !req.session.verifyToken ) {
       return res.redirect("/");
     }  
 

@@ -3,17 +3,47 @@
 <section>
   <!-- Hero Slider-->
 
-  <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+  <div id="carouselExampleCaptions" class="carousel slide mt-2 mb-0" data-bs-ride="carousel">
+    
+    <div class="carousel-inner p-1">
+        <% banners.forEach((banner, index)=> { %>
+        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+            <img src="/uploads/banners/<%= banner.image.filename %>" class="d-block w-100"  alt="<%= banner.name %>">
+            <div class="container">
+              <div class="carousel-caption text-start">
+                <h2 ><%- banner.name %>.</h2>
+                <p class="opacity-75"><%- banner.description %>
+                </p>
+                <p>
+                  <a class="btn btn-primary" href="<%- banner.reference %>">Know More</a>
+                </p>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+  
+  
+  <!-- <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
     <div class="carousel-indicators">
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-        aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-          preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
           <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
         </svg>
         <div class="container">
@@ -21,13 +51,12 @@
             <h1>Example headline.</h1>
             <p class="opacity-75">Some representative placeholder content for the first slide of the
               carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
-          </div>
+              <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+            </div>
         </div>
       </div>
       <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-          preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
           <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
         </svg>
         <div class="container">
@@ -39,8 +68,7 @@
         </div>
       </div>
       <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-          preserveAspectRatio="xMidYMid slice" focusable="false">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
           <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
         </svg>
         <div class="container">
@@ -60,9 +88,10 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
-  </div>
-
+  </div> -->
+  
 </section>
+
 <!-- Categories section-->
 <!-- <section>
   <div class="container py-6">
@@ -155,65 +184,16 @@
     <!-- Brands Slider-->
     <div class="owl-carousel owl-theme brands-slider">
       <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
+      <% categories.forEach((category, index) => { %>
+        <div class="item d-flex align-items-center justify-content-center">
+          <div class="w-8rem">
+            <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
+            <p class="text-muted text-capitalize"><%- category.name %></p>
+          </div>
         </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-2.svg" alt="Brand 2" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-3.svg" alt="Brand 3" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-4.svg" alt="Brand 4" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-5.svg" alt="Brand 5" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-6.svg" alt="Brand 6" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-2.svg" alt="Brand 2" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-3.svg" alt="Brand 3" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-4.svg" alt="Brand 4" />
-        </div>
-      </div>
+      <% }) %>
+      
+      
     </div>
   </div>
 </section>
@@ -236,14 +216,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/serrah-galos-494231-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/serrah-galos-494231-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -261,14 +238,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/averie-woodard-319832-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/averie-woodard-319832-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -287,14 +261,11 @@
         <div class="product">
           <div class="product-image">
             <div class="ribbon ribbon-danger">Sold out</div>
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/serrah-galos-494279-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/serrah-galos-494279-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -312,14 +283,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/dmitriy-ilkevich-437760-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/dmitriy-ilkevich-437760-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -337,14 +305,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/ian-dooley-347968-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/ian-dooley-347968-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -362,14 +327,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/alex-holyoake-571682-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/alex-holyoake-571682-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -387,13 +349,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/ao-456813-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/ao-456813-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -411,14 +371,11 @@
       <div class="product-slider-item">
         <div class="product">
           <div class="product-image">
-            <img class="img-fluid"
-              src="https://demo.bootstrapious.com/sell/2-0-1/img/product/kyle-loftus-592041-unsplash.jpg"
-              alt="product" />
+            <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/product/kyle-loftus-592041-unsplash.jpg" alt="product" />
             <div class="product-hover-overlay">
               <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
               <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i
-                    class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                <a class="btn btn-dark btn-buy" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
@@ -438,8 +395,7 @@
 
 <!-- Banner Section-->
 <section class="py-6 position-relative light-overlay">
-  <img class="bg-image" src="https://demo.bootstrapious.com/sell/2-0-1/img/photo/benjamin-voros-260869-unsplash.jpg"
-    alt="" />
+  <img class="bg-image" src="https://demo.bootstrapious.com/sell/2-0-1/img/photo/benjamin-voros-260869-unsplash.jpg" alt="" />
   <div class="container">
     <div class="overlay-content text-center text-dark">
       <p class="text-uppercase fw-bold mb-1 letter-spacing-5">

@@ -1,0 +1,97 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" href="/admin/banners">Banners</a>
+        </li>
+        <li class="breadcrumb-item" aria-current="page">
+          Edit Banner - <%= banner.name %>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <%= locals.title ? locals.title : 'Dashboard' %>
+  </h1>
+
+</div>
+
+<div class="card container py-3 col-lg-6">
+  <h3 class="mb-3 text-center card-title mt-3">Edit Banner</h3>
+  <form class="card-body p-md-5 bg-body-tertiary" id="edit-banner">
+    <!-- Name input -->
+    <div class="err mb-3 text-danger"></div>
+    <div class="row mb-3">
+      <div class="form-group mb-3">
+        <label class="form-label" for="">Banner Name</label>
+        <input type="text" class="form-control" value="<%= banner.name %>" name="banner_name">
+      </div>
+      <div class="form-group mb-3">
+        <label class="form-label" for="">Reference Link</label>
+        <input type="text" id="start_date" value="<%= banner.reference %>" class="form-control " name="reference">
+      </div>
+      <div class="form-group mb-3">
+        <div class="d-flex justify-content-between">
+          <label class="form-label" for="">Banner Image</label>
+          <div class="d-flex align-items-center justify-content-center">
+            <img id="banner_prev" class="img-fluid img-thumbnail my-1" width="120rem" src="/uploads/banners/<%= banner.image.filename %>" alt="">
+          </div>
+        </div>
+        <input id="banner_image" type="file" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-control " class="mb-3" />
+        <input id="cropped_banner" type="hidden" name="" value="">
+        <input id="" type="hidden" name="imageName" value="<%= banner.image.filename %>">
+        <input id="" type="hidden" name="banner_id" value="<%= banner._id %>">
+      </div>
+      <div class="form-group mb-3">
+        <label class="form-label" for="">Status</label>
+        <select class="form-select" name="status" aria-label="List or Unlist the Banner">
+          <% if (banner.isActive) { %>
+          <option value="true">Listed</option>
+          <option value="false">Unlisted</option>
+          <% } else { %>
+          <option value="false">Unlisted</option>
+          <option value="true">Listed</option>
+          <% } %>
+        </select>
+      </div>
+    </div>
+    <!-- Submit button -->
+    <div class="button-grp">
+      <button type="submit" class="btn btn-sm btn-primary px-3">Submit</button>
+      <button type="reset" class="btn btn-sm btn-info px-3">Clear</button>
+    </div>
+  </form>
+  <div style="display: none;" class="crop-banner card container p-2 shadow" id="banner-crp-container">
+    <div class="d-flex flex-column">
+      <img src="" id="bannerIMG" style="object-fit: cover;" class="img-fluid">
+      <button id="cropImageBtn" class="btn btn-primary mt-3">Crop Image</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .error {
+    color: rgb(255, 0, 0)
+  }
+
+  .crop-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 30rem;
+  }
+</style>

@@ -3,23 +3,31 @@ const mongoose = require("mongoose");
 const bannerSchema = new mongoose.Schema(
   {
     name: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     description: {
-      type: String,
-      required: true,
+        type: String,
+        default: ' '
     },
     image: {
-      type: String,
-      required: true,
+        filename: String,
+        originalname: String,
+        path: String,
+    },
+    reference: {
+        type: String,
+        required: true,
     },
     isActive: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  { timestamps: true }
+        type: Boolean,
+        required: true,
+        default:true
+    }
+},
+{
+    timestamps: true,
+}
 );
 
 module.exports = mongoose.model("Banner", bannerSchema);

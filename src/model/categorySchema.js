@@ -5,12 +5,18 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: {
+    filename: String,
+    originalname: String,
+    path: String,
+  },
+
   description: {
     type: String,
   },
-  blocked: {
+  isActive: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 

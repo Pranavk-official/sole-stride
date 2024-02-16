@@ -3691,6 +3691,16 @@ a {
     background: #384aeb;
     opacity: .9
 }
+.login_box_area .admin-login_box_img:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    content: "";
+    background: #6618a1;
+    opacity: .9
+}
 
 .login_box_area .login_box_img .hover {
     position: absolute;

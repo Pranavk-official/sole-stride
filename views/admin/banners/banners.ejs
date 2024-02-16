@@ -1,0 +1,82 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+          <!-- </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" href="/banner">Banners</a>
+        </li> -->
+        <li class="breadcrumb-item active" aria-current="page">
+          Banners
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <%= locals.title ? locals.title : 'Dashboard' %>
+  </h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <a href="/admin/banners/add-banner">
+      <button type="button" class="btn btn-sm btn-outline-primary">Add Banner</button>
+    </a>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr class="text-center">
+          <th scope="col">#</th>
+          <th scope="col">Image</th>
+          <th scope="col">Name</th>
+          <th scope="col">Reference</th>
+          <th scope="col">Status</th>
+          <th scope="col" class="text-center">Delete/Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% banners.forEach(function(banner,index) { %>
+        <tr class="align-middle text-center">
+          <td>
+            <%= index+1 %>
+          </td>
+          <td><img class="mx-auto d-block img-fluid img-thumbnail" src="/uploads/banners/<%= banner.image.filename %>" alt=""></td>
+          <td><%= banner.name %></td>
+          <td><a href="<%= banner.reference %>">Check Reference</a></td>
+          <% if (banner.isActive) { %>
+          <td class="text-success">Listed</td>
+          <% } else { %>
+          <td class="text-danger">Unlisted</td>
+          <% } %>
+          <td>
+
+            <div class="btn-group mx-2" role="group" aria-label="Delete/Edit Button">
+              <div class="d-flex align-items-center">
+                <a href="/admin/banners/edit-banner/<%= banner._id %>" class="btn btn-sm btn-warning">
+                  <i class="bi bi-pencil"></i>
+                  <!-- Edit -->
+                </a>
+                <button type="button" onclick="deleteBanner('<%= banner._id %>','<%= banner.image.filename %>')" class="btn btn-sm btn-danger">
+                  <i class="bi bi-trash"></i>
+                  <!-- Delete -->
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>

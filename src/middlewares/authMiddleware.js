@@ -11,7 +11,7 @@ module.exports = {
         }
     },
     isLoggedOut: (req, res, next) => {
-        if(req.isAuthenticated() && !req.user.isAdmin) {
+        if(req.isAuthenticated() ) {
             res.redirect('/')
         } else {
             next()
@@ -35,7 +35,7 @@ module.exports = {
         if(req.isAuthenticated() && req.user.isAdmin) {
             next()
         } else {
-            res.redirect('/admin')
+            res.redirect('/admin/login')
         }
     },
     isAdminLoggedOut: (req, res, next) => {

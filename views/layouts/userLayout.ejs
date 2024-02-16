@@ -24,7 +24,7 @@
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="https://demo.bootstrapious.com/sell/2-0-1/css/style.default.7acfaf01.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="https://demo.bootstrapious.com/sell/2-0-1/css/custom.0a822280.css">
+    <!-- <link rel="stylesheet" href="https://demo.bootstrapious.com/sell/2-0-1/css/custom.0a822280.css"> -->
     <!-- Favicon-->
     <link rel="shortcut icon" href="https://demo.bootstrapious.com/sell/2-0-1/img/favicon.png">
 
@@ -47,13 +47,26 @@
         .carousel-item {
             height: 32rem;
         }
+        
+        @media (max-width: 1300px) {
+            .carousel-caption {
+            bottom: 1rem;
+            z-index: 10;
+        }
+            .carousel-item {
+                height: 14rem;
+            }
+            .carousel-item img {
+                height: 100%;
+            }
+        }
     </style>
 
 
 </head>
 
 <body>
-
+    
     <%- include('../partials/user/header.ejs') %>
 
     <main>

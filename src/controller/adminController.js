@@ -7,9 +7,22 @@ module.exports = {
             title : 'SoleStride - Dashboard'
         }
 
+        console.log(req.user);
+
         res.render('admin/dashboard',{
             locals,
-            layout: './layouts/adminLayout'
+            admin: req.user,
+            layout: adminLayout
+        })
+    },
+    getUsersList: async (req,res) => {
+        const locals = {
+            title : 'SoleStride - Customers'
+        }
+
+        res.render('admin/users/users',{
+            locals,
+            layout: adminLayout
         })
     },
 }

@@ -136,3 +136,5 @@ dist
 ./public/uploads/category-images/*
 ./public/uploads/product-images/*
 ./public/uploads/profile-images/*
+
+./cut-files.txt
