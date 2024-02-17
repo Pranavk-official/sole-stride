@@ -1,27 +1,39 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const userController = require('../controller/userController');
-const { isLoggedIn } = require('../middlewares/authMiddleware')
+const userController = require("../controller/userController");
+const { isLoggedIn } = require("../middlewares/authMiddleware");
+
+router.use(isLoggedIn,(req, res, next) => {
+  if (req.user) {
+    res.locals.user = req.user;
+    res.locals.cartCount = req.user.cart.length 
+  }
+  res.locals.success = req.flash('success')
+  res.locals.error = req.flash('error')
+  next()
+});
+
+router.get('/cart', (req,res) => {
+  res.redirect('/cart')
+})
 
 router
-    .route('/profile')
-    .all(isLoggedIn)
-    .get(userController.getProfile)
-    .post(userController.editProfile)
+  .route("/profile")
+  .get(userController.getProfile)
+  .post(userController.editProfile);
 
-router.route('/address')
-    .all(isLoggedIn)
-    .get(userController.getAddress);
+router
+  .route("/reset-password")
+  .post(userController.resetPass);
+
+router.route("/address").get(userController.getAddress);
 
 // router.route('/cart')
-//     .all(isLoggedIn)
 //     .get(userController.getAddress);
 
-router
-    .route('/orders')
-    .get(userController.getOrders);
-router.get('/order', userController.getOrder);
-router.get('/wishlist', userController.getWishlist);
+router.route("/orders").get(userController.getOrders);
+router.get("/order", userController.getOrder);
+router.get("/wishlist", userController.getWishlist);
 
 module.exports = router;

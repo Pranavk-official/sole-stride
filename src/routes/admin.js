@@ -4,11 +4,12 @@ const router = express.Router();
 const adminController = require("../controller/adminController");
 const categoryController = require("../controller/categoryController");
 const bannerController = require("../controller/bannerController");
+const productController = require("../controller/productController");
 
 const { categoryValidation } = require("../validators/adminValidator");
 
 const { isAdmin } = require("../middlewares/authMiddleware");
-const { categoryUpload, bannerUpload } = require("../middlewares/multer");
+const { categoryUpload, bannerUpload, productUpload } = require("../middlewares/multer");
 
 /* Common Midleware for admin routes*/
 router.use(isAdmin, (req, res, next) => {
@@ -78,8 +79,18 @@ router
  * Product Management
  */
 
-router.route("/products");
+router.route("/products")
+    .get(productController.getAllProducts)
 
+
+router.route("/products/add-product")
+    .get(productController.getAddProduct)
+    .post(productUpload.fields([{name:"images"},{name:"primaryImage"}]),productController.addProduct)
+
+router.route("/products/edit-product/:id")
+    .get(productController.getEditProduct)
+    .post(productUpload.fields([{name:"images"},{name:"primaryImage"}]),productController.editProduct)
+    
 /**
  * Customer Management
  */

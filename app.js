@@ -68,6 +68,9 @@ app.use(function (req, res, next) {
 
 // Custom middleware to expose flash messages to views
 app.use((req, res, next) => {
+  if(req.user){
+    res.locals.user = req.user
+  }
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();

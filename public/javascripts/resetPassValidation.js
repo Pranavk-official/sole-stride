@@ -1,23 +1,43 @@
-const passwordEl = document.querySelector("#password");
-const confirmPasswordEl = document.querySelector("#confirmPassword");
+const oldPasswordEl = document.querySelector("#oldPassword");
+const newPasswordEl = document.querySelector("#newPassword");
+const confirmPasswordEl = document.querySelector("#confirmNewPassword");
 
 const form = document.querySelector("#reset-password-form");
 
 
-const checkPassword = () => {
+const checkOldPassword = () => {
   let valid = false;
 
-  const password = passwordEl.value.trim();
+  const password = oldPasswordEl.value.trim();
 
   if (!isRequired(password)) {
-    showError(passwordEl.parentElement, "Password cannot be blank.");
+    showError(oldPasswordEl.parentElement, "Password cannot be blank.");
   } else if (!isPasswordSecure(password)) {
     showError(
-      passwordEl.parentElement,
+      oldPasswordEl.parentElement,
       "Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)"
     );
   } else {
-    showSuccess(passwordEl.parentElement);
+    showSuccess(oldPasswordEl.parentElement);
+    valid = true;
+  }
+
+  return valid;
+};
+const checkPassword = () => {
+  let valid = false;
+
+  const password = newPasswordEl.value.trim();
+
+  if (!isRequired(password)) {
+    showError(newPasswordEl.parentElement, "Password cannot be blank.");
+  } else if (!isPasswordSecure(password)) {
+    showError(
+      newPasswordEl.parentElement,
+      "Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)"
+    );
+  } else {
+    showSuccess(newPasswordEl.parentElement);
     valid = true;
   }
 
@@ -28,7 +48,7 @@ const checkConfirmPassword = () => {
   let valid = false;
   // check confirm password
   const confirmPassword = confirmPasswordEl.value.trim();
-  const password = passwordEl.value.trim();
+  const password = newPasswordEl.value.trim();
 
   if (!isRequired(confirmPassword)) {
     showError(
@@ -85,21 +105,34 @@ const showSuccess = (input) => {
   error.textContent = "";
 };
 
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  let 
+  let isOldPasswordValid = checkOldPassword(),
     isPasswordValid = checkPassword(),
     isConfirmPasswordValid = checkConfirmPassword();
 
-  let isFormValid =
+  let isFormValid = isOldPasswordValid &&
     isPasswordValid &&
     isConfirmPasswordValid;
 
   if (isFormValid) {
-    form.submit();
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You want to change your password?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, change it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        form.submit()
+      }
+    });
   }
 });
+
 
 const debounce = (fn, delay = 500) => {
   let timeoutId;
@@ -119,10 +152,13 @@ form.addEventListener(
   "input",
   debounce(function (e) {
     switch (e.target.id) {
-      case "password":
+      case "oldPassword":
+        checkOldPassword();
+        break;
+      case "newPassword":
         checkPassword();
         break;
-      case "confirmPassword":
+      case "confirmNewPassword":
         checkConfirmPassword();
         break;
     }
@@ -131,11 +167,21 @@ form.addEventListener(
 
 // Password Toggle
 
-const togglePassword = document.querySelector("#togglePassword");
-const togglePasswordConfirm = document.querySelector("#togglePasswordConfirm");
-const password = document.querySelector("#password");
-const confirmPassword = document.querySelector("#confirmPassword");
+const toggleOldPassword = document.querySelector("#toggleOldPassword");
+const togglePassword = document.querySelector("#toggleNewPassword");
+const togglePasswordConfirm = document.querySelector("#toggleNewPasswordConfirm");
+const password = document.querySelector("#newPassword");
+const confirmPassword = document.querySelector("#confirmNewPassword");
 
+toggleOldPassword.addEventListener("click", function (e) {
+  // toggle the type attribute
+  const type =
+    oldPasswordEl.getAttribute("type") === "password" ? "text" : "password";
+  oldPasswordEl.setAttribute("type", type);
+  // toggle the eye / eye slash icon
+  this.classList.toggle("bi-eye");
+
+});
 togglePassword.addEventListener("click", function (e) {
   // toggle the type attribute
   const type =

@@ -1,0 +1,164 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" href="/admin/products">Products</a>
+        </li>
+
+        <li class="breadcrumb-item active" aria-current="page">
+          Edit Product - <%- product.product_name %>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"><%= locals.title ? locals.title : 'Dashboard' %></h1>
+</div>
+
+<section class="new-product">
+  <form id="addProductForm" class="container row m-3 justify-content-evenly border">
+    <legend class="h2 fw-bold text-center m-3">
+      Edit Product - <%- product.product_name %>
+    </legend>
+    <div class="card col-md-4 pb-0">
+      <fieldset class="card-body align-items-center">
+        <legend>Edit Product Images</legend>
+        <span class="m-2 text-success">file supports only: jpeg,jpg,png,webp</span>
+
+        <div class="card-body">
+          <div class="primary-img row">
+            <label for="inputtext3" class="col-sm-2 col-md-12 col-form-label mb-2">Primary Image</label>
+            <div class="d-flex align-items-center justify-content-evenly">
+              <img src="/uploads/product-images/<%= product.primary_image.name %>" class="border rounded" id="img<%= product.primary_image.name %>" alt="" style="width: 4rem" />
+              <div class="col-sm-10 col-md-9">
+                <input type="hidden" class="form-control mb-2 prod-img" value="<%= product.primary_image._id %>" name="id_primary_img" />
+                <input type="file" class="form-control mb-2" id="<%= product.primary_image.name %>" accept=".jpg,.jpeg,.png,.webp,.svg" onchange="previewImg(event)" name="primaryImage" />
+              </div>
+            </div>
+          </div>
+          <div class="secondary-img row">
+            <div class="d-flex align-items-center">
+              <label for="inputtext3" class="col-form-label mb-2">Secondary Images</label>
+            </div>
+            <% product.secondary_images.forEach(function(img) { %>
+            <img src="/uploads/product-images/<%= img.name %>" class="border rounded mt-1" alt="" id="img<%= img.name %>" style="width: 5rem" />
+            <div class="col-sm-10 col-md-9 mt-3">
+              <input type="file" class="form-control mb-2" accept=".jpeg,.png,.jpg,.webp,.svg" id="<%= img.name %>" onchange="previewImg(event)" name="images" />
+              <input type="hidden" class="form-control mb-2" value="<%= img._id %>" name="id_secondary_img" />
+            </div>
+            <% }); %>
+
+            <div class="d-flex align-items-center secondary-img jsutify-content-center"></div>
+        <br />
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="card col-md-7">
+      <fieldset class="card-body">
+        <legend>Product Details</legend>
+        <div class="form-group mb-3">
+          <label for="product_name" class="form-label">Product Name</label>
+          <input name="product_name" type="text" class="form-control" id="product_name" />
+          <small></small>
+        </div>
+        
+        <div class="form-group mb-3">
+          <label class="form-label" for="status">Status</label>
+          <select class="form-select" name="status" id="status" aria-label="Default select example">
+            <% if (product.isActive) { %>
+            <option value="true">List</option>
+            <option value="false">Unlist</option>
+            <% } else { %>
+            <option value="false">Unlist</option>
+            <option value="true">List</option>
+            <% } %>
+          </select>
+        </div>
+        <div class="row">
+          <div class="form-group col mb-3">
+            <label for="brand_name" class="form-label">Brand</label>
+            <input name="brand_name" type="text" class="form-control" id="brand_name" />
+            <small></small>
+          </div>
+          <div class="form-group col mb-3">
+            <label for="size" class="form-label">Size</label>
+            <input name="size" type="text" class="form-control" id="size" />
+            <small></small>
+          </div>
+          <div class="form-group col mb-3">
+            <label for="product_color" class="form-label">Color</label>
+            <input name="product_color" type="color" class="form-control" id="product_color" />
+            <small></small>
+          </div>
+          <div class="form-group col mb-3">
+            <label for="product_stock" class="form-label">Stock/Quantity</label>
+            <input name="stock" type="number" class="form-control" id="product_stock" min="1" />
+            <small></small>
+          </div>
+        </div>
+        <div class="form-group mb-3">
+          <label for="category" class="form-label">Category Name</label>
+          <select class="form-select text-capitalize" name="category" required>
+            <% categories.forEach(function(category) { %>
+            <option class="text-capitalize" value="<%= category._id %>">
+              <%= category.name %>
+            </option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="description" class="form-label">Product Description</label>
+          <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="row">
+          <div class="form-group mb-3 col">
+            <label for="actualPrice" class="form-label">Actual Price</label>
+            <input class="form-control" type="number" name="actualPrice" id="actualPrice" />
+            <small></small>
+          </div>
+          <div class="form-group mb-3 col">
+            <label for="sellingPrice" class="form-label">Selling Price</label>
+            <input class="form-control" type="number" name="sellingPrice" id="sellingPrice" />
+            <small></small>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="d-flex justify-content-evenly m-4">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-warning">Clear</button>
+    </div>
+  </form>
+  <div style="display: none" class="crop-product card p-2 shadow" id="crp-container">
+    <div class="d-flex flex-column">
+      <img src="" id="images" style="object-fit: cover" />
+      <button id="cropImageBtn" class="btn btn-primary mt-3">Crop Image</button>
+    </div>
+  </div>
+</section>
+<style>
+  .crop-product {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 30rem;
+  }
+
+  .error {
+    color: rgb(255, 0, 0);
+  }
+</style>

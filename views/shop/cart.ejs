@@ -19,7 +19,10 @@
         </div>
     </div>
 </section>
+
+<% if (cartCount && cartCount > 0) { %>
 <!-- Shopping Cart Section-->
+
 <section>
     <div class="container">
         <div class="row mb-5">
@@ -40,159 +43,76 @@
                     </div>
                     <div class="cart-body">
                         <!-- Product-->
-                        <div class="cart-item">
-                            <div class="row d-flex align-items-center text-start text-md-center">
-                                <div class="col-12 col-md-5"><a class="cart-remove close mt-3 d-md-none" href="#"><i
-                                            class="fa fa-times"> </i></a>
-                                    <div class="d-flex align-items-center"><a href="detail.html"><img
-                                                class="cart-item-img"
-                                                src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-ian-dooley-347968-unsplash.jpg"
-                                                alt="..."></a>
-                                        <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                                href="detail.html"><strong>Skull Tee</strong></a><br><span
-                                                class="text-muted text-sm">Size: Large</span><br><span
-                                                class="text-muted text-sm">Colour: Green</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7 mt-4 mt-md-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Price per item</div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$65.00</div>
+                        <% cartList.forEach(item => { %>
+                            <div class="cart-item">
+                                <div class="row d-flex align-items-center text-start text-md-center">
+                                    <div class="col-12 col-md-5"><a class="cart-remove close mt-3 d-md-none" href="#"><i
+                                                class="fa fa-times"> </i></a>
+                                        <div class="d-flex align-items-center"><a href="detail.html"><img
+                                                    class="cart-item-img"
+                                                    src="/uploads/product-images/<%= item.prod_details.primary_image.name %>"
+                                                    alt="..."></a>
+                                            <div class="cart-title text-start"><a class="text-uppercase text-dark"
+                                                    href="detail.html"><strong><%= item.prod_details.product_name %></strong></a><br><span
+                                                    class="text-muted text-sm">Size: <%= item.prod_details.size %></span><br><span
+                                                    class="text-muted text-sm">Colour: <span style="background-color: '<%= item.prod_details.color %>';"></span></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="row align-items-center">
-                                                <div class="d-md-none col-7 col-sm-9 text-muted">Quantity</div>
-                                                <div class="col-5 col-sm-3 col-md-12">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="btn btn-items btn-items-decrease">-</div>
-                                                        <input
-                                                            class="form-control text-center border-0 border-md input-items"
-                                                            type="text" value="4">
-                                                        <div class="btn btn-items btn-items-increase">+</div>
+                                    </div>
+                                    <div class="col-12 col-md-7 mt-4 mt-md-0">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-3">
+                                                <div class="row">
+                                                    <div class="col-6 d-md-none text-muted">Price per item</div>
+                                                    <div class="col-6 col-md-12 text-end text-md-center">$<%= item.prod_details.sellingPrice %></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row align-items-center">
+                                                    <div class="d-md-none col-7 col-sm-9 text-muted">Quantity</div>
+                                                    <div class="col-5 col-sm-3 col-md-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <button onclick="decreaseCartQuantity('<%- item.prod_details._id %>')" class="btn btn-outline-dark btn-items btn-items-decrease col-3">-</button>
+                                                            <input
+                                                                id="quantityInput-<%- item.prod_details._id %>"
+                                                                readonly
+                                                                min="1"
+                                                                name="quantity"
+                                                                class="form-control text-center border-0 border-md input-items"
+                                                                type="text" value="<%= item.cart.quantity %>">
+                                                            <button onclick="increaseCartQuantity('<%- item.prod_details._id %>')" class="btn btn-outline-dark btn-items btn-items-increase col-3">+</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Total price </div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$260.00</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-2 d-none d-md-block text-center"><a class="cart-remove"
-                                                href="#"> <i class="delete fa fa-times"></i></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Product-->
-                        <div class="cart-item">
-                            <div class="row d-flex align-items-center text-start text-md-center">
-                                <div class="col-12 col-md-5"><a class="cart-remove close mt-3 d-md-none" href="#"><i
-                                            class="fa fa-times"> </i></a>
-                                    <div class="d-flex align-items-center"><a href="detail.html"><img
-                                                class="cart-item-img"
-                                                src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-kyle-loftus-596319-unsplash.jpg"
-                                                alt="..."></a>
-                                        <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                                href="detail.html"><strong>Transparent Blouse</strong></a><br><span
-                                                class="text-muted text-sm">Size: Medium</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7 mt-4 mt-md-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Price per item</div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$55.00</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="row align-items-center">
-                                                <div class="d-md-none col-7 col-sm-9 text-muted">Quantity</div>
-                                                <div class="col-5 col-sm-3 col-md-12">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="btn btn-items btn-items-decrease">-</div>
-                                                        <input
-                                                            class="form-control text-center border-0 border-md input-items"
-                                                            type="text" value="3">
-                                                        <div class="btn btn-items btn-items-increase">+</div>
-                                                    </div>
+                                            <div class="col-md-3">
+                                                <div class="row">
+                                                    <div class="col-6 d-md-none text-muted">Total price </div>
+                                                    <div class="col-6 col-md-12 text-end text-md-center">$<%= item.price %></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Total price </div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$165.00</div>
+                                            <div class="col-2 d-none d-md-block text-center">
+                                                <button onclick="removeFromCart('<%- item.prod_details._id %>')" class="btn btn-light cart-remove"> 
+                                                    <i class="delete bi bi-x-lg text-danger"></i>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="col-2 d-none d-md-block text-center"><a class="cart-remove"
-                                                href="#"> <i class="delete fa fa-times"></i></a></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Product-->
-                        <div class="cart-item">
-                            <div class="row d-flex align-items-center text-start text-md-center">
-                                <div class="col-12 col-md-5"><a class="cart-remove close mt-3 d-md-none" href="#"><i
-                                            class="fa fa-times"> </i></a>
-                                    <div class="d-flex align-items-center"><a href="detail.html"><img
-                                                class="cart-item-img"
-                                                src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-serrah-galos-494312-unsplash.jpg"
-                                                alt="..."></a>
-                                        <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                                href="detail.html"><strong>White Tee</strong></a><br><span
-                                                class="text-muted text-sm">Size: Medium</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-7 mt-4 mt-md-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Price per item</div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$55.00</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="row align-items-center">
-                                                <div class="d-md-none col-7 col-sm-9 text-muted">Quantity</div>
-                                                <div class="col-5 col-sm-3 col-md-12">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="btn btn-items btn-items-decrease">-</div>
-                                                        <input
-                                                            class="form-control text-center border-0 border-md input-items"
-                                                            type="text" value="3">
-                                                        <div class="btn btn-items btn-items-increase">+</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="row">
-                                                <div class="col-6 d-md-none text-muted">Total price </div>
-                                                <div class="col-6 col-md-12 text-end text-md-center">$165.00</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-2 d-none d-md-block text-center"><a class="cart-remove"
-                                                href="#"> <i class="delete fa fa-times"></i></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <% }) %>
                     </div>
                 </div>
-                <div class="my-5 d-flex justify-content-between flex-column flex-lg-row"><a
-                        class="btn btn-link text-muted" href="category.html"><i class="fa fa-chevron-left"></i> Continue
-                        Shopping</a><a class="btn btn-dark" href="checkout1.html">Proceed to checkout <i
-                            class="fa fa-chevron-right"></i> </a></div>
+                <div class="my-5 d-flex justify-content-between flex-column flex-lg-row">
+                    <a class="btn btn-link text-muted" href="/shop">
+                        <i class="fa fa-chevron-left"></i>
+                        Continue Shopping
+                    </a>
+                    <a class="btn btn-dark" href="">
+                        Proceed to checkout 
+                        <i class="fa fa-chevron-right"></i> 
+                    </a>
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="block mb-5">
@@ -203,11 +123,11 @@
                         <p class="text-sm">Shipping and additional costs are calculated based on values you have
                             entered.</p>
                         <ul class="order-summary mb-0 list-unstyled">
-                            <li class="order-summary-item"><span>Order Subtotal </span><span>$390.00</span></li>
-                            <li class="order-summary-item"><span>Shipping and handling</span><span>$10.00</span></li>
-                            <li class="order-summary-item"><span>Tax</span><span>$0.00</span></li>
+                            <li class="order-summary-item"><span>Order Subtotal </span><span>$<%= totalPrice %></span></li>
+                            <li class="order-summary-item"><span>Shipping and handling <span class="text-muted">(free)</span></span><span>$0.00</span></li>
+                            <!-- <li class="order-summary-item"><span>Tax</span><span>$0.00</span></li> -->
                             <li class="order-summary-item border-0"><span>Total</span><strong
-                                    class="order-summary-total">$400.00</strong></li>
+                                    class="order-summary-total">$<%= totalPrice %></strong></li>
                         </ul>
                     </div>
                 </div>
@@ -215,3 +135,20 @@
         </div>
     </div>
 </section>
+<% } else { %>
+    <!-- If cart is empty -->
+    <div class="container my-5 mb-6">
+        <div class="col my-5 text-center">
+            <h2 class="h1">
+                Cart is empty...
+            </h2>
+            <h3 class="my-5">
+                <a href="/shop">
+                    <button class="btn btn-lg btn-primary">Shop Now</button>
+                </a>
+            </h3>
+        </div>
+    </div>
+
+<% } %>
+

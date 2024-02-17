@@ -1,31 +1,189 @@
+<main class="main my-5">
+  <div class="d-column d-lg-flex justify-content-center m-0">
+    <div
+      class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3"
+    >
+      <div
+        id="usersList"
+        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
+        style="
+          border-radius: 5px;
+          height: 160px;
+          background-color: rgba(62, 15, 180, 0.377);
+        "
+      >
+        <div style="font-size: 2rem; color: rgb(0, 0, 0)"></div>
 
+        <div class="text-center mt-3 font-weight-bold h4">Total Users</div>
+      </div>
 
-<div class="container">
-    <div class="row text-center">
-        <div class="col card mx-2">
-            <div class="card-body">
-                <p class="h2 card-title">User Count</p>
-                <p class="h3 card-content">
-                </p>
-            </div>
-        </div>
-        <div class="col card mx-2">
-            <div class="card-body">
-                <p class="h2 card-title">User Count</p>
-                <p class="h3 card-content">0</p>
-            </div>
-        </div>
-        <div class="col card mx-2">
-            <div class="card-body">
-                <p class="h2 card-title">User Count</p>
-                <p class="h3 card-content">0</p>
-            </div>
-        </div>
-        <div class="col card mx-2">
-            <div class="card-body">
-                <p class="h2 card-title">User Count</p>
-                <p class="h3 card-content">0</p>
-            </div>
-        </div>
+      <div
+        id="productsList"
+        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
+        style="
+          border-radius: 5px;
+          height: 160px;
+          background-color: rgba(251, 144, 5, 0.377);
+        "
+      >
+        <div style="font-size: 2rem; color: rgb(0, 0, 0)"></div>
+
+        <div class="text-center mt-3 font-weight-bold h4">Total Products</div>
+      </div>
     </div>
-</div>
+
+    <div
+      class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3"
+    >
+      <div
+        id="ordersList"
+        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
+        style="
+          border-radius: 5px;
+          height: 160px;
+          background-color: rgba(15, 180, 89, 0.377);
+        "
+      >
+        <div style="font-size: 2rem; color: rgb(0, 0, 0)"></div>
+
+        <div class="text-center mt-3 font-weight-bold h4">Total Orders</div>
+      </div>
+
+      <div
+        id="salesList"
+        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
+        style="
+          border-radius: 5px;
+          height: 160px;
+          background-color: rgba(14, 125, 244, 0.377);
+        "
+      >
+        <div style="font-size: 2rem"></div>
+
+        <div class="text-center mt-3 font-weight-bold h4">
+          Total Revenue (rs)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div
+    class="d-flex flex-column align-items-center justify-content-center m-lg-5"
+  >
+    <h2 class="text-center m-5">Total Sales Revenue Chart</h2>
+
+    <div class="col-lg-10">
+      <canvas class="w-100 h-auto" id="myChart"></canvas>
+    </div>
+
+    <div class="mt-5 d-flex">
+      <button
+        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
+        data="yearly"
+      >
+        Yearly
+      </button>
+      <button
+        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
+        data="weekly"
+      >
+        Weekly
+      </button>
+      <button
+        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
+        data="daily"
+      >
+        Daily
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="d-flex flex-column align-items-center justify-content-center m-lg-5"
+  >
+    <h2 class="text-center m-5">Total Orders Placed Chart</h2>
+
+    <div class="col-lg-10">
+      <canvas class="w-100 h-auto" id="myChartOrders"></canvas>
+    </div>
+
+    <div class="mt-5 d-flex">
+      <button
+        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="yearly"
+      >
+        Yearly
+      </button>
+      <button
+        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="weekly"
+      >
+        Weekly
+      </button>
+      <button
+        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="daily"
+      >
+        Daily
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column align-items-center justify-content-center m-5">
+    <h2 class="text-center m-5">Types Of Orders Chart</h2>
+
+    <div class="col-md-7 col-lg-6">
+      <canvas class="w-100 h-auto" id="myChartOrderType"></canvas>
+    </div>
+
+    <div class="mt-5 d-flex">
+      <button
+        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="yearly"
+      >
+        Yearly
+      </button>
+      <button
+        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="weekly"
+      >
+        Weekly
+      </button>
+      <button
+        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
+        data="daily"
+      >
+        Daily
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column align-items-center justify-content-center m-5">
+    <h2 class="text-center m-5">Category Wise Sales</h2>
+
+    <div class="col-md-7 col-lg-6">
+      <canvas class="w-100 h-auto" id="myChartCategoryWiseSales"></canvas>
+    </div>
+
+    <div class="mt-5 d-flex">
+      <button
+        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
+        data="yearly"
+      >
+        Yearly
+      </button>
+      <button
+        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
+        data="weekly"
+      >
+        Weekly
+      </button>
+      <button
+        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
+        data="daily"
+      >
+        Daily
+      </button>
+    </div>
+  </div> -->
+</main>

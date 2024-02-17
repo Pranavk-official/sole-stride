@@ -70,11 +70,15 @@
     <%- include('../partials/user/header.ejs') %>
 
     <main>
-        
+        <div class="container">
+            <%- include('../partials/flashMessage.ejs') %>
+        </div>
         <%- body %>
     </main>
 
     <%- include('../partials/user/footer.ejs') %>
+
+
 
         <!-- JavaScript files-->
 
@@ -101,6 +105,11 @@
         </script>
         <script defer src="https://demo.bootstrapious.com/sell/2-0-1/js/theme.30e7c8f9.js"></script>
         <script src="https://demo.bootstrapious.com/sell/2-0-1/vendor/jquery.cookie/jquery.cookie.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script defer src="/javascripts/resetPassValidation.js"></script>
+        <script defer src="/js/user/cart.js"></script>
 </body>
 
 </html>

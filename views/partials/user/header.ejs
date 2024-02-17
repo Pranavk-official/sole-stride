@@ -125,7 +125,7 @@
                                 data-bs-target="#" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 <i class="bi bi-cart3"></i>
-                                <!-- <div class="navbar-icon-link-badge">3</div> -->
+                                <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount %></div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4"
                                 aria-labelledby="cartdetails">
@@ -218,7 +218,7 @@
                     <% if (typeof user !=='undefined') { %>
                         <% if (user) { %>
                         <div class="nav-item navbar-icon-link ">
-                            <a href="/logout" class="navbar-icon-link badge rounded-pill bg-danger badge-sm px-2 py-1 align-items-center">
+                            <a href="/logout" class="navbar-icon-link text-danger px-2 py-1 align-items-center">
                                 <i class="bi bi-box-arrow-right align-items-center"></i>
                                 <span
                                     class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">

@@ -1,5 +1,6 @@
 const Banner = require('../model/bannerSchema')
 const Category = require('../model/categorySchema')
+const Product = require('../model/productSchema')
 
 module.exports = {
     getHome: async (req,res) => {
@@ -48,13 +49,22 @@ module.exports = {
         const locals = {
             title: 'SoleStride - Product'
         }
+        const products = await Product.find({isActive: true})
+        const categories = await Category.find({isActive: true})
         res.render('shop/productsList', {
-            locals
+            locals,
+            products,
+            categories
         })
     },
     getCheckout: async (req,res) => {
+
+        // if(req.user.cart.length < 1){
+        //     return res.redirect('/cart')
+        // }
+
         const locals = {
-            title: 'SoleStride - Orders'
+            title: 'SoleStride - Checkout'
         }
         res.render('shop/checkout', {
             locals

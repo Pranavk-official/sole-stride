@@ -6,6 +6,19 @@ const userSchema = new mongoose.Schema(
     profileImg: {
       type: String,
     },
+    cart: [
+      {
+        product_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     username: {
       type: String,
       required: true,
