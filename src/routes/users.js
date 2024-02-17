@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
+const {cartList} = require('../middlewares/cartMiddleware')
 const userController = require("../controller/userController");
 const { isLoggedIn } = require("../middlewares/authMiddleware");
 
-router.use(isLoggedIn,(req, res, next) => {
+router.use(isLoggedIn,cartList,(req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length 
@@ -28,9 +29,14 @@ router
   .post(userController.resetPass);
 
 router.route("/address").get(userController.getAddress);
+router.route("/address/add-address").post(userController.addAddress);
+router.route("/address/edit-address/:id").get(userController.getAddress);
+router.route("/address/delete-address/:id").post(userController.deleteAddress);
 
 // router.route('/cart')
 //     .get(userController.getAddress);
+
+router.post("/place-order", userController.placeOrder);
 
 router.route("/orders").get(userController.getOrders);
 router.get("/order", userController.getOrder);

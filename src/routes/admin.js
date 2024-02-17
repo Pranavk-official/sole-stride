@@ -90,6 +90,9 @@ router.route("/products/add-product")
 router.route("/products/edit-product/:id")
     .get(productController.getEditProduct)
     .post(productUpload.fields([{name:"images"},{name:"primaryImage"}]),productController.editProduct)
+
+
+// list/unlist product
     
 /**
  * Customer Management
@@ -97,9 +100,16 @@ router.route("/products/edit-product/:id")
 
 router.route("/users").get(adminController.getUsersList);
 
+// edit/view
+// block 
+// delete user
+
 /**
  * Order Management
  */
+
+
+//  ??
 
 router.route("/orders");
 

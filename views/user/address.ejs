@@ -1,148 +1,190 @@
 <section>
-    <div class="container">
-        <!-- Breadcrumbs -->
-        <ol class="breadcrumb justify-content-center">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="index.html">Account</a></li>
-            <li class="breadcrumb-item active">Address</li>
-        </ol>
-        <!-- Hero Content-->
-        <div class="hero-content pb-5 text-center">
-            <h1 class="hero-heading">Your Addressess</h1>
-        </div>
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb justify-content-center">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="index.html">Account</a></li>
+      <li class="breadcrumb-item active">Address</li>
+    </ol>
+    <!-- Hero Content-->
+    <div class="hero-content pb-5 text-center">
+      <h1 class="hero-heading">Your Addressess</h1>
     </div>
+  </div>
 </section>
 
 <div class="container mb-5">
-    <div class="row">
-        <%- include('../partials/user/sidebar.ejs') %>
-            <!-- Content  -->
-            <section class="col-lg-8">
-                <!-- Toolbar-->
-                <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
-                    <h6 class="fs-base  mb-0">List of your registered addresses:</h6>
+  <div class="row">
+    <%- include('../partials/user/sidebar.ejs') %>
+    <!-- Content  -->
+    <section class="col-lg-8">
+      <!-- Toolbar-->
+      <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
+        <h6 class="fs-base  mb-0">List of your registered addresses:</h6>
+      </div>
+      <!-- Add New Address-->
+      <!-- Add New Address Modal-->
+      <form class="needs-validation modal fade" action="/user/address/add-address" method="POST" id="add-address" tabindex="-1" novalidate>
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content p-4">
+            <div class="modal-header">
+              <h5 class="modal-title">Add a new address</h5>
+              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row gx-4 gy-3">
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-fn">Full name</label>
+                  <input name="name" class="form-control" type="text" id="address-fn" required>
+                  <div class="invalid-feedback">Please fill in you first name!</div>
                 </div>
-                <!-- Add New Address-->
-                <form class="needs-validation modal fade" method="post" id="add-address" tabindex="-1" novalidate>
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Add a new address</h5>
-                                <button class="btn-close" type="button" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row gx-4 gy-3">
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-fn">First name</label>
-                                        <input class="form-control" type="text" id="address-fn" required>
-                                        <div class="invalid-feedback">Please fill in you first name!</div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-ln">Last name</label>
-                                        <input class="form-control" type="text" id="address-ln" required>
-                                        <div class="invalid-feedback">Please fill in you last name!</div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-company">Company</label>
-                                        <input class="form-control" type="text" id="address-company">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-country">Country</label>
-                                        <select class="form-select" id="address-country" required>
-                                            <option value>Select country</option>
-                                            <option value="Argentina">Argentina</option>
-                                            <option value="Belgium">Belgium</option>
-                                            <option value="France">France</option>
-                                            <option value="Germany">Germany</option>
-                                            <option value="Spain">Spain</option>
-                                            <option value="UK">United Kingdom</option>
-                                            <option value="USA">USA</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select your country!</div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-city">City</label>
-                                        <input class="form-control" type="text" id="address-city" required>
-                                        <div class="invalid-feedback">Please fill in your city!</div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-line1">Line 1</label>
-                                        <input class="form-control" type="text" id="address-line1" required>
-                                        <div class="invalid-feedback">Please fill in your address!</div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-line2">Line 2</label>
-                                        <input class="form-control" type="text" id="address-line2">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label class="form-label" for="address-zip">ZIP code</label>
-                                        <input class="form-control" type="text" id="address-zip" required>
-                                        <div class="invalid-feedback">Please add your ZIP code!</div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="address-primary">
-                                            <label class="form-check-label" for="address-primary">Make this address
-                                                primary</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-outline-success btn-shadow" type="submit">Add address</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-ln">Phone</label>
+                  <input name="phone" class="form-control" type="text" id="address-ln" required>
+                  <div class="invalid-feedback">Please fill in you last name!</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-house-name">House Name</label>
+                  <input name="house_name" class="form-control" type="text" id="address-house-name">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-area">Area/Street</label>
+                  <input name="area_street" class="form-control" type="text" id="address-area">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-locality">locality</label>
+                  <input name="locality" class="form-control" type="text" id="address-locality">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-town">Town</label>
+                  <input name="town" class="form-control" type="text" id="address-town">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-state">State</label>
+                  <select class="form-select" name="state" id="address-state">
+                    <option value="india">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and
+                      Daman
+                      and
+                      Diu
+                    </option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Puducherry">Puducherry</option>
+                  </select>
+                  <div class="invalid-feedback">Please select your country!</div>
+                </div>
+
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-zip">ZIP code</label>
+                  <input name="zipcode" class="form-control" type="number" id="address-zip" required>
+                  <div class="invalid-feedback">Please add your ZIP code!</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="address-landmark">Landmark</label>
+                  <input name="landmark" class="form-control" type="text" id="address-landmark" required>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="alternate-phone">Alternate Phone</label>
+                  <input name="alternate_phone" class="form-control" type="text" id="alternate-phone" required>
+                  <input name="customer_id" type="hidden" value="<%- user._id %>" class="form-control">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="form-check">Address Type</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" value="HOME" name="address_type" id="flexRadioDefault1" checked>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      HOME
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" value="WORK" type="radio" name="address_type" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      WORK
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="address-primary">
+                    <label class="form-check-label" for="address-primary">Make this address
+                      primary</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-outline-success btn-shadow" type="submit">Add address</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- Addresses list-->
+      <div class="table table-responsive table-striped fs-md">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% address.forEach(item => { %>
+            <tr>
+              <td class="py-3 align-middle"><%- item.name + ', ' + item.house_name + ', ' + item.locality + ', ' + item.area_street %>
+                <!-- <span class="align-middle badge bg-info ms-2">
+                  Primary
+                </span> -->
+              </td>
+              <td class="py-3 btn-group align-middle align-items-center">
+                <!-- <a class="btn btn-sm btn-info" href="/user/address/edit-address/<%- item._id %>" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil fs-6"></i></a> -->
+                <form action="/user/address/delete-address/<%- item._id %>" method="POST">
+                  <button class="btn btn-sm btn-danger" type="submit" data-bs-toggle="tooltip" title="Remove">
+                    <i class="bi bi-trash fs-6"></i>
+                  </button>
                 </form>
-                <!-- Addresses list-->
-                <div class="table table-responsive table-striped fs-md">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Address</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="py-3 align-middle">396 Lillian Blvd, Holbrook, NY 11741, USA<span
-                                        class="align-middle badge bg-info ms-2">Primary</span></td>
-                                <td class="py-3 align-middle"><a class="nav-link-style me-2" href="#"
-                                        data-bs-toggle="tooltip" title="Edit"><i class="ci-edit"></i></a><a
-                                        class="nav-link-style text-danger" href="#" data-bs-toggle="tooltip"
-                                        title="Remove">
-                                        <div class="bi bi-trash"></div>
-                                    </a></td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 align-middle">769, Industrial, West Chicago, IL 60185, USA</td>
-                                <td class="py-3 align-middle"><a class="nav-link-style me-2" href="#"
-                                        data-bs-toggle="tooltip" title="Edit"><i class="ci-edit"></i></a><a
-                                        class="nav-link-style text-danger" href="#" data-bs-toggle="tooltip"
-                                        title="Remove">
-                                        <div class="bi bi-trash"></div>
-                                    </a></td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 align-middle">514 S. Magnolia St. Orlando, FL 32806, USA</td>
-                                <td class="py-3 align-middle"><a class="nav-link-style me-2" href="#"
-                                        data-bs-toggle="tooltip" title="Edit"><i class="ci-edit"></i></a><a
-                                        class="nav-link-style text-danger" href="#" data-bs-toggle="tooltip"
-                                        title="Remove">
-                                        <div class="bi bi-trash"></div>
-                                    </a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-sm-start pt-4">
-                    <a class="btn btn-outline-success" href="#add-address"
-                        data-bs-toggle="modal">
-                        Add new address
-                    </a>
-                </div>
-            </section>      
-    </div>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-sm-start pt-4">
+        <a class="btn btn-outline-success" href="#add-address" data-bs-toggle="modal">
+          Add new address
+        </a>
+      </div>
+    </section>
+  </div>
 </div>

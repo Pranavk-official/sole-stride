@@ -15,24 +15,25 @@ $(document).ready(() => {
           cartCount.innerText = data.count;
         }
         Swal.fire({
-          icon: 'success',
-          title: 'Added to Cart',
-          text: 'Your product has been added to the cart.',
-          confirmButtonText: 'Continue Shopping'
+          icon: "success",
+          title: "Added to Cart",
+          text: "Your product has been added to the cart.",
+          confirmButtonText: "Continue Shopping",
         });
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Failed to Add to Cart',
+          icon: "error",
+          title: "Failed to Add to Cart",
           text: data.message,
         });
       }
     } catch (error) {
       console.log();
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!', error,
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        error,
       });
     }
   }),
@@ -101,12 +102,12 @@ $(document).ready(() => {
 
       if (currentQuantity <= 1) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'You can\'t decrease to zero!',
+          icon: "error",
+          title: "Oops...",
+          text: "You can't decrease to zero!",
         });
-        
-        return ;
+
+        return;
       }
 
       const response = await fetch(`/cart/decrease-quantity/${productId}`, {
@@ -122,17 +123,17 @@ $(document).ready(() => {
       } else {
         // Handle fetch errors here
         Swal.fire({
-          icon: 'error',
-          title: 'Oops... '+ response.status,
-          text: 'Something went wrong!',
+          icon: "error",
+          title: "Oops... " + response.status,
+          text: "Something went wrong!",
         });
       }
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!'+ error,
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!" + error,
       });
     }
   };
@@ -157,3 +158,29 @@ $(document).ready(() => {
   //       });
   //   };
 });
+
+const submitOrder = document.getElementById("submitOrder");
+if (submitOrder) {
+  submitOrder.addEventListener("click", async (e) => {
+    e.preventDefault();
+    let form = document.getElementById("orderForm");
+    if (form) {
+      let formData = new FormData(form);
+      const body = Object.fromEntries(formData);
+      console.log(body);
+      await fetch("/user/place-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            location.assign("/shop/order-success");
+          }
+        });
+    } else {
+      console.error("Form element not found");
+    }
+  });
+}

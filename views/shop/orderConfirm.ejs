@@ -3,7 +3,8 @@
     <div class="container">
         <!-- Breadcrumbs -->
         <ol class="breadcrumb justify-content-center">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
             <li class="breadcrumb-item active">Order confirmed </li>
         </ol>
         <!-- Hero Content-->
@@ -17,8 +18,9 @@
         <div class="icon-rounded bg-success-light mb-3 mx-auto text-success">
             <i class="bi bi-check-circle h1"></i>
         </div>
-        <h4 class="mb-3 ff-base">Thank you, User. Your order is confirmed.</h4>
+        <h4 class="mb-3 ff-base">Thank you, <%- user.username %>. Your order is confirmed.</h4>
+        <h4 class="mb-3 ff-base">Order Id : <%- order %> </h4>
         <p class="text-muted mb-5">Your order hasn't shipped yet but we will send you ane email when it does.</p>
-        <p> <a class="btn btn-outline-dark" href="customer-order.html">View or manage your order</a></p>
+        <p> <a class="btn btn-outline-dark" href="/user/orders">View or manage your order</a></p>
     </div>
 </section>

@@ -125,86 +125,47 @@
                                 data-bs-target="#" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 <i class="bi bi-cart3"></i>
-                                <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount %></div>
+                                <% if (typeof cartCount !== 'undefined') { %>
+                                    <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount ? cartCount : '0' %></div>
+                                <% } %>
                             </a>
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4"
                                 aria-labelledby="cartdetails">
                                 <div class="navbar-cart-product-wrapper">
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a
-                                                href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-ian-dooley-347968-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i
-                                                        class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Skull
-                                                        Tee</a><small
-                                                        class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00
-                                                    </strong>
+                                    <% if (typeof cartEntries !== 'undefined' && typeof cartTotalPrice !== 'undefined') { %>
+                                     
+                                    <% cartEntries.forEach((item, index) => { %>
+                                        <!-- cart item-->
+                                        <div class="navbar-cart-product">
+                                            <div class="d-flex align-items-center">
+                                                <a
+                                                    href="/shop/product/<%- item.prod_details._id %>"><img
+                                                        class="img-fluid navbar-cart-product-image"
+                                                        src="/uploads/product-images/<%= item.prod_details.primary_image.name %>"
+                                                        alt="..." /></a>
+                                                <div class="w-100">
+                                                    <button onclick="removeFromCart('<%- item.prod_details._id %>')" class="btn btn-light navbar-cart-product-close"><i
+                                                            class="text-danger bi bi-x-lg">
+                                                        </i>
+                                                    </button>
+                                                    <div class="ps-3">
+                                                        <a class="navbar-cart-product-link"
+                                                            href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small
+                                                            class="d-block text-muted">Quantity: <%- item.cart.quantity %>
+                                                        </small><strong class="d-block text-sm">$<%- item.price %></strong>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a
-                                                href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-kyle-loftus-596319-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i
-                                                        class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">Transparent
-                                                        Blouse</a><small
-                                                        class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- cart item-->
-                                    <div class="navbar-cart-product">
-                                        <div class="d-flex align-items-center">
-                                            <a
-                                                href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><img
-                                                    class="img-fluid navbar-cart-product-image"
-                                                    src="https://demo.bootstrapious.com/sell/2-0-1/img/product/product-square-serrah-galos-494312-unsplash.jpg"
-                                                    alt="..." /></a>
-                                            <div class="w-100">
-                                                <a class="navbar-cart-product-close" href="#"><i
-                                                        class="bi bi-x-lg">
-                                                    </i></a>
-                                                <div class="ps-3">
-                                                    <a class="navbar-cart-product-link"
-                                                        href="https://demo.bootstrapious.com/sell/2-0-1/detail.html">White
-                                                        Tee</a><small
-                                                        class="d-block text-muted">Quantity: 1
-                                                    </small><strong class="d-block text-sm">$75.00
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <% }) %>
+                                    
                                 </div>
                                 <!-- total price-->
                                 <div class="navbar-cart-total">
                                     <span class="text-uppercase text-muted">Total</span><strong
-                                        class="text-uppercase">$75.00</strong>
+                                        class="text-uppercase">$<%- cartTotalPrice %></strong>
                                 </div>
+                                <% } %>
                                 <!-- buttons-->
                                 <div class="d-flex justify-content-between">
                                     <a class="btn btn-link text-dark me-3" href="/cart">View Cart <i

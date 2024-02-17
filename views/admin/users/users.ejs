@@ -1,0 +1,158 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="breadcrumb-item active" aria-current="page">
+          Customers
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"><%= locals.title ? locals.title : 'Dashboard' %></h1>
+</div>
+
+
+<section class="container">
+    <div class="table-resposive">
+      <table class="table table-striped table-sm table-hover">
+        <thead>
+          <th scope="col">#</th>
+          <th scope="col">Username</th>
+          <th scope="col">Full Name</th>
+          <th scope="col" class="text-center">isVerified</th>
+          <th scope="col" class="text-center">isAdmin</th>
+          <th scope="col" class="text-center">Block/Unblock</th>
+          <th scope="col" class="text-center">Action</th>
+        </thead>
+        <tbody>
+    
+          <% users.forEach((user,index) => { %>
+          <tr class="align-middle">
+            <td><%= index+1 %></td>
+            <td><%= user.username %> </td>
+            <td><%= user.firstName + ' ' + user.lastName %> </td>
+            <td class="text-center">
+              <% if (user.isVerified) { %>
+              <span class="text-success"><%= user.isVerified %></span>
+              <% } else { %>
+              <span class="text-danger"><%= user.isVerified %></span>
+              <% } %>
+            </td>
+            <td class="text-center">
+              <% if (user.isAdmin) { %>
+              <span class="text-success"><%= user.isAdmin %></span>
+              <% } else { %>
+              <span class="text-danger"><%= user.isAdmin %></span>
+              <% } %>
+            </td>
+            <td class="text-center">
+              <% if (!user.isBlocked) { %>
+              <form action="/admin/users/block-user/<%= user._id%>?_method=PATCH" method="POST">
+                <button class="btn btn-danger btn-sm">
+                  <i class="bi bi-person"></i> Block
+                </button>
+              </form>
+              <% } else { %>
+              <form action="/admin/users/unblock-user/<%= user._id%>?_method=PATCH" method="POST">
+                <button class="btn btn-success btn-sm">
+                  <i class="bi bi-person"></i> Unblock
+                </button>
+              </form>
+              <% } %>
+    
+            </td>
+            <td class="text-center">
+              <div class="d-flex flex-row justify-content-center">
+                <!-- <a href="/admin/users/view-user/<%= user._id%>" class="btn btn-primary btn-sm mx-1">
+                  <i class="bi bi-eye"></i>
+                </a> -->
+    
+                <a href="/admin/users/edit-user/<%= user._id%>" class="btn btn-warning btn-sm mx-1">
+    
+                  <i class="bi bi-pencil"></i>
+                </a>
+    
+                <form action="/admin/users/delete-user/<%= user._id%>?_method=DELETE" method="POST" class="position relative">
+                  <button class="btn btn-danger btn-sm mx-1">
+                    <i class="bi bi-person-x"></i>
+                  </button>
+                </form>
+              </div>
+    
+            </td>
+          </tr>
+          <% }) %>
+    
+        </tbody>
+      </table>
+    </div>
+</section>
+
+
+<!-- Pagination -->
+
+<% if (users.length > 0 && nextPage) { %>
+<nav aria-label="Dashboard Pagination">
+  <ul class="pagination justify-content-center mt-5">
+    <% if (current == 1) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">First</a>
+    </li>
+
+    <% } else { %>
+    <li class="page-item">
+      <a href="?page=1" class="page-link">First</a>
+    </li>
+    <% } %>
+
+    <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+    <% if (i !== 1) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">...</a>
+    </li>
+    <% } %>
+
+    <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+    <% if (i == current) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link"><%= i %> </a>
+    </li>
+    <% } else { %>
+    <li class="page-item">
+      <a href="/?page=<%= i %>" class="page-link"><%= i %></a>
+    </li>
+
+    <% } %>
+    <% if (i == Number(current)+ 4 && i < pages) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">...</a>
+    </li>
+    <% } %>
+
+    <% } %>
+    <% if (current == pages) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">Last</a>
+    </li>
+    <% } else { %>
+    <li class="page-item">
+      <a href="/?page=<%= pages %>" class="page-link">Last</a>
+    </li>
+
+    <% } %>
+
+  </ul>
+</nav>
+<% } %>

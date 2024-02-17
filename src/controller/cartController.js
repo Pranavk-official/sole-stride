@@ -1,4 +1,5 @@
 const Product = require("../model/productSchema");
+const Order = require("../model/orderSchema");
 // const Cart = require("../model/cartSchema");
 const User = require("../model/userSchema");
 
@@ -50,41 +51,46 @@ const addProductToCart = async (userId, productId) => {
 
 module.exports = {
   getCart: async (req, res) => {
-    let userData = req.user;
+    if(!req.isAuthenticated()){
+      return res.redirect('/login')
+    } else {
 
-    let user = await User.findById(req.user.id);
-    // console.log(user.cart);
 
-    let cartList = await User.aggregate([
-      { $match: { _id: user._id } },
-      { $project: { cart: 1, _id: 0 } },
-      { $unwind: { path: "$cart" } },
-      {
-        $lookup: {
-          from: "products",
-          localField: "cart.product_id",
-          foreignField: "_id",
-          as: "prod_details",
+      let user = await User.findById(req.user.id);
+      // console.log(user.cart);
+  
+      let cartList = await User.aggregate([
+        { $match: { _id: user._id } },
+        { $project: { cart: 1, _id: 0 } },
+        { $unwind: { path: "$cart" } },
+        {
+          $lookup: {
+            from: "products",
+            localField: "cart.product_id",
+            foreignField: "_id",
+            as: "prod_details",
+          },
         },
-      },
-      { $unwind: { path: "$prod_details" } },
-    ]);
-
-    let totalPrice = 0;
-    for (let prod of cartList) {
-      prod.price = prod.prod_details.sellingPrice * prod.cart.quantity;
-      totalPrice += prod.price; // Calculate total price
+        { $unwind: { path: "$prod_details" } },
+      ]);
+  
+      let totalPrice = 0;
+      for (let prod of cartList) {
+        prod.price = prod.prod_details.sellingPrice * prod.cart.quantity;
+        totalPrice += prod.price; // Calculate total price
+      }
+  
+      let cartCount = req.user.cart.length; // Update cartCount
+  
+      console.log(cartList, cartCount, totalPrice);
+  
+      res.render("shop/cart", {
+        cartList,
+        cartCount,
+        totalPrice,
+      });
     }
-
-    let cartCount = req.user.cart.length; // Update cartCount
-
-    // console.log(cartList, cartCount, totalPrice);
-
-    res.render("shop/cart", {
-      cartList,
-      cartCount,
-      totalPrice,
-    });
+    
   },
   addToCart: async (req, res) => {
     if (!req.isAuthenticated()) {
@@ -180,4 +186,29 @@ module.exports = {
       });
     }
   },
+
+
+  getOrderSuccess: async(req,res) => {
+    let user = await User.findById(req.user.id)
+    let order = await Order.aggregate([
+        {
+            $match: {
+                customer_id: user._id
+            }
+        },
+        {
+            $sort: {
+                createdAt: -1
+            }
+        },
+        {
+            $limit: 1
+        }
+    ]);
+    let order_id = order[0]._id;
+
+    res.render('shop/orderConfirm', {
+      order: order_id
+    })
+  }
 };

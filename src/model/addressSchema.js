@@ -20,7 +20,7 @@ const addressSchema = new Schema({
         type: String,
         required: true
     },
-    pincode: {
+    zipcode: {
         type: Number,
         required: true
     },
