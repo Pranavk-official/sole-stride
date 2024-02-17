@@ -1,204 +1,237 @@
 <style>
-    .otp-field {
-        flex-direction: row;
-        column-gap: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  .otp-field {
+    flex-direction: row;
+    column-gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .otp-field input {
-        height: 45px;
-        width: 42px;
-        border-radius: 6px;
-        outline: none;
-        font-size: 1.125rem;
-        text-align: center;
-        border: 1px solid #ddd;
-    }
+  .otp-field input {
+    height: 45px;
+    width: 42px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 1.125rem;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
 
-    .otp-field input:focus {
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    }
+  .otp-field input:focus {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  }
 
-    .otp-field input::-webkit-inner-spin-button,
-    .otp-field input::-webkit-outer-spin-button {
-        display: none;
-    }
+  .otp-field input::-webkit-inner-spin-button,
+  .otp-field input::-webkit-outer-spin-button {
+    display: none;
+  }
 
-    .resend {
-        font-size: 16px;
-    }
+  .resend {
+    font-size: 16px;
+  }
 </style>
 
 <!--================Login Box Area =================-->
 <section class="login_box_area section-margin my-5">
-    <div class="container">
-        <% if (success.length > 0) { %>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong><%- success %>!</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-        <% } %>
-        <% if (error.length > 0) { %>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong><%- error %></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-        <% } %>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="login_box_img">
-                    <div class="hover">
-                        <h4>Verify OTP</h4>
-                        <p>Your code was sent to you via email</p>
-                        <!-- <a class="button button-account" href="register.html">Create an Account</a> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login_form_inner bg-body-secondary ">
-                    <h4 class="pt-5">Verify</h4>
-                    <form action="/verify-otp" method="POST" class="card-body p-5 text-center">
+  <div class="container">
 
-                        <div class="otp-field mb-4">
-                            <input name="val1" type="number" />
-                            <input name="val2" type="number" disabled />
-                            <input name="val3" type="number" disabled />
-                            <input name="val4" type="number" disabled />
-                            <input name="val5" type="number" disabled />
-                            <input name="val6" type="number" disabled />
-                        </div>
-
-                        <button class="btn btn-primary mb-3">
-                            Verify
-                        </button>
-
-                        <p class="resend text-muted mb-0">
-                            Didn't receive code?
-                            <span class="link-dark link-opacity-25" style="text-decoration: underline;"
-                                id="resend" onclick="resendOTP()">Request again</span>
-                            <span class="font-monospace badge rounded-pill bg-info p-auto" id="timer"></span>
-                        </p>
-                        <!-- <div>Time left = <span id="timer"></span></div> -->
-                    </form>
-                </div>
-            </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="login_box_img">
+          <div class="hover">
+            <h4>Verify OTP</h4>
+            <p>Your code was sent to you via email</p>
+            <!-- <a class="button button-account" href="register.html">Create an Account</a> -->
+          </div>
         </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="login_form_inner bg-body-secondary ">
+          <h4 class="pt-5">Verify</h4>
+          <form action="/verify-otp" method="POST" class="card-body p-5 text-center">
+
+            <div class="otp-field mb-4">
+              <input name="val1" type="number" />
+              <input name="val2" type="number" disabled />
+              <input name="val3" type="number" disabled />
+              <input name="val4" type="number" disabled />
+              <input name="val5" type="number" disabled />
+              <input name="val6" type="number" disabled />
+            </div>
+
+            <button class="btn btn-primary mb-3">
+              Verify
+            </button>
+
+            <p class="resend text-muted mb-0">
+              Didn't receive code?
+              <span class="link-dark link-opacity-25" style="text-decoration: underline;" id="resend" onclick="resendOTP()">Request again</span>
+              <span class="font-monospace badge rounded-pill bg-info p-auto" id="timer"></span>
+            </p>
+            <!-- <div>Time left = <span id="timer"></span></div> -->
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 <!--================End Login Box Area =================-->
 <script defer src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-    // let timer = document.getElementById('timer')
-    const resendButton = document.getElementById('resend')
-    resendButton.disabled = true;
-    let timerOn = true;
+  // let timer = document.getElementById('timer')
+  const resendButton = document.getElementById('resend')
+  resendButton.disabled = true;
+  let timerOn = true;
 
-    function timer(remaining) {
-        var m = Math.floor(remaining / 60);
-        var s = remaining % 60;
+  function timer(remaining) {
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
 
-        m = m < 10 ? '0' + m : m;
-        s = s < 10 ? '0' + s : s;
-        document.getElementById('timer').innerHTML = m + ':' + s;
-        remaining -= 1;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    document.getElementById('timer').innerHTML = m + ':' + s;
+    remaining -= 1;
 
-        if (remaining >= 0 && timerOn) {
-            setTimeout(function () {
-                timer(remaining);
-            }, 1000);
-            return;
-        }
-
-        if (!timerOn) {
-            // Do validate stuff here
-            return;
-        }
-        document.getElementById('timer').classList.add('d-none');
-        // Do timeout stuff here
-        // alert('Timeout for otp');
-        resendButton.disabled = false;
-        resendButton.style.cursor = 'pointer';
-
-        resendButton.classList.remove('link-dark', 'link-opacity-25');
-        resendButton.classList.add('badge', 'rounded-pill', 'bg-primary');
-        // window.location.reload()
+    if (remaining >= 0 && timerOn) {
+      setTimeout(function() {
+        timer(remaining);
+      }, 1000);
+      return;
     }
 
-    timer(20);
+    if (!timerOn) {
+      // Do validate stuff here
+      return;
+    }
+    document.getElementById('timer').classList.add('d-none');
+    // Do timeout stuff here
+    // alert('Timeout for otp');
+    resendButton.disabled = false;
+    resendButton.style.cursor = 'pointer';
 
-    const inputs = document.querySelectorAll(".otp-field > input");
-    const button = document.querySelector(".btn");
+    resendButton.classList.remove('link-dark', 'link-opacity-25');
+    resendButton.classList.add('badge', 'rounded-pill', 'bg-primary');
+    // window.location.reload()
+  }
 
-    window.addEventListener("load", () => inputs[0].focus());
-    button.setAttribute("disabled", "disabled");
+  timer(20);
 
-    inputs[0].addEventListener("paste", function (event) {
-        event.preventDefault();
+  const inputs = document.querySelectorAll(".otp-field > input");
+  const button = document.querySelector(".btn");
 
-        const pastedValue = (event.clipboardData || window.clipboardData).getData(
-            "text"
-        );
-        const otpLength = inputs.length;
+  window.addEventListener("load", () => inputs[0].focus());
+  button.setAttribute("disabled", "disabled");
 
-        for (let i = 0; i < otpLength; i++) {
-            if (i < pastedValue.length) {
-                inputs[i].value = pastedValue[i];
-                inputs[i].removeAttribute("disabled");
-                inputs[i].focus;
-            } else {
-                inputs[i].value = ""; // Clear any remaining inputs
-                inputs[i].focus;
-            }
-        }
-    });
+  inputs[0].addEventListener("paste", function(event) {
+    event.preventDefault();
 
-    inputs.forEach((input, index1) => {
-        input.addEventListener("keyup", (e) => {
-            const currentInput = input;
-            const nextInput = input.nextElementSibling;
-            const prevInput = input.previousElementSibling;
+    const pastedValue = (event.clipboardData || window.clipboardData).getData(
+      "text"
+    );
+    const otpLength = inputs.length;
 
-            if (currentInput.value.length > 1) {
-                currentInput.value = "";
-                return;
-            }
+    for (let i = 0; i < otpLength; i++) {
+      if (i < pastedValue.length) {
+        inputs[i].value = pastedValue[i];
+        inputs[i].removeAttribute("disabled");
+        inputs[i].focus;
+      } else {
+        inputs[i].value = ""; // Clear any remaining inputs
+        inputs[i].focus;
+      }
+    }
+  });
 
-            if (
-                nextInput &&
-                nextInput.hasAttribute("disabled") &&
-                currentInput.value !== ""
-            ) {
-                nextInput.removeAttribute("disabled");
-                nextInput.focus();
-            }
+  inputs.forEach((input, index1) => {
+    input.addEventListener("keyup", (e) => {
+      const currentInput = input;
+      const nextInput = input.nextElementSibling;
+      const prevInput = input.previousElementSibling;
 
-            if (e.key === "Backspace") {
-                inputs.forEach((input, index2) => {
-                    if (index1 <= index2 && prevInput) {
-                        input.setAttribute("disabled", true);
-                        input.value = "";
-                        prevInput.focus();
-                    }
-                });
-            }
+      if (currentInput.value.length > 1) {
+        currentInput.value = "";
+        return;
+      }
 
-            button.classList.remove("active");
-            button.setAttribute("disabled", "disabled");
+      if (
+        nextInput &&
+        nextInput.hasAttribute("disabled") &&
+        currentInput.value !== ""
+      ) {
+        nextInput.removeAttribute("disabled");
+        nextInput.focus();
+      }
 
-            const inputsNo = inputs.length;
-            if (!inputs[inputsNo - 1].disabled && inputs[inputsNo - 1].value !== "") {
-                button.classList.add("active");
-                button.removeAttribute("disabled");
-
-                return;
-            }
+      if (e.key === "Backspace") {
+        inputs.forEach((input, index2) => {
+          if (index1 <= index2 && prevInput) {
+            input.setAttribute("disabled", true);
+            input.value = "";
+            prevInput.focus();
+          }
         });
-    });
+      }
 
+      button.classList.remove("active");
+      button.setAttribute("disabled", "disabled");
+
+      const inputsNo = inputs.length;
+      if (!inputs[inputsNo - 1].disabled && inputs[inputsNo - 1].value !== "") {
+        button.classList.add("active");
+        button.removeAttribute("disabled");
+
+        return;
+      }
+    });
+  });
+
+
+
+
+  async function resendOTP() {
+    try {
+      const response = await fetch("/resend-otp", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      console.log(response);
+
+      if (response.ok) {
+        const res = await response.json();
+
+        console.log(res);
+
+        if (res.success) {
+          // Set the timer values
+          // timer(20)
+
+          // Show a success SweetAlert
+          Swal.fire("Success!", "New OTP sent!", "success")
+            .then(() => {
+              // Reload the page after  2 seconds
+              setTimeout(() => {
+                location.reload();
+              }, 2000);
+            });
+        } else {
+          // Show an error SweetAlert with the message from the response
+          Swal.fire("Error!", res.message, "error");
+        }
+      } else {
+        // Show an error SweetAlert
+        Swal.fire("Error!", "Failed to send OTP", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      // Show an error SweetAlert with the error message
+      Swal.fire("Error!", error.message, "error");
+    }
+  }
 </script>
 <!-- <script>
     import axios from 'axios';

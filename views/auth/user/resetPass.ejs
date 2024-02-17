@@ -1,26 +1,12 @@
 <!--================Login Box Area =================-->
 <section class="login_box_area section-margin my-5">
-    <div class="container">
-        <% if (success.length > 0) { %>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong><%- success %>!</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-        <% } %>
-        <% if (error.length > 0) { %>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong><%- error %></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-        <% } %>
-    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="login_box_img">
                     <div class="hover">
                         <h4>Reset Password</h4>
-                        <!-- <a class="btn btn-outline-light" href="/register">Create an Account</a> -->
                     </div>
                 </div>
             </div>
@@ -48,15 +34,9 @@
                             </div>
                             <small></small>
                         </div>
-                        <!-- <div class="col-md-12 form-group">
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option2" name="selector">
-                                <label for="f-option2">Keep me logged in</label>
-                            </div>
-                        </div> -->
+
                         <div class="col-md-12 form-group">
                             <button type="submit" value="submit" class="btn btn-outline-primary w-100">Reset Password</button>
-                            <!-- <a class="text-primary" href="/forgot-password">Forgot Password?</a> -->
                         </div>
                     </form>
                 </div>
@@ -66,4 +46,4 @@
 </section>
 <!--================End Login Box Area =================-->
 
-<script src="/javascripts/resetPassValidation.js"></script>
+<script src="/javascripts/passResetValidation.js"></script>

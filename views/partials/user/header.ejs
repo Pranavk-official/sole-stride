@@ -160,11 +160,13 @@
                                     <% }) %>
                                     
                                 </div>
-                                <!-- total price-->
-                                <div class="navbar-cart-total">
-                                    <span class="text-uppercase text-muted">Total</span><strong
-                                        class="text-uppercase">$<%- cartTotalPrice %></strong>
-                                </div>
+                                <% if (cartTotalPrice > 0) { %>
+                                    <!-- total price-->
+                                    <div class="navbar-cart-total">
+                                        <span class="text-uppercase text-muted">Total</span><strong
+                                            class="text-uppercase">$<%- cartTotalPrice %></strong>
+                                    </div>
+                                <% } %>
                                 <% } %>
                                 <!-- buttons-->
                                 <div class="d-flex justify-content-between">

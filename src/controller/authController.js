@@ -347,22 +347,26 @@ module.exports = {
    */
   resendOTP: async (req, res) => {
     try {
-      if (req.user || !req.session.verifyToken) {
-        return res.status(500).json({
-          success: false,
-          message: "Error: Session Time Out Try Again !",
-        });
-      }
-      const userId = req.session.passwordResetToken
+      // if (req.isAuthenticated() || !req.session.verifyToken) {
+      //   return res.status(500).json({
+      //     success: false,
+      //     message: "Error: Session Time Out Try Again !",
+      //   });
+      // }
+      let userId = req.session.passwordResetToken
         ? req.session.passwordResetToken
         : req.session.verifyToken;
 
+      if(req.session.forgotPassToken){
+        userId = req.session.forgotPassToken
+      }
+      
       const user = await User.findOne({
         _id: userId,
         isAdmin: false,
         isBlocked: false,
       });
-      const otpSend = await sendOtpEmail(user, res);
+      const otpSend = sendOtpEmail(user, res);
       if (otpSend) {
         return res.status(201).json({ success: true });
       }
@@ -372,6 +376,7 @@ module.exports = {
         message: "Server facing some issues try again !",
       });
     } catch (error) {
+      console.error(error);
       return res.status(500).json({ success: false, message: `${error}` });
     }
   },
@@ -450,7 +455,7 @@ module.exports = {
   resetPass: async (req, res) => {
     // console.log(req.body);
     const errors = validationResult(req);
-    console.log(errors);
+    // console.log(errors);
     if (!errors.isEmpty()) {
       req.flash(
         "error",
