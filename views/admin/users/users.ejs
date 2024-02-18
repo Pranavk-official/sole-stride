@@ -25,85 +25,88 @@
 
 
 <section class="container">
-    <div class="table-resposive">
-      <table class="table table-striped table-sm table-hover">
-        <thead>
-          <th scope="col">#</th>
-          <th scope="col">Username</th>
-          <th scope="col">Full Name</th>
-          <th scope="col" class="text-center">isVerified</th>
-          <th scope="col" class="text-center">isAdmin</th>
-          <th scope="col" class="text-center">Block/Unblock</th>
-          <th scope="col" class="text-center">Action</th>
-        </thead>
-        <tbody>
-    
-          <% users.forEach((user,index) => { %>
-          <tr class="align-middle">
-            <td><%= index+1 %></td>
-            <td><%= user.username %> </td>
-            <td><%= user.firstName + ' ' + user.lastName %> </td>
-            <td class="text-center">
-              <% if (user.isVerified) { %>
-              <span class="text-success"><%= user.isVerified %></span>
-              <% } else { %>
-              <span class="text-danger"><%= user.isVerified %></span>
-              <% } %>
-            </td>
-            <td class="text-center">
-              <% if (user.isAdmin) { %>
-              <span class="text-success"><%= user.isAdmin %></span>
-              <% } else { %>
-              <span class="text-danger"><%= user.isAdmin %></span>
-              <% } %>
-            </td>
-            <td class="text-center">
+  <div class="container table-responsive">
+    <table class="table table-striped table-sm table-hover">
+      <thead>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Full Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Joined Date</th>
+        <th scope="col" class="text-center">isVerified</th>
+        <th scope="col" class="text-center">isAdmin</th>
+        <th scope="col" class="text-center">Block/Unblock</th>
+        <!-- <th scope="col" class="text-center">Action</th> -->
+      </thead>
+      <tbody>
+
+        <% users.forEach((user,index) => { %>
+        <tr class="align-middle">
+          <td><%= index+1 %></td>
+          <td><%= user.username %> </td>
+          <td><%= user.firstName + ' ' + user.lastName %> </td>
+          <td><%= user.email %> </td>
+          <td><%= user.createdAt.toLocaleDateString('en-GB');  %> </td>
+          <td class="text-center">
+            <% if (user.isVerified) { %>
+            <span class="text-success"><%= user.isVerified %></span>
+            <% } else { %>
+            <span class="text-danger"><%= user.isVerified %></span>
+            <% } %>
+          </td>
+          <td class="text-center">
+            <% if (user.isAdmin) { %>
+            <span class="badge rounded-pill bg-success">Admin</span>
+            <% } else { %>
+            <span class="badge rounded-pill bg-info">User</span>
+            <% } %>
+          </td>
+          <td class="text-center">
+            <% if (!user.isAdmin) { %>
               <% if (!user.isBlocked) { %>
-              <form action="/admin/users/block-user/<%= user._id%>?_method=PATCH" method="POST">
-                <button class="btn btn-danger btn-sm">
-                  <i class="bi bi-person"></i> Block
-                </button>
-              </form>
+              <button onclick="blockOrUnblock('<%- user._id %>','<%- user.isBlocked %>','<%- user.username %>')" class="btn btn-danger btn-sm" id="block_unblock">
+                <i class="bi bi-person"></i> Block
+              </button>
+              <!-- <form action="/admin/users/block-user/<%= user._id%>?_method=PATCH" method="POST">
+                </form> -->
               <% } else { %>
-              <form action="/admin/users/unblock-user/<%= user._id%>?_method=PATCH" method="POST">
-                <button class="btn btn-success btn-sm">
-                  <i class="bi bi-person"></i> Unblock
+              <button onclick="blockOrUnblock('<%- user._id %>','<%- user.isBlocked %>','<%- user.username %>')" class="btn btn-success btn-sm" id="block_unblock">
+                <i class="bi bi-person"></i> Unblock
+              </button>
+              <!-- <form action="/admin/users/unblock-user/<%= user._id%>?_method=PATCH" method="POST">
+                </form> -->
+              <% } %>
+            <% } %>
+
+          </td>
+          <!-- <td class="text-center">
+            <div class="d-flex flex-row justify-content-center">
+
+              <a href="/admin/users/edit-user/<%= user._id%>" class="btn btn-warning btn-sm mx-1">
+
+                <i class="bi bi-pencil"></i>
+              </a>
+
+              <form action="/admin/users/delete-user/<%= user._id%>?_method=DELETE" method="POST" class="position relative">
+                <button class="btn btn-danger btn-sm mx-1">
+                  <i class="bi bi-person-x"></i>
                 </button>
               </form>
-              <% } %>
-    
-            </td>
-            <td class="text-center">
-              <div class="d-flex flex-row justify-content-center">
-                <!-- <a href="/admin/users/view-user/<%= user._id%>" class="btn btn-primary btn-sm mx-1">
-                  <i class="bi bi-eye"></i>
-                </a> -->
-    
-                <a href="/admin/users/edit-user/<%= user._id%>" class="btn btn-warning btn-sm mx-1">
-    
-                  <i class="bi bi-pencil"></i>
-                </a>
-    
-                <form action="/admin/users/delete-user/<%= user._id%>?_method=DELETE" method="POST" class="position relative">
-                  <button class="btn btn-danger btn-sm mx-1">
-                    <i class="bi bi-person-x"></i>
-                  </button>
-                </form>
-              </div>
-    
-            </td>
-          </tr>
-          <% }) %>
-    
-        </tbody>
-      </table>
-    </div>
+            </div>
+
+          </td> -->
+        </tr>
+        <% }) %>
+
+      </tbody>
+    </table>
+  </div>
 </section>
 
 
 <!-- Pagination -->
 
-<% if (users.length > 0 && nextPage) { %>
+<% if (users.length > 0 && nextPage || current == pages) { %>
 <nav aria-label="Dashboard Pagination">
   <ul class="pagination justify-content-center mt-5">
     <% if (current == 1) { %>
@@ -131,7 +134,7 @@
     </li>
     <% } else { %>
     <li class="page-item">
-      <a href="/?page=<%= i %>" class="page-link"><%= i %></a>
+      <a href="/admin/users/?page=<%= i %>" class="page-link"><%= i %></a>
     </li>
 
     <% } %>
@@ -148,7 +151,7 @@
     </li>
     <% } else { %>
     <li class="page-item">
-      <a href="/?page=<%= pages %>" class="page-link">Last</a>
+      <a href="/admin/users/?page=<%= pages %>" class="page-link">Last</a>
     </li>
 
     <% } %>
@@ -156,3 +159,48 @@
   </ul>
 </nav>
 <% } %>
+
+<script defer>
+  const blockOrUnblock = async (userId, isBlocked, username) => {
+
+    console.log(userId, isBlocked, username);
+
+
+    const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: isBlocked == 'true' ? `You want to unblock the user ${username}` : `You want to block the user ${username}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: isBlocked ? 'Yes, block!' : 'Yes, unblock!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    })
+
+    if (confirmed.isConfirmed) {
+      const response = await fetch(`/admin/users/toggle-block/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: isBlocked == 'true' ? 'User has been unblocked.' : 'User has been blocked.',
+          icon: 'success',
+          timer: 1500
+        }).then((result) => {
+          location.assign('/admin/users')
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong.',
+          icon: 'error',
+          timer: 1500
+        });
+      }
+    }
+  }
+</script>

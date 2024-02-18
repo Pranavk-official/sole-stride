@@ -9,11 +9,15 @@ module.exports = {
     const locals = {
       title: "SoleStride - Home",
     };
+
+    let perPage = 9;
+    let page = req.query.page || 1;
+
     const banners = await Banner.find({ isActive: true });
-    const products = await Product.find({ isActive: true }).limit(9);
+    const products = await Product.find({ isActive: true }).limit(9).sort({createdAt: -1});
     const categories = await Category.find({ isActive: true });
 
-    console.log(categories);
+
     res.render("index", {
       locals,
       banners,
@@ -25,15 +29,17 @@ module.exports = {
     });
   },
   getProduct: async (req, res) => {
-
-    const product = await Product.findOne({_id: req.params.id, isActive: true})
+    const product = await Product.findOne({
+      _id: req.params.id,
+      isActive: true,
+    });
     console.log(product);
     const locals = {
       title: "SoleStride - Product",
     };
     res.render("shop/productDetail", {
       locals,
-      product
+      product,
     });
   },
   getProductTest: async (req, res) => {
@@ -48,23 +54,44 @@ module.exports = {
     const locals = {
       title: "SoleStride - Product",
     };
-    const products = await Product.find({ isActive: true });
+
+
+    let perPage = 12;
+    let page = req.query.page || 1;
+
+    const count = await Product.countDocuments();
+    const nextPage = parseInt(page) + 1;
+    const hasNextPage = nextPage <= Math.ceil(count / perPage);
+
+    const products = await Product.aggregate([
+      { $match: { isActive: true } },
+      { $sort: { createdAt: -1 } },
+    ])
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .exec();
     const categories = await Category.find({ isActive: true });
     res.render("shop/productsList", {
       locals,
       products,
       categories,
+      current: page,
+      pages: Math.ceil(count / perPage),
+      nextPage: hasNextPage ? nextPage : null,
     });
   },
   getCheckout: async (req, res) => {
-    if(!req.isAuthenticated()){
-      return res.redirect('/login')
+    if (!req.isAuthenticated()) {
+      return res.redirect("/login");
     }
-    
-    if(req.user.cart.length < 1){
-        return res.redirect('/cart')
+
+    if (req.user.cart.length < 1) {
+      return res.redirect("/cart");
     }
-    const address = await Address.find({ customer_id: req.user.id, delete: false });
+    const address = await Address.find({
+      customer_id: req.user.id,
+      delete: false,
+    });
     let user = await User.findById(req.user.id);
     console.log(address);
 
@@ -90,7 +117,7 @@ module.exports = {
     }
 
     let cartCount = req.user.cart.length; // Update cartCount
-    
+
     const locals = {
       title: "SoleStride - Checkout",
     };
@@ -113,10 +140,10 @@ module.exports = {
     });
   },
 
-  addAddress: async (req,res) => {
+  addAddress: async (req, res) => {
     console.log(req.body);
-    await Address.create(req.body)
-    req.flash('success', 'Address Addedd')
-    res.redirect('/checkout')
-  }
+    await Address.create(req.body);
+    req.flash("success", "Address Addedd");
+    res.redirect("/checkout");
+  },
 };

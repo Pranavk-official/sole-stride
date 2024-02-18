@@ -18,9 +18,9 @@
         <%- include('../partials/user/sidebar.ejs') %>
             <!-- Content  -->
             <section class="col-lg-8">
-                <div class="container">
-                    <table class="table table-borderless table-hover table-responsive-md">
-                        <thead class="bg-light">
+                <div class="container  table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="bg-secondary-subtle">
                             <tr>
                                 <th class="py-4 text-uppercase text-sm">Order #</th>
                                 <th class="py-4 text-uppercase text-sm">Date</th>
@@ -30,46 +30,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th class="py-4 align-middle"># 1735</th>
-                                <td class="py-4 align-middle">22/6/2017</td>
-                                <td class="py-4 align-middle">$150.00</td>
-                                <td class="py-4 align-middle"><span
-                                        class="badge p-2 text-uppercase badge-info-light">Being prepared</span>
-                                </td>
-                                <td class="py-4 align-middle"><a class="btn btn-outline-dark btn-sm"
-                                        href="customer-order.html">View</a></td>
-                            </tr>
-                            <tr>
-                                <th class="py-4 align-middle"># 1734</th>
-                                <td class="py-4 align-middle">7/5/2017</td>
-                                <td class="py-4 align-middle">$150.00</td>
-                                <td class="py-4 align-middle"><span
-                                        class="badge p-2 text-uppercase badge-warning-light">Action
-                                        needed</span></td>
-                                <td class="py-4 align-middle"><a class="btn btn-outline-dark btn-sm"
-                                        href="customer-order.html">View</a></td>
-                            </tr>
-                            <tr>
-                                <th class="py-4 align-middle"># 1730</th>
-                                <td class="py-4 align-middle">30/9/2016</td>
-                                <td class="py-4 align-middle">$150.00</td>
-                                <td class="py-4 align-middle"><span
-                                        class="badge p-2 text-uppercase badge-success-light">Received</span>
-                                </td>
-                                <td class="py-4 align-middle"><a class="btn btn-outline-dark btn-sm"
-                                        href="customer-order.html">View</a></td>
-                            </tr>
-                            <tr>
-                                <th class="py-4 align-middle"># 1705</th>
-                                <td class="py-4 align-middle">22/6/2016</td>
-                                <td class="py-4 align-middle">$150.00</td>
-                                <td class="py-4 align-middle"><span
-                                        class="badge p-2 text-uppercase badge-danger-light">Cancelled</span>
-                                </td>
-                                <td class="py-4 align-middle"><a class="btn btn-outline-dark btn-sm"
-                                        href="customer-order.html">View</a></td>
-                            </tr>
+                            <% orderDetails.forEach(element => { %>
+                                <tr>
+                                    <th class="py-4 align-middle">#<%- element._id %></th>
+                                    <td class="py-4 align-middle"><%= element.createdAt.toLocaleDateString('en-GB') %></td>
+                                    <td class="py-4 align-middle">$<%- element.total_amount %></td>
+                                    <td class="py-4 align-middle"><span
+                                            class="badge p-2 text-uppercase badge-info-light">Being prepared</span>
+                                    </td>
+                                    <td class="py-4 align-middle"><a class="btn btn-outline-dark btn-sm"
+                                            href="/user/order/<%- element._id %>">View</a></td>
+                                </tr>
+                            <% }) %>
+
                         </tbody>
                     </table>
                 </div>

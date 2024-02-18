@@ -113,6 +113,9 @@ module.exports = {
    * User Registration and Authentication
    */
   getLogin: async (req, res) => {
+    if(req.session.verifyToken){
+      delete req.session.verifyToken
+    }
     const locals = {
       title: "SoleStride - Login",
     };
@@ -124,6 +127,10 @@ module.exports = {
     });
   },
   getRegister: async (req, res) => {
+    if(req.session.verifyToken){
+      delete req.session.verifyToken
+    }
+    
     const locals = {
       title: "SoleStride - Register",
     };

@@ -24,117 +24,96 @@
 <div class="container mb-5">
   <div class="row">
     <%- include('../partials/user/sidebar.ejs') %>
-      <div class="col-lg-8">
-        <!-- Profile form-->
-        <form>
-          <div class="bg-secondary rounded-3 p-4 mb-4">
-            <div class="d-flex align-items-center"><img class="rounded" src="img/shop/account/avatar.jpg" width="90"
-                alt="Susan Gardner">
-              <div class="ps-3">
+    <div class="col-lg-8">
+      <!-- Profile form-->
+      <form id="update-form">
+        <div class="bg-secondary-subtle rounded-3 p-4 mb-4">
+          <div class="d-flex align-items-center"><img class="rounded" src="/uploads/profile-image/avatar.png" width="90" alt="<%- user.username %>">
+            <!-- <div class="ps-3">
                 <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change
                   avatar</button>
                 <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
-              </div>
-            </div>
+              </div> -->
+            <h3 class="m-2 text-capitalize"><%- user.firstName + ' ' + user.lastName %></h3>
+            <p class="lead m-2 text-uppercase">Update Profile</p>
           </div>
-          <div class="row gx-4 gy-3">
-            <div class="col-sm-6">
-              <label class="form-label" for="account-fn">First Name</label>
-              <input class="form-control" type="text" id="account-fn" value="<%- user.firstName %>">
-            </div>
-            <div class="col-sm-6">
-              <label class="form-label" for="account-ln">Last Name</label>
-              <input class="form-control" type="text" id="account-ln" value="<%- user.lastName %>">
-            </div>
-            <div class="col-sm-6">
-              <label class="form-label" for="account-email">Email Address</label>
-              <input class="form-control" type="email" id="account-email" value="<%- user.email %>" disabled>
-            </div>
-            <div class="col-sm-6">
-              <label class="form-label" for="account-phone">Phone Number</label>
-              <input class="form-control" type="text" id="account-phone" value="+7 (805) 348 95 72" required>
-            </div>
-            <!-- <div class="col-sm-6">
-                    <label class="form-label" for="account-pass">New Password</label>
-                    <div class="password-toggle">
-                      <input class="form-control" type="password" id="account-pass">
-                      <label class="password-toggle-btn" aria-label="Show/hide password">
-                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="form-label" for="account-confirm-pass">Confirm Password</label>
-                    <div class="password-toggle">
-                      <input class="form-control" type="password" id="account-confirm-pass">
-                      <label class="password-toggle-btn" aria-label="Show/hide password">
-                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
-                      </label>
-                    </div>
-                  </div> -->
-            <div class="col-12">
-              <hr class="mt-2 mb-3">
-              <div class="d-flex flex-wrap justify-content-between align-items-center">
-                <button class="btn btn-outline-primary m-3 mt-sm-0" type="button">Update profile</button>
-                <!-- <button class="btn btn-outline-warning m-3 mt-sm-0" type="button">Change Password</button> -->
-              </div>
-            </div>
+        </div>
+        <div class="row gx-4 gy-3">
+          <div class="col-sm-6">
+            <label class="form-label" for="account-fn">First Name</label>
+            <input name="firstName" class="form-control" type="text" id="account-fn" value="<%- user.firstName %>">
+            <small></small>
           </div>
-        </form>
-        <!-- Change Password Form -->
-        <form action="/user/reset-password" method="POST" id="reset-password-form">
-          <hr class="my-4">
-          <div class="bg-secondary rounded-3 p-4 mb-4">
-            <h4>Change Password</h4>
+          <div class="col-sm-6">
+            <label class="form-label" for="account-ln">Last Name</label>
+            <input name="lastName" class="form-control" type="text" id="account-ln" value="<%- user.lastName %>">
+            <small></small>
           </div>
-          <div class="col px-5 mx-5">
-            <div class="col-md-12  mb-5 form-group">
-                <div class="d-flex align-items-center">
-                  <label class="form-label" for="oldPassword">Old Password</label>
-                    <input type="password" class="form-control" id="oldPassword" name="oldPassword"
-                        placeholder="Old Password" onfocus="this.placeholder = ''"
-                        onblur="this.placeholder = 'Password'">
-                    <i class="bi bi-eye-slash" id="toggleOldPassword"
-                        style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                </div>
-                <small></small>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3 form-group">
-                  <div class="d-flex align-items-center">
-                      <input type="password" class="form-control" id="newPassword" name="newPassword"
-                          placeholder="New Password" onfocus="this.placeholder = ''"
-                          onblur="this.placeholder = 'Password'">
-                      <i class="bi bi-eye-slash" id="toggleNewPassword"
-                          style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                  </div>
-                  <small></small>
-              </div>
-              <div class="col-md-6 mb-3 form-group">
-                  <div class="d-flex align-items-center">
-                      <input type="password" class="form-control password" id="confirmNewPassword"
-                          name="confirmNewPassword" placeholder="Confirm New Password"
-                          onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm New Password'">
-                      <i class="bi bi-eye-slash" id="toggleNewPasswordConfirm"
-                          style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
-                  </div>
-                  <small></small>
-              </div>
-            </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="account-email">Email Address</label>
+            <input class="form-control" type="email" id="account-email" value="<%- user.email %>" disabled>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="account-phone">Phone Number</label>
+            <input name="phone" class="form-control" type="text" id="account-phone" value="+7 (805) 348 95 72" required>
+            <small></small>
           </div>
           <div class="col-12">
             <hr class="mt-2 mb-3">
             <div class="d-flex flex-wrap justify-content-between align-items-center">
-              <!-- <button class="btn btn-outline-primary m-3 mt-sm-0" type="button">Update profile</button> -->
-              <button class="btn btn-outline-warning m-3 mt-sm-0" type="submit">Change Password</button>
+              <button class="btn btn-outline-primary m-3 mt-sm-0" type="submit">Update profile</button>
+              <!-- <button class="btn btn-outline-warning m-3 mt-sm-0" type="button">Change Password</button> -->
             </div>
           </div>
+        </div>
+      </form>
+      <!-- Change Password Form -->
+      <form action="/user/reset-password" method="POST" id="reset-password-form">
+        <hr class="my-4">
+        <div class="bg-secondary rounded-3 p-4 mb-4">
+          <h4>Change Password</h4>
+        </div>
+        <div class="col px-5 mx-5">
+          <div class="col-md-12  mb-5 form-group">
+            <div class="d-flex align-items-center">
+              <label class="form-label" for="oldPassword">Old Password</label>
+              <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Old Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+              <i class="bi bi-eye-slash" id="toggleOldPassword" style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+            </div>
+            <small></small>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3 form-group">
+              <div class="d-flex align-items-center">
+                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                <i class="bi bi-eye-slash" id="toggleNewPassword" style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+              </div>
+              <small></small>
+            </div>
+            <div class="col-md-6 mb-3 form-group">
+              <div class="d-flex align-items-center">
+                <input type="password" class="form-control password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm New Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm New Password'">
+                <i class="bi bi-eye-slash" id="toggleNewPasswordConfirm" style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
+              </div>
+              <small></small>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <hr class="mt-2 mb-3">
+          <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <!-- <button class="btn btn-outline-primary m-3 mt-sm-0" type="button">Update profile</button> -->
+            <button class="btn btn-outline-warning m-3 mt-sm-0" type="submit">Change Password</button>
+          </div>
+        </div>
 
-      </form>          
-      </div>
+      </form>
+    </div>
   </div>
 
 </div>
 </div>
 
+<script defer src="/javascripts/updateProfile.js"></script>
 <script defer src="/javascripts/resetPassValidation.js"></script>
+

@@ -10,6 +10,7 @@ const { categoryValidation } = require("../validators/adminValidator");
 
 const { isAdmin } = require("../middlewares/authMiddleware");
 const { categoryUpload, bannerUpload, productUpload } = require("../middlewares/multer");
+const orderController = require("../controller/orderController");
 
 /* Common Midleware for admin routes*/
 router.use(isAdmin, (req, res, next) => {
@@ -100,6 +101,8 @@ router.route("/products/edit-product/:id")
 
 router.route("/users").get(adminController.getUsersList);
 
+router.route("/users/toggle-block/:id").patch(adminController.toggleBlock)
+
 // edit/view
 // block 
 // delete user
@@ -111,6 +114,7 @@ router.route("/users").get(adminController.getUsersList);
 
 //  ??
 
-router.route("/orders");
+router.route("/orders").get(orderController.getOrders);
+router.route("/orders/manage-order/:id").get(orderController.getOrderDetails);
 
 module.exports = router;

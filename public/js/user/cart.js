@@ -159,28 +159,28 @@ $(document).ready(() => {
   //   };
 });
 
-const submitOrder = document.getElementById("submitOrder");
-if (submitOrder) {
-  submitOrder.addEventListener("click", async (e) => {
-    e.preventDefault();
-    let form = document.getElementById("orderForm");
-    if (form) {
-      let formData = new FormData(form);
-      const body = Object.fromEntries(formData);
-      console.log(body);
-      await fetch("/user/place-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            location.assign("/shop/order-success");
-          }
-        });
-    } else {
-      console.error("Form element not found");
-    }
-  });
-}
+// const submitOrder = document.getElementById("submitOrder");
+// if (submitOrder) {
+//   submitOrder.addEventListener("click", async (e) => {
+//     e.preventDefault();
+//     let form = document.getElementById("orderForm");
+//     if (form) {
+//       let formData = new FormData(form);
+//       const body = Object.fromEntries(formData);
+//       console.log(body);
+//       await fetch("/user/place-order", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(body),
+//       })
+//         .then((response) => response.json())
+//         .then((data) => {
+//           if (data.success) {
+//             location.assign("/shop/order-success");
+//           }
+//         });
+//     } else {
+//       console.error("Form element not found");
+//     }
+//   });
+// }

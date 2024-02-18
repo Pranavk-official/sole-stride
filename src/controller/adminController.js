@@ -11,16 +11,18 @@ module.exports = {
 
     // console.log(req.user);
     const users = await User.find();
-    const usersCount = await User.find().countDocuments();
-
     const products = await Product.find();
+    
+    const usersCount = await User.find().countDocuments();
     const productsCount = await Product.find().countDocuments();
+    const ordersCount = await Orders.find().countDocuments()
 
     res.render("admin/dashboard", {
       locals,
       users,
-      usersCount,
       products,
+      usersCount,
+      ordersCount,
       productsCount,
       admin: req.user,
       layout: adminLayout,
@@ -31,7 +33,7 @@ module.exports = {
       title: "SoleStride - Customers",
     };
 
-    let perPage = 12;
+    let perPage = 9;
     let page = req.query.page || 1;
 
     const users = await User.aggregate([{ $sort: { createdAt: -1 } }])
@@ -53,4 +55,19 @@ module.exports = {
       layout: adminLayout,
     });
   },
+
+  toggleBlock: async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      user.isBlocked = !user.isBlocked;
+      await user.save();
+      res.status(200).json({ message: user.isBlocked ? 'User blocked successfully' : 'User unblocked successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  },
+
 };

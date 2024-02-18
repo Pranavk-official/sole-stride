@@ -72,38 +72,38 @@ const isPasswordSecure = (password) => {
   return re.test(password);
 };
 
-const isRequired = (value) => (value === "" ? false : true);
+// const isRequired = (value) => (value === "" ? false : true);
 const isBetween = (length, min, max) =>
   length < min || length > max ? false : true;
 
-const showError = (input, message) => {
-  // get the form-field element
-  const formField = input.parentElement;
-  // add the error class
-  formField.classList.remove("success", "is-valid");
-  input.classList.remove("success", "is-valid");
-  formField.classList.add("error", "is-invalid");
-  input.classList.add("error", "is-invalid");
+// const showError = (input, message) => {
+//   // get the form-field element
+//   const formField = input.parentElement;
+//   // add the error class
+//   formField.classList.remove("success", "is-valid");
+//   input.classList.remove("success", "is-valid");
+//   formField.classList.add("error", "is-invalid");
+//   input.classList.add("error", "is-invalid");
 
-  // show the error message
-  const error = formField.querySelector("small");
-  error.textContent = message;
-};
+//   // show the error message
+//   const error = formField.querySelector("small");
+//   error.textContent = message;
+// };
 
-const showSuccess = (input) => {
-  // get the form-field element
-  const formField = input.parentElement;
+// const showSuccess = (input) => {
+//   // get the form-field element
+//   const formField = input.parentElement;
 
-  // remove the error class
-  formField.classList.remove("error", "is-invalid");
-  input.classList.remove("error", "is-invalid");
-  formField.classList.add("success", "is-valid");
-  input.classList.add("success", "is-valid");
+//   // remove the error class
+//   formField.classList.remove("error", "is-invalid");
+//   input.classList.remove("error", "is-invalid");
+//   formField.classList.add("success", "is-valid");
+//   input.classList.add("success", "is-valid");
 
-  // hide the error message
-  const error = formField.querySelector("small");
-  error.textContent = "";
-};
+//   // hide the error message
+//   const error = formField.querySelector("small");
+//   error.textContent = "";
+// };
 
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -117,6 +117,7 @@ form.addEventListener("submit", async function (e) {
     isConfirmPasswordValid;
 
   if (isFormValid) {
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'You want to change your password?',
@@ -127,7 +128,42 @@ form.addEventListener("submit", async function (e) {
       confirmButtonText: 'Yes, change it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        form.submit()
+        const confirmed = await Swal.fire({
+          title: 'Are you sure?',
+          text: 'You want to reset your password.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, reset!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        });
+    
+        if (confirmed.isConfirmed) {
+          const formData = new FormData(form);
+          const response = await fetch('/user/reset-password', {
+            method: 'POST',
+            body: formData
+          });
+    
+          if (response.ok) {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Password has been reset.',
+              icon: 'success',
+              timer: 1500
+            }).then(()=>{
+              location.assign('/user/profile');
+            });
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Something went wrong.',
+              icon: 'error',
+              timer: 1500
+            });
+          }
+        }
+        // form.submit()
       }
     });
   }

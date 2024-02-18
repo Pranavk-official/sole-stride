@@ -12,6 +12,7 @@ const order_schema = new Schema(
       {
         product_id: {
           type: ObjectId,
+          ref: 'Product',
           required: true,
         },
         quantity: {

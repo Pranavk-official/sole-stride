@@ -68,12 +68,12 @@
               <h6 class="detail-option-heading">Brand <span class="fw-bold text-secondary"><%- product.brand_name %></span></h6>
             </div>
             <div class="col-12 detail-option mb-3">
-              <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
+              <h6 class="detail-option-heading">Colour</h6>
               <ul class="list-inline mb-0 colours-wrapper">
                 <li class="list-inline-item">
-                  <label class="btn-colour" for="colour_Blue" style="background-color: '<%- product.color %>'">
+                  <!-- <label class="btn-colour" for="colour_Blue" style="background-color: '<%- product.color %>'"> -->
                   </label>
-                  <input class="input-invisible" type="radio" name="colour" value="<%- product.color %>" id="colour_Blue" required>
+                  <input class="form-color" disabled type="color" name="colour" value="<%- product.color %>">
                 </li>
               </ul>
             </div>

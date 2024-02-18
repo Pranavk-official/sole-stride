@@ -1,0 +1,94 @@
+<section class="container">
+    <div class="conatiner mt-3 my-2 row">
+      <% orderDetails.forEach(function(order) { %>
+    
+      <div class="card px-4 me-3 col-md-4">
+        <div class="img-text-wrapper p-3 d-flex">
+          <img style="width:  5rem;" src="/uploads/product-images/<%= order.products.primary_image.name %>" alt="">
+          <div class="h5 fw-bold">
+            <%= order.products.product_name %>
+            <span style="font-size:  0.9rem;" class="fw-normal"><br> Quantity:<%= order.items.quantity %></span>
+            <span style="font-size:  0.9rem;" class="fw-bold text-success">&nbsp &nbsp &nbsp &#160 ₹
+              <%= order.items.price %></span>
+          </div>
+          <% if (order.items.delivered) { %>
+          <!-- <div style="width:60%; height:1rem" class="d-flex align-items-center justify-content-end">
+            <i class="fa-solid text-success fa-star"></i>
+            <i class="fa-solid text-success fa-star"></i>
+            <i class="fa-regular text-secondary fa-star"></i>
+            <a href="/reviews/new-review/<%= order.products._id %>" class="text-decoration-none text-success">Rate
+              this?</a>
+          </div> -->
+          <% } %>
+        </div>
+        <div  class="d-flex justify-content-around mb-3">
+          <% if (order.items.cancelled) { %>
+          <input role="button" readonly type="none" class="text-center btn bg-light text-danger py-2 px-2" value="Cancelled">
+          <% } %>
+          <% if (order.items.ordered) { %>
+          <input role="button" onclick="cancelOrder('<%= order.items.product_id %>','<%= order._id %>')" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2" value="Cancel">
+          <% } %>
+    
+          <input role="button" id="cancel-btn" onclick="trckOrder('<%= order.items._id %>')" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2" value="Track Order">
+          <% if (order.items.return) { %>
+          <a class="text-decoration-none" href="/orders/return-order?order_id=<%= order._id %>&product_id=<%= order.items.product_id %>">
+            <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2" value="Return?"></a>
+          <% } %>
+          <% if (order.items.inReturn) { %>
+          <input role="button" readonly type="none" class="text-center btn bg-secondary text-warning py-2 px-2" value="Return: <%= order.items.status %>">
+          <% } %>
+          <% if (order.items.needHelp) { %>
+          <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2" value="Need Help?">
+          <% } %>
+          <% if (order.items.delivered) { %>
+          <a href="/orders/get-invoice?productId=<%= order.items.product_id %>&orderId=<%= order._id %>" class="text-center btn bg-light text-primary text-decoration-none py-2 px-4">
+            <i class="fa-solid fa-download"></i> Download Invoice</a>
+          <% } %>
+        </div>
+        <div class="row d-flex align-items-center">
+          <div style="position: relative;" id="order<%= order.items._id %>" class="border track-order my-2 p-2 rounded ">
+            <% if (order.items.cancelled_on) { %>
+            <div style="width:98% ; position:absolute; z-index: -3;top:4rem ;height:1.5rem;" class="bg-light text-center fw-bold text-danger">Cancelled on <%= order.items.cancelled_on %>
+            </div>
+            <% } %>
+            <% if (order.items.pending) { %>
+            <div style="width:98% ; position:absolute; z-index: -3;top:4rem ;height:1.5rem" class="bg-light text-center fw-bold text-danger">Payment Failed</div>
+            <% } %>
+            <div class="d-flex justify-content-around mb-1">
+              <div style="width:  10rem;">
+                <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.createdAt %></p>
+              </div>
+              <div style="width:  10rem;">
+                <% if (order.items.shipped) { %>
+                <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.shipped_on %></p>
+                <% } %>
+              </div>
+              <div style="width:  10rem;">
+                <% if (order.items.outdelivery) { %>
+                <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.out_for_delivery %></p>
+                <% } %>
+              </div>
+    
+              <div style="width:  10rem;">
+                <% if (order.items.delivered) { %>
+                <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.delivered_on %></p>
+                <% } %>
+              </div>
+            </div>
+            <div class="progress" style="height:  6px; border-radius:  16px;">
+              <div class="progress-bar" role="progressbar" style="width: <%= order.items.track %>%; border-radius:  16px; background-color: #07ae5d;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+              </div>
+            </div>
+            <div class="d-flex justify-content-around mb-1">
+              <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Ordered</p>
+              <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
+              <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivery</p>
+              <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+</section>
+

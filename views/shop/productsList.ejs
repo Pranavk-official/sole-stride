@@ -22,10 +22,15 @@
         <!-- Grid -->
         <div class="products-grid col-xl-9 col-lg-8 order-lg-2">
           <header class="product-grid-header">
-            <div class="me-3 mb-3">
-              Showing <strong>1-12 </strong>of <strong>158 </strong>products</div>
-            <div class="me-3 mb-3"><span class="me-2">Show</span><a class="product-grid-header-show active" href="#">12 </a><a class="product-grid-header-show " href="#">24 </a><a class="product-grid-header-show " href="#">All </a>
-            </div>
+            <!-- <div class="me-3 mb-3">
+              Showing <strong>1-12 </strong>of <strong>158 </strong>products
+            </div> -->
+            <!-- <div class="me-3 mb-3">
+              <span class="me-2">Show</span>
+              <a class="product-grid-header-show active" href="#">12 </a>
+              <a class="product-grid-header-show " href="#">24 </a>
+              <a class="product-grid-header-show " href="#">All </a>
+            </div> -->
             <div class="mb-3 d-flex align-items-center"><span class="d-inline-block me-2">Sort by</span>
               <select class="form-select w-auto border-0">
                 <option value="orderby_0">Default</option>
@@ -74,7 +79,7 @@
               </div>
             </div>
             <!-- Quickview Modal    -->
-            <div class="modal fade quickview" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <!-- <div class="modal fade quickview" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <button class="close modal-close" type="button" data-bs-dismiss="modal" aria-label="Close">
@@ -169,23 +174,65 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <% }) %>
             <!-- /product-->
 
           </div>
           <!-- Pagination-->
-          <nav class="d-flex justify-content-center mb-5 mt-3" aria-label="page navigation">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">Prev</span><span class="sr-only">Previous</span></a></li>
-              <li class="page-item active"><a class="page-link" href="#">1 </a></li>
-              <li class="page-item"><a class="page-link" href="#">2 </a></li>
-              <li class="page-item"><a class="page-link" href="#">3 </a></li>
-              <li class="page-item"><a class="page-link" href="#">4 </a></li>
-              <li class="page-item"><a class="page-link" href="#">5 </a></li>
-              <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">Next</span><span class="sr-only">Next </span></a></li>
-            </ul>
-          </nav>
+          <% if (products.length > 0 && nextPage || current == pages) { %>
+            <nav aria-label="Product Pagination">
+              <ul class="pagination justify-content-center mt-5">
+                <% if (current == 1) { %>
+                <li class="page-item disabled">
+                  <a href="#" class="page-link">First</a>
+                </li>
+            
+                <% } else { %>
+                <li class="page-item">
+                  <a href="?page=1" class="page-link">First</a>
+                </li>
+                <% } %>
+            
+                <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+                <% if (i !== 1) { %>
+                <li class="page-item disabled">
+                  <a href="#" class="page-link">...</a>
+                </li>
+                <% } %>
+            
+                <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+                <% if (i == current) { %>
+                <li class="page-item disabled">
+                  <a href="#" class="page-link"><%= i %> </a>
+                </li>
+                <% } else { %>
+                <li class="page-item">
+                  <a href="/shop/?page=<%= i %>" class="page-link"><%= i %></a>
+                </li>
+            
+                <% } %>
+                <% if (i == Number(current)+ 4 && i < pages) { %>
+                <li class="page-item disabled">
+                  <a href="#" class="page-link">...</a>
+                </li>
+                <% } %>
+            
+                <% } %>
+                <% if (current == pages) { %>
+                <li class="page-item disabled">
+                  <a href="#" class="page-link">Last</a>
+                </li>
+                <% } else { %>
+                <li class="page-item">
+                  <a href="/shop/?page=<%= pages %>" class="page-link">Last</a>
+                </li>
+            
+                <% } %>
+            
+              </ul>
+            </nav>
+            <% } %>
         </div>
         <!-- / Grid End-->
         <!-- Sidebar-->
@@ -194,7 +241,7 @@
             <div class="expand-lg collapse" id="categoriesMenu">
               <div class="nav nav-pills flex-column mt-4 mt-lg-0" role="menu">
                 <div class="sidebar-menu-item mb-2" data-bs-toggle="collapse" data-bs-target="#subcategories_0" aria-expanded="false" aria-controls="subcategories_0" role="menuitem"><a class="nav-link" href="#!"><span>Jackets</span><span class="sidebar-badge ms-2">123</span></a></div>
-                <div class="collapse show" id="subcategories_0">
+                <div class="collapse" id="subcategories_0">
                   <div class="nav nav-pills flex-column ms-3"><a class="nav-link mb-2" href="#!">Lorem ipsum</a><a class="nav-link mb-2" href="#!">Dolor</a><a class="nav-link mb-2" href="#!">Sit amet</a><a class="nav-link mb-2" href="#!">Donec vitae</a>
                   </div>
                 </div>

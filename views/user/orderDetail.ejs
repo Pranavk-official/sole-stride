@@ -1,140 +1,160 @@
 <!-- Hero Section-->
 <section class="hero">
-    <div class="container">
-        <!-- Breadcrumbs -->
-        <ol class="breadcrumb justify-content-center">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="customer-orders.html">Orders</a></li>
-            <li class="breadcrumb-item active">Order #1735 </li>
-        </ol>
-        <!-- Hero Content-->
-        <div class="hero-content pb-5 text-center">
-            <h1 class="hero-heading">Order #1735</h1>
-            <div class="row">
-                <div class="col-xl-8 offset-xl-2">
-                    <p class="lead text-muted">Order #1735 was placed on <strong>22/06/2021</strong> and is currently
-                        <strong>Being prepared</strong>.</p>
-                    <p class="text-muted">If you have any questions, please feel free to <a href="contact.html">contact
-                            us</a>, our customer service center is working for you 24/7.</p>
-                </div>
-            </div>
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb justify-content-center">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item"><a href="customer-orders.html">Orders</a></li>
+      <li class="breadcrumb-item active">Order #<%- orderDetail._id %> </li>
+    </ol>
+    <!-- Hero Content-->
+    <div class="hero-content pb-5 text-center">
+      <h1 class="hero-heading h2">Order <span class="lead h6">#<%- orderDetail._id %></span> </h1>
+      <div class="row">
+        <div class="col-xl-8 offset-xl-2">
+          <p class="lead text-muted">Order #<%- orderDetail._id %> was placed on <strong><%- orderDetail.createdAt.toLocaleString() %></strong> and is currently
+            <strong><%- orderDetail.status %></strong>.
+          </p>
+          <p class="text-muted">If you have any questions, please feel free to <a href="contact.html">contact
+              us</a>, our customer service center is working for you 24/7.</p>
         </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div>
+          <div class="block-header">
+            <h6 class="text-uppercase mb-0">Cancel Order ??</h6>
+          </div>
+          <div class="block-body bg-light pt-1">
+            <button onclick="cancelOrder('<%- orderDetail._id %>')" class="btn btn-danger">Cancel</button>
+          </div>
+        </div>
+        <div>
+          <div class="block-header">
+            <h6 class="text-uppercase mb-0">Track Order ??</h6>
+          </div>
+          <div class="block-body bg-light pt-1">
+            <button class="btn btn-info ">Track</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <section>
-    <div class="container">
-        <div class="cart">
-            <div class="cart-wrapper">
-                <div class="cart-header text-center">
-                    <div class="row">
-                        <div class="col-6">Item</div>
-                        <div class="col-2">Price</div>
-                        <div class="col-2">Quantity</div>
-                        <div class="col-2">Total</div>
-                    </div>
-                </div>
-                <div class="cart-body">
-                    <!-- Product-->
-                    <div class="cart-item">
-                        <div class="row d-flex align-items-center text-center">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center"><a href="detail.html"><img
-                                            class="cart-item-img"
-                                            src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-ian-dooley-347968-unsplash.jpg"
-                                            alt="..."></a>
-                                    <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                            href="detail.html"><strong>Skull Tee</strong></a><br><span
-                                            class="text-muted text-sm">Size: Large</span><br><span
-                                            class="text-muted text-sm">Colour: Green</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">$65.00</div>
-                            <div class="col-2">4
-                            </div>
-                            <div class="col-2 text-center">$260.00</div>
-                        </div>
-                    </div>
-                    <!-- Product-->
-                    <div class="cart-item">
-                        <div class="row d-flex align-items-center text-center">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center"><a href="detail.html"><img
-                                            class="cart-item-img"
-                                            src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-kyle-loftus-596319-unsplash.jpg"
-                                            alt="..."></a>
-                                    <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                            href="detail.html"><strong>Transparent Blouse</strong></a><br><span
-                                            class="text-muted text-sm">Size: Medium</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">$55.00</div>
-                            <div class="col-2">3
-                            </div>
-                            <div class="col-2 text-center">$165.00</div>
-                        </div>
-                    </div>
-                    <!-- Product-->
-                    <div class="cart-item">
-                        <div class="row d-flex align-items-center text-center">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center"><a href="detail.html"><img
-                                            class="cart-item-img"
-                                            src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/product-square-serrah-galos-494312-unsplash.jpg"
-                                            alt="..."></a>
-                                    <div class="cart-title text-start"><a class="text-uppercase text-dark"
-                                            href="detail.html"><strong>White Tee</strong></a><br><span
-                                            class="text-muted text-sm">Size: Medium</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">$55.00</div>
-                            <div class="col-2">3
-                            </div>
-                            <div class="col-2 text-center">$165.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+
+    <div class="row my-5">
+      <div class="col-md-6">
+        <div class="block mb-5">
+          <div class="block-header">
+            <h6 class="text-uppercase mb-0">Order Summary</h6>
+          </div>
+          <div class="block-body bg-light pt-1">
+            <p class="text-sm">Shipping and additional costs are calculated based on values you have entered.</p>
+            <ul class="order-summary mb-0 list-unstyled">
+              <li class="order-summary-item"><span>Order Subtotal </span><span>$<%- orderDetails[0].total_amount %></span></li>
+              <li class="order-summary-item"><span>Shipping and handling (free) </span><span>$0.00</span>
+              </li>
+              <!-- <li class="order-summary-item"><span>Tax</span><span>$0.00</span></li> -->
+              <li class="order-summary-item border-0"><span>Total</span><strong class="order-summary-total">$<%- orderDetails[0].total_amount %></strong></li>
+            </ul>
+          </div>
         </div>
-        <div class="row my-5">
-            <div class="col-md-6">
-                <div class="block mb-5">
-                    <div class="block-header">
-                        <h6 class="text-uppercase mb-0">Order Summary</h6>
+      </div>
+      <div class="col-md-6">
+        <div class="block-header">
+          <h6 class="text-uppercase mb-0">Invoice / Shipping address</h6>
+        </div>
+        <div class="block-body bg-light pt-1">
+          <p><%- orderDetails[0].address.name %><br><%- orderDetails[0].address.house_name %><br><%- address.locality %><br><%- address.zipcode %><br><%- address.town %><br><strong class="text-capitalize"><%- address.state %></strong></p>
+        </div>
+        <!-- <div class="block-header">
+                        <h6 class="text-uppercase mb-0">Shipping address</h6>
                     </div>
                     <div class="block-body bg-light pt-1">
-                        <p class="text-sm">Shipping and additional costs are calculated based on values you have
-                            entered.</p>
-                        <ul class="order-summary mb-0 list-unstyled">
-                            <li class="order-summary-item"><span>Order Subtotal </span><span>$390.00</span></li>
-                            <li class="order-summary-item"><span>Shipping and handling</span><span>$10.00</span>
-                            </li>
-                            <li class="order-summary-item"><span>Tax</span><span>$0.00</span></li>
-                            <li class="order-summary-item border-0"><span>Total</span><strong
-                                    class="order-summary-total">$400.00</strong></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="block-header">
-                    <h6 class="text-uppercase mb-0">Invoice address</h6>
-                </div>
-                <div class="block-body bg-light pt-1">
-                    <p>John Brown<br>13/25 New Avenue<br>New Heaven<br>45Y 73J<br>England<br><strong>Great
-                            Britain</strong></p>
-                </div>
-                <div class="block-header">
-                    <h6 class="text-uppercase mb-0">Shipping address</h6>
-                </div>
-                <div class="block-body bg-light pt-1">
-                    <p>John Brown<br>13/25 New Avenue<br>New Heaven<br>45Y 73J<br>England<br><strong>Great
-                            Britain</strong></p>
-                </div>
-            </div>
-        </div>
+                        <p>John Brown<br>13/25 New Avenue<br>New Heaven<br>45Y 73J<br>England<br><strong>Great
+                                Britain</strong></p>
+                    </div> -->
+
+      </div>
     </div>
+
+    <table class="table table-responsive table-sm table-borderless my-4 mb-7">
+      <legend class="h3 text-uppercase text-center">Ordered Products</legend>
+      <div class="cart-wrapper">
+        <thead class="cart-header text-center">
+          <tr>
+            <th class="">Item</th>
+            <th class="">Price</th>
+            <th class="">Quantity</th>
+            <th class="">Total</th>
+          </tr>
+        </thead>
+        <tbody class="cart-body table-body">
+          <% orderDetails[0].items.forEach((element) => { %>
+          <!-- Product-->
+          <tr class="cart-item align-middle text-center">
+            <div class="row d-flex align-items-center text-center">
+              <td class="d-flex justify-content-center">
+                <div class="d-flex align-items-center"><a href="/shop/product/<%- element.product_id._id %>"><img class="cart-item-img" src="/uploads/product-images/<%- element.product_id.primary_image.name %>" alt="..."></a>
+                  <div class="cart-title text-start"><a class="text-uppercase text-dark" href="detail.html"><strong><%- element.product_id.product_name %></strong></a><br><span class="text-muted text-sm">Size: <%- element.product_id.size %></span><br><span class="text-muted text-sm">Colour: <input type="color" readonly value="<%- element.product_id.color %>"></span>
+                  </div>
+                </div>
+              </td>
+              <td class="">$<%- element.product_id.sellingPrice %></td>
+              <td class=""><%- element.quantity %>
+              </td>
+              <td class=" text-center">$<%- element.price %></td>
+            </div>
+          </tr>
+          <% }) %>
+        </tbody>
+    </table>
+    <hr>
+
+  </div>
 </section>
+
+
+<script>
+  const cancelOrder = async (orderId) => {
+
+    const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You want to cancel this order.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, cancel!',
+      cancelButtonText: 'No, keep it!',
+      reverseButtons: true
+    });
+
+    if (confirmed.isConfirmed) {
+      const response = await fetch(`/user/orders/cancel-order/${orderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Order has been cancelled.',
+          icon: 'success',
+          timer: 1500
+        }).then(() => {
+          location.assign('/user/orders');
+        })
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong.',
+          icon: 'error',
+          timer: 1500
+        });
+      }
+    }
+  }
+</script>
