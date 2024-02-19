@@ -26,14 +26,10 @@
     <%- include('../partials/user/sidebar.ejs') %>
     <div class="col-lg-8">
       <!-- Profile form-->
-      <form id="update-form">
+      <form id="update-form" action="/user/profile" method="POST">
         <div class="bg-secondary-subtle rounded-3 p-4 mb-4">
-          <div class="d-flex align-items-center"><img class="rounded" src="/uploads/profile-image/avatar.png" width="90" alt="<%- user.username %>">
-            <!-- <div class="ps-3">
-                <button class="btn btn-light btn-shadow btn-sm mb-2" type="button"><i class="ci-loading me-2"></i>Change
-                  avatar</button>
-                <div class="p mb-0 fs-ms text-muted">Upload JPG, GIF or PNG image. 300 x 300 required.</div>
-              </div> -->
+          <div class="d-flex align-items-center">
+            <img class="rounded" src="/uploads/profile-image/avatar.png" width="90" alt="<%- user.username %>">
             <h3 class="m-2 text-capitalize"><%- user.firstName + ' ' + user.lastName %></h3>
             <p class="lead m-2 text-uppercase">Update Profile</p>
           </div>
@@ -55,14 +51,13 @@
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="account-phone">Phone Number</label>
-            <input name="phone" class="form-control" type="text" id="account-phone" value="+7 (805) 348 95 72" required>
+            <input name="phone" class="form-control" type="text" id="account-phone" placeholder="+91 80534 89572" required>
             <small></small>
           </div>
           <div class="col-12">
             <hr class="mt-2 mb-3">
             <div class="d-flex flex-wrap justify-content-between align-items-center">
               <button class="btn btn-outline-primary m-3 mt-sm-0" type="submit">Update profile</button>
-              <!-- <button class="btn btn-outline-warning m-3 mt-sm-0" type="button">Change Password</button> -->
             </div>
           </div>
         </div>

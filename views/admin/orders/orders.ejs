@@ -73,6 +73,10 @@
                                 <a class="btn btn-sm btn-danger" href="/admin/orders/manage-order/<%- order._id %>">
                                     Manage
                                 </a>
+                            <% } else { %>
+                                  <a class="btn btn-sm btn-info" href="/admin/orders/manage-order/<%- order._id %>">
+                                      View
+                                  </a> 
                             <% } %>
                         </td>
                     </tr>

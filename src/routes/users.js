@@ -29,6 +29,7 @@ router
   .route("/reset-password")
   .post(userController.resetPass);
 
+
 router.route("/address").get(userController.getAddress);
 router.route("/address/add-address").post(userController.addAddress);
 router.route("/address/edit-address/:id").get(userController.getAddress);
@@ -40,6 +41,7 @@ router.post("/place-order", orderController.placeOrder);
 
 router.route("/orders").get(orderController.getUserOrders);
 router.get("/order/:id", orderController.getUserOrder);
+router.post("/cancel-order/:id", orderController.cancelOrder);
 router.get("/wishlist", userController.getWishlist);
 
 module.exports = router;

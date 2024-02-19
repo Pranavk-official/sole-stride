@@ -84,54 +84,52 @@ const showSuccess = (input) => {
 
 updateForm.addEventListener("submit", function (e) {
   e.preventDefault();
-
+  
   let isFirstNameValid = checkFirstName(),
     isLastNameValid = checkLastName(),
     isPhoneValid = checkPhone();
-
+  
   let isFormValid = isFirstNameValid && isLastNameValid && isPhoneValid;
 
   if (isFormValid) {
-    // updateForm.submit();
-    Swal.fire({
-      title: "Update Profile?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, update it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const formData = new FormData(updateForm);
-        fetch("/user/update-profile", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              Swal.fire(
-                "Updated!",
-                "Your profile has been updated.",
-                "success"
-              );
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: data.message || "Something went wrong!",
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong!",
-            });
-          });
-      }
-    });
+    updateForm.submit();
+    // const formData = new FormData(updateForm);
+    // console.log(formData);
+    // Swal.fire({
+    //   title: "Are you sure?",
+    //   text: "You want to update your profile?",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Yes, Update!",
+    // }).then(async (result) => {
+    //   if (result.isConfirmed) {
+    //     const formData = new FormData(form);
+    //     const response = await fetch("/user/profile", {
+    //       method: "POST",
+    //       body: formData,
+    //     });
+
+    //     if (response.ok) {
+    //       Swal.fire({
+    //         title: "Success!",
+    //         text: "Password has been reset.",
+    //         icon: "success",
+    //         timer: 1500,
+    //       }).then(() => {
+    //         location.assign("/user/profile");
+    //       });
+    //     } else {
+    //       Swal.fire({
+    //         title: "Error!",
+    //         text: "Something went wrong.",
+    //         icon: "error",
+    //         timer: 1500,
+    //       });
+    //     }
+    //     // form.submit()
+    //   }
+    // });
   }
 });

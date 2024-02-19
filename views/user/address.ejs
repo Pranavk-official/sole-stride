@@ -22,7 +22,6 @@
       <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
         <h6 class="fs-base  mb-0">List of your registered addresses:</h6>
       </div>
-      <!-- Add New Address-->
       <!-- Add New Address Modal-->
       <form class="needs-validation modal fade" action="/user/address/add-address" method="POST" id="add-address" tabindex="-1" novalidate>
         <div class="modal-dialog modal-lg">
@@ -144,13 +143,7 @@
                     </label>
                   </div>
                 </div>
-                <!-- <div class="col-12">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="address-primary">
-                    <label class="form-check-label" for="address-primary">Make this address
-                      primary</label>
-                  </div>
-                </div> -->
+
               </div>
             </div>
             <div class="modal-footer">
@@ -172,14 +165,12 @@
           <tbody>
             <% address.forEach(item => { %>
             <tr>
-              <td class="py-3 align-middle"><%- item.name + ', ' + item.house_name + ', ' + item.locality + ', ' + item.area_street %>
-                <!-- <span class="align-middle badge bg-info ms-2">
-                  Primary
-                </span> -->
+              <td class="py-3 align-middle text-capitalize">
+                <%- item.name.toLowerCase() + ', ' + item.house_name + ', ' + item.town + ', ' + item.state + ', PIN: ' + item.zipcode + ', PH:' + item.phone %>
               </td>
               <td class="py-3 btn-group align-middle align-items-center">
                 <!-- <a class="btn btn-sm btn-info" href="/user/address/edit-address/<%- item._id %>" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil fs-6"></i></a> -->
-                <form action="/user/address/delete-address/<%- item._id %>" method="POST">
+                <form id="deleteAddress" action="/user/address/delete-address/<%- item._id %>" method="POST">
                   <button class="btn btn-sm btn-danger" type="submit" data-bs-toggle="tooltip" title="Remove">
                     <i class="bi bi-trash fs-6"></i>
                   </button>
@@ -201,6 +192,27 @@
 
 
 <script defer>
+
+  const deleteAddress = document.querySelector("#deleteAddress")
+
+  deleteAddress.addEventListener("submit", function (e) {
+    e.preventDefault()
+    let form = e.target
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();
+      }
+    });
+  })
+
   const form = document.querySelector("#add-address");
 
   const checkName = () => {

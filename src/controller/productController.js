@@ -5,10 +5,11 @@ const Category = require('../model/categorySchema')
 
 module.exports = {
     getAllProducts: async (req,res) =>{
+        console.log(req.session);
         const products = await Product.find()
         res.render('admin/products/products', {
             layout,
-            products
+            products,
         })
     },
     getAddProduct: async (req,res) =>{
@@ -71,7 +72,9 @@ module.exports = {
     },
     editProduct: async (req,res) =>{
         try {
-            const product = await Product.findOne({ _id: req.body.id });
+            console.log(req.body,req.params.id);
+            const product = await Product.findOne({ _id: req.params.id });
+            console.log(product);
             if (req.files != null) {
                 const id_secondary_img = req.body.id_secondary_img
                 const primaryImage = product.primary_image
@@ -96,7 +99,7 @@ module.exports = {
                 }
             }
     
-            const categoryID = new mongoose.Types.ObjectId(req.body.category)
+            const categoryID = req.body.category
             product.product_name = req.body.product_name;
             product.brand_name = req.body.brand_name;
             product.description = req.body.description;
@@ -108,7 +111,8 @@ module.exports = {
             product.isActive = req.body.status;
             product.size = req.body.size;
     
-            const productUpdate = await Product.findByIdAndUpdate({ _id: req.body.id }, product);
+            const productUpdate = await Product.findByIdAndUpdate({ _id: req.params.id }, product);
+            // req.flash('success', 'product editted successfully')
             if (productUpdate) {
                 req.flash('success', 'product editted successfully')
                 res.redirect('/admin/products')

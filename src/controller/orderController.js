@@ -15,7 +15,6 @@ module.exports = {
       return res.json({ status: false, message: "Please add the address" });
     }
 
-    console.log(req.body);
     const user = await User.findById(req.user.id);
     let status;
     if (
@@ -49,7 +48,6 @@ module.exports = {
       },
     ]);
 
-    console.log(cartList);
     const address = await Address.findOne({ _id: req.body.address });
 
     if (address && cartList) {
@@ -60,14 +58,13 @@ module.exports = {
           product_id: cartList[i].cart.product_id,
           quantity: cartList[i].cart.quantity,
           price: parseInt(cartList[i].prod_detail.sellingPrice),
-          status: status,
         });
       }
 
       let totalPrice = 0;
       for (let prod of cartList) {
         prod.price = prod.prod_detail.sellingPrice * prod.cart.quantity;
-        totalPrice += prod.price; // Calculate total price
+        totalPrice += prod.price;
       }
 
       let order = {
@@ -134,11 +131,10 @@ module.exports = {
     orderDetails = orderDetails.reverse();
 
     const count = await Order.countDocuments({ customer_id: user._id });
-    const order = await Order.find({ customer_id: user._id });
+    // const order = await Order.find({ customer_id: user._id });
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
 
-    console.log(orderDetails.items);
 
     res.render("user/orders", {
       orderDetails,
@@ -170,7 +166,52 @@ module.exports = {
     });
   },
   // Cancel and Return
-  cancelOrder: async (req, res) => {},
+  cancelOrder: async (req, res) => {
+    try {
+      console.log(req.params);
+
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({ message: "Order not found." });
+      }
+
+      if (order.status === "Cancelled") {
+        return res.status(400).json({ message: "Order is already cancelled." });
+      }
+
+      const updatedOrder = await Order.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: { status: "Cancelled", cancelled_on: new Date() },
+        },
+        { new: true }
+      ); // Use the { new: true } option to return the updated document
+
+      if (!updatedOrder) {
+        return res.status(500).json({ message: "Failed to cancel order." });
+      }
+
+      // Assuming you have a Product model and each product has a quantity field
+      for (const item of updatedOrder.items) {
+        const product = await Product.findById(item.product_id);
+        if (product) {
+          product.stock += item.quantity; // Increment the quantity of the product
+          await product.save(); // Save the updated product
+        }
+      }
+
+      res
+        .status(200)
+        .json({
+          message: "Order cancelled successfully.",
+          order: updatedOrder,
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error." });
+    }
+  },
   returnOrder: async (req, res) => {},
 
   /**
@@ -230,10 +271,48 @@ module.exports = {
     });
   },
   getOrderDetails: async (req, res) => {
-    res.render('admin/orders/viewOrder',{
-      layout
-    })
+    const orderDetails = await Order.findOne({ _id: req.params.id })
+      .populate("customer_id")
+      .populate("items.product_id");
+
+    console.log(orderDetails.customer_id);
+    res.render("admin/orders/viewOrder", {
+      layout,
+      orderDetails,
+    });
   },
 
-  changeOrderStatus: async (req, res) => {},
+  changeOrderStatus: async (req, res) => {
+    const status = req.body.status;
+    const order_id = req.params.id;
+  
+    try {
+      // Check if the order exists
+      const order = await Order.findById(order_id);
+      if (!order) {
+        return res.status(404).json({ success: false, message: 'Order not found.' });
+      }
+  
+      // Check if the new status is valid
+      if (!['Cancelled', 'Pending', 'confirmed', 'Shipped', 'Out for Delivery', 'Delivered'].includes(status)) {
+        return res.status(400).json({ success: false, message: 'Invalid status.' });
+      }
+  
+      // Update the order status
+      const updateOrder = await Order.updateOne(
+        { _id: order_id },
+        { $set: { status: status } }
+      );
+  
+      // Check if the order was successfully updated
+      if (updateOrder) {
+        res.json({ success: true, message: 'Order status updated successfully.' });
+      } else {
+        res.status(400).json({ success: false, message: 'No changes were made.' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Server error.' });
+    }
+  },
 };

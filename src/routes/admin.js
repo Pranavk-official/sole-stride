@@ -17,8 +17,9 @@ router.use(isAdmin, (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     res.locals.admin = req.user;
   }
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  // console.log(req.session.flash);
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
   next();
 });
 
@@ -103,18 +104,14 @@ router.route("/users").get(adminController.getUsersList);
 
 router.route("/users/toggle-block/:id").patch(adminController.toggleBlock)
 
-// edit/view
-// block 
-// delete user
 
 /**
  * Order Management
  */
 
 
-//  ??
-
 router.route("/orders").get(orderController.getOrders);
 router.route("/orders/manage-order/:id").get(orderController.getOrderDetails);
+router.route("/orders/manage-order/changeStatus/:id").post(orderController.changeOrderStatus);
 
 module.exports = router;

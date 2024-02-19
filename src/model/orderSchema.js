@@ -6,6 +6,7 @@ const order_schema = new Schema(
   {
     customer_id: {
       type: ObjectId,
+      ref: 'User',
       require: true,
     },
     items: [
@@ -25,7 +26,6 @@ const order_schema = new Schema(
         },
         status: {
           type: String,
-          required: true,
         },
         shipped_on: {
           type: Date,

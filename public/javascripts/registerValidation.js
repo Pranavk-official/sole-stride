@@ -29,6 +29,8 @@ const checkUsername = () => {
   return valid;
 };
 
+
+
 const checkEmail = () => {
   let valid = false;
   const email = emailEl.value.trim();
