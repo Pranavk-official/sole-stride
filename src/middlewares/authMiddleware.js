@@ -1,6 +1,8 @@
 const User = require('../model/userSchema')
 const OTP = require('../model/otpSchema')
 
+const passport = require('../config/passport-config')
+
 module.exports = {
     isLoggedIn: (req, res, next) => {
         // console.log(req.user, req.isAuthenticated());
@@ -45,4 +47,27 @@ module.exports = {
             next()
         }
     },
+
+
+    // Check Blocked status for users
+
+    checkBlockedUser: async (req,res,next) => {
+        if(req.user) {
+            const user = await User.findOne({_id: req.user.id})
+            console.log(user);
+            if(user.isBlocked) {
+                req.logout((err) => {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      req.flash("error", `User is blocked by the admin!!!!`);
+                      res.clearCookie("connect.sid");
+                      return res.redirect("/login");
+                    }
+                  });
+            } else {
+                next();
+            }
+        }
+    }
 }

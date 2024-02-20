@@ -51,7 +51,7 @@
           <td>
             <%= index+1 %>
           </td>
-          <td><img class="mx-auto d-block img-fluid img-thumbnail" src="/uploads/banners/<%= banner.image.filename %>" alt=""></td>
+          <td><img class="mx-auto d-block img-fluid img-thumbnail" width="290rem" src="/uploads/banners/<%= banner.image.filename %>" alt=""></td>
           <td><%= banner.name %></td>
           <td><a href="<%= banner.reference %>">Check Reference</a></td>
           <% if (banner.isActive) { %>
@@ -80,3 +80,57 @@
     </table>
   </div>
 </div>
+<!-- Pagination-->
+<% if (banners.length > 0 && nextPage || current == pages) { %>
+<nav aria-label="Product Pagination">
+  <ul class="pagination justify-content-center mt-5">
+    <% if (current == 1) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">First</a>
+    </li>
+
+    <% } else { %>
+    <li class="page-item">
+      <a href="/admin/banners/?page=1" class="page-link">First</a>
+    </li>
+    <% } %>
+
+    <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+    <% if (i !== 1) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">...</a>
+    </li>
+    <% } %>
+
+    <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+    <% if (i == current) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link"><%= i %> </a>
+    </li>
+    <% } else { %>
+    <li class="page-item">
+      <a href="/admin/banners?page=<%= i %>" class="page-link"><%= i %></a>
+    </li>
+
+    <% } %>
+    <% if (i == Number(current)+ 4 && i < pages) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">...</a>
+    </li>
+    <% } %>
+
+    <% } %>
+    <% if (current == pages) { %>
+    <li class="page-item disabled">
+      <a href="#" class="page-link">Last</a>
+    </li>
+    <% } else { %>
+    <li class="page-item">
+      <a href="/admin/banners?page=<%= pages %>" class="page-link">Last</a>
+    </li>
+
+    <% } %>
+
+  </ul>
+</nav>
+<% } %>

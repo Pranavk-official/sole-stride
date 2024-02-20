@@ -73,28 +73,12 @@
               <button onclick="blockOrUnblock('<%- user._id %>','<%- user.isBlocked %>','<%- user.username %>')" class="btn btn-success btn-sm" id="block_unblock">
                 <i class="bi bi-person"></i> Unblock
               </button>
-              <!-- <form action="/admin/users/unblock-user/<%= user._id%>?_method=PATCH" method="POST">
-                </form> -->
+
               <% } %>
             <% } %>
 
           </td>
-          <!-- <td class="text-center">
-            <div class="d-flex flex-row justify-content-center">
 
-              <a href="/admin/users/edit-user/<%= user._id%>" class="btn btn-warning btn-sm mx-1">
-
-                <i class="bi bi-pencil"></i>
-              </a>
-
-              <form action="/admin/users/delete-user/<%= user._id%>?_method=DELETE" method="POST" class="position relative">
-                <button class="btn btn-danger btn-sm mx-1">
-                  <i class="bi bi-person-x"></i>
-                </button>
-              </form>
-            </div>
-
-          </td> -->
         </tr>
         <% }) %>
 

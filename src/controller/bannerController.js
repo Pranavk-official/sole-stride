@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require("fs");
 
 const layout = "./layouts/adminLayout.ejs";
 const Banner = require("../model/bannerSchema");
@@ -8,11 +8,27 @@ module.exports = {
     const locals = {
       title: "Banner Management",
     };
-    const banners = await Banner.find();
+
+    let perPage = 5;
+    let page = req.query.page || 1;
+
+    const banners = await Banner.aggregate([{ $sort: { createdAt: -1 } }])
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .exec();
+
+    const count = await Banner.find().countDocuments();
+    const nextPage = parseInt(page) + 1;
+    const hasNextPage = nextPage <= Math.ceil(count / perPage);
+
     res.render("admin/banners/banners", {
       locals,
       banners,
       layout,
+      current: page,
+      pages: Math.ceil(count / perPage),
+      nextPage: hasNextPage ? nextPage : null,
+      currentRoute: "/user/banners/",
     });
   },
   getAddBanner: async (req, res) => {
@@ -79,20 +95,20 @@ module.exports = {
       });
     }
   },
-  deleteBanner: async (req,res) => {
+  deleteBanner: async (req, res) => {
     const id = req.query.id;
     const image = req.query.image;
     // delete banner image from file
     fs.unlink(`./public/uploads/banners/${image}`, (err) => {
-        if (err) throw err;
-    })
+      if (err) throw err;
+    });
 
     // deleteing banner image from db
     const delete_banner = await Banner.findByIdAndDelete({ _id: id });
     if (delete_banner) {
-        res.json({
-            success: true
-        })
+      res.json({
+        success: true,
+      });
     }
   },
 };

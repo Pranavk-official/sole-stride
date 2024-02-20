@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const shopController = require("../controller/shopController");
 const cartController = require("../controller/cartController");
-const { isLoggedIn } = require("../middlewares/authMiddleware");
+const { isLoggedIn, checkBlockedUser } = require("../middlewares/authMiddleware");
 const { cartList } = require("../middlewares/cartMiddleware");
 
 router.use(cartList,(req, res, next) => {
@@ -17,7 +17,7 @@ router.use(cartList,(req, res, next) => {
 /* GET users listing. */
 router.get("/", shopController.getHome);
 router.get("/shop", shopController.getProductList);
-router.get("/cart", cartController.getCart);
+router.get("/cart", checkBlockedUser,cartController.getCart);
 router.get("/shop/order-success", cartController.getOrderSuccess);
 router.get("/cart/add-to-cart/:id", cartController.addToCart);
 router.get("/cart/remove-from-cart/:id", cartController.removeCartItem);

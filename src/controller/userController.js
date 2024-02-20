@@ -94,6 +94,12 @@ module.exports = {
     req.flash("success", "Address Addedd");
     res.redirect("/user/address");
   },
+  editAddress: async (req, res) => {
+    console.log(req.params);
+    // await Address.create(req.body);
+    req.flash("success", "Address Edited");
+    res.redirect("/user/address");
+  },
 
   // ADDRESS
   deleteAddress: async (req, res) => {

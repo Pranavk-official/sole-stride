@@ -95,6 +95,8 @@ router.route("/products/edit-product/:id")
 
 
 // list/unlist product
+
+router.patch("/products/toggle-listing/:id", productController.toggleListing)
     
 /**
  * Customer Management

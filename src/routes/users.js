@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
+const User = require('../model/userSchema')
 const {cartList} = require('../middlewares/cartMiddleware')
+const { isLoggedIn, checkBlockedUser } = require("../middlewares/authMiddleware");
 const userController = require("../controller/userController");
-const { isLoggedIn } = require("../middlewares/authMiddleware");
 const orderController = require("../controller/orderController");
 
-router.use(isLoggedIn,cartList,(req, res, next) => {
+router.use( isLoggedIn, cartList,async (req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
-    res.locals.cartCount = req.user.cart.length 
+    res.locals.cartCount = req.user.cart.length
+
   }
   res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
@@ -32,7 +34,7 @@ router
 
 router.route("/address").get(userController.getAddress);
 router.route("/address/add-address").post(userController.addAddress);
-router.route("/address/edit-address/:id").get(userController.getAddress);
+// router.route("/address/edit-address/:id").get(userController.editAddress);
 router.route("/address/delete-address/:id").post(userController.deleteAddress);
 
 

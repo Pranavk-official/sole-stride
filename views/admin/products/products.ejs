@@ -76,18 +76,14 @@
         </td>
         <td class="text-center">
           <div class="d-flex flex-row justify-content-center">
-            <% if (product.status) { %>
-            <form action="/admin/products/unlist-product/<%= product._id%>?_method=PATCH" method="POST">
-              <button class="btn btn-danger btn-sm">
-                <i class="bi bi-slash-circle-fill"></i> Unlist
-              </button>
-            </form>
+            <% if (product.isActive) { %>
+            <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-danger btn-sm">
+              <i class="bi bi-slash-circle-fill"></i> Unlist
+            </button>
             <% } else { %>
-            <form action="/admin/products/list-product/<%= product._id%>?_method=PATCH" method="POST">
-              <button class="btn btn-success btn-sm">
-                <i class="bi bi-check-circle-fill"></i> List
-              </button>
-            </form>
+            <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-success btn-sm">
+              <i class="bi bi-check-circle-fill"></i> List
+            </button>
             <% } %>
           </div>
         </td>
@@ -109,4 +105,99 @@
 
     </tbody>
   </table>
+  <!-- Pagination-->
+  <% if (products.length > 0 && nextPage || current == pages) { %>
+  <nav aria-label="Product Pagination">
+    <ul class="pagination justify-content-center mt-5">
+      <% if (current == 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">First</a>
+      </li>
+
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/products/?page=1" class="page-link">First</a>
+      </li>
+      <% } %>
+
+      <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+      <% if (i !== 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %>
+
+      <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+      <% if (i == current) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link"><%= i %> </a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/products?page=<%= i %>" class="page-link"><%= i %></a>
+      </li>
+
+      <% } %>
+      <% if (i == Number(current)+ 4 && i < pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %>
+
+      <% } %>
+      <% if (current == pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">Last</a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/products?page=<%= pages %>" class="page-link">Last</a>
+      </li>
+
+      <% } %>
+
+    </ul>
+  </nav>
+  <% } %>
 </div>
+
+<script defer>
+  const toggleListing = async (productId, isActive, productName) => {
+    const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: isActive ? `You want to unlist the product ${productName}` : `You want to list the product ${productName}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: isActive ? 'Yes, unlist!' : 'Yes, list!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    });
+
+    if (confirmed.isConfirmed) {
+      const response = await fetch(`/admin/products/toggle-listing/${productId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: isActive ? 'Product has been unlisted.' : 'Product has been listed.',
+          icon: 'success',
+          timer: 1500
+        }).then((result) => {
+          location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong.',
+          icon: 'error',
+          timer: 1500
+        });
+      }
+    }
+  };
+</script>

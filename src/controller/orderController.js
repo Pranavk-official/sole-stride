@@ -130,6 +130,8 @@ module.exports = {
 
     orderDetails = orderDetails.reverse();
 
+    
+
     const count = await Order.countDocuments({ customer_id: user._id });
     // const order = await Order.find({ customer_id: user._id });
     const nextPage = parseInt(page) + 1;
@@ -223,7 +225,7 @@ module.exports = {
       title: "Order Management",
     };
 
-    let perPage = 9;
+    let perPage = 10;
     let page = req.query.page || 1;
 
     const orders = await Order.aggregate([
@@ -253,7 +255,9 @@ module.exports = {
           as: "item.product",
         },
       },
-    ]);
+    ]).skip(perPage * page - perPage)
+    .limit(perPage)
+    .exec();
 
     // console.log(orders);
     const count = await Order.countDocuments();
