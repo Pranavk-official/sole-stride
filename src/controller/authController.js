@@ -122,8 +122,6 @@ module.exports = {
 
     res.render("auth/user/login", {
       locals,
-      success: req.flash("success"),
-      error: req.flash("error"),
     });
   },
   getRegister: async (req, res) => {
@@ -137,8 +135,6 @@ module.exports = {
 
     res.render("auth/user/register", {
       locals,
-      success: req.flash("success"),
-      error: req.flash("error"),
     });
   },
   userRegister: async (req, res) => {
@@ -156,12 +152,12 @@ module.exports = {
     const { username, firstName, lastName, email, password, confirmPassword } =
       req.body;
 
-    const existingUser = await User.findOne({ email });
+    // const existingUser = await User.findOne({ email });
 
-    if (existingUser) {
-      req.flash("error", "Email already in use");
-      return res.redirect("/register");
-    }
+    // if (existingUser) {
+    //   req.flash("error", "Email already in use");
+    //   return res.redirect("/register");
+    // }
 
     if (password !== confirmPassword) {
       req.flash("error", "Passwords do not match");
@@ -278,8 +274,6 @@ module.exports = {
 
     res.render("auth/user/verifyOtp", {
       locals,
-      success: req.flash("success"),
-      error: req.flash("error"),
     });
   },
   

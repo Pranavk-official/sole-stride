@@ -57,7 +57,7 @@ module.exports = {
 
 
       let user = await User.findById(req.user.id);
-      // console.log(user.cart);
+      console.log(user.cart[0]);
   
       let cartList = await User.aggregate([
         { $match: { _id: user._id } },
@@ -82,7 +82,7 @@ module.exports = {
   
       let cartCount = req.user.cart.length; // Update cartCount
   
-      console.log(cartList, cartCount, totalPrice);
+      // console.log(cartList, cartCount, totalPrice);
   
       res.render("shop/cart", {
         cartList,

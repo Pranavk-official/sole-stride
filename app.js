@@ -20,6 +20,7 @@ const authRouter = require("./src/routes/auth");
 const adminRouter = require("./src/routes/admin");
 const shopRouter = require("./src/routes/shop");
 const usersRouter = require("./src/routes/users");
+const { cartList } = require("./src/middlewares/cartMiddleware");
 
 const app = express();
 connectDB();
@@ -56,17 +57,11 @@ app.use(nocache());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-app.use("/", authRouter);
-app.use("/user/", usersRouter);
-app.use("/", shopRouter);
-app.use("/admin", adminRouter);
-
-
 // Custom middleware to expose flash messages to views
 app.use((req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
+      // console.log(req.session);
   }
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -74,7 +69,16 @@ app.use((req, res, next) => {
 });
 
 
-app.use(checkBlockedUser);
+app.use("/", authRouter);
+app.use("/user/", usersRouter);
+app.use("/", shopRouter);
+app.use("/admin", adminRouter);
+
+
+
+
+
+app.use(checkBlockedUser,cartList);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

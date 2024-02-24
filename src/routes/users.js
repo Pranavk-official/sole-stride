@@ -7,14 +7,14 @@ const { isLoggedIn, checkBlockedUser } = require("../middlewares/authMiddleware"
 const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
 
-router.use( isLoggedIn, cartList,async (req, res, next) => {
+router.use( isLoggedIn, async (req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length
 
   }
-  res.locals.success = req.flash('success')
-  res.locals.error = req.flash('error')
+  // res.locals.success = req.flash('success')
+  // res.locals.error = req.flash('error')
   next()
 });
 

@@ -10,7 +10,6 @@ const categorySchema = new mongoose.Schema({
     originalname: String,
     path: String,
   },
-
   description: {
     type: String,
   },
@@ -18,6 +17,8 @@ const categorySchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model("Category", categorySchema);

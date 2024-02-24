@@ -5,13 +5,14 @@ const cartController = require("../controller/cartController");
 const { isLoggedIn, checkBlockedUser } = require("../middlewares/authMiddleware");
 const { cartList } = require("../middlewares/cartMiddleware");
 
-router.use(cartList,(req, res, next) => {
+router.use((req, res, next) => {
+  console.log(req.session.id);
   if (req.user) {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length
   }
-  res.locals.success = req.flash('success')
-  res.locals.error = req.flash('error')
+  // res.locals.success = req.flash('success')
+  // res.locals.error = req.flash('error')
   next()
 });
 /* GET users listing. */

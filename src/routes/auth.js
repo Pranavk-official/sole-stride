@@ -19,7 +19,7 @@ const {
 router
   .route("/login")
   .get(isLoggedOut, authController.getLogin)
-  .post(isVerified, loginValidation, authController.userLogin);
+  .post(loginValidation, authController.userLogin);
 
 router
   .route("/register")
