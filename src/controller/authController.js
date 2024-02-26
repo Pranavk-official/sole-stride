@@ -348,12 +348,7 @@ module.exports = {
    */
   resendOTP: async (req, res) => {
     try {
-      // if (req.isAuthenticated() || !req.session.verifyToken) {
-      //   return res.status(500).json({
-      //     success: false,
-      //     message: "Error: Session Time Out Try Again !",
-      //   });
-      // }
+
       let userId = req.session.passwordResetToken
         ? req.session.passwordResetToken
         : req.session.verifyToken;

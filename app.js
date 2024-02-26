@@ -58,7 +58,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Custom middleware to expose flash messages to views
-app.use((req, res, next) => {
+app.use(checkBlockedUser,cartList,(req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
       // console.log(req.session);
@@ -74,11 +74,6 @@ app.use("/user/", usersRouter);
 app.use("/", shopRouter);
 app.use("/admin", adminRouter);
 
-
-
-
-
-app.use(checkBlockedUser,cartList);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

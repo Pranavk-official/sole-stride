@@ -99,11 +99,19 @@
           </div>
           <% } %>
           <% } else { %>
-          <div class="nav-item navbar-icon-link">
+          <div class="nav-item navbar-icon-link m-0">
             <a href="/login" class="navbar-icon-link">
-              <i class="bi bi-person"></i>
+              <i class="bi bi-door-open-fill text-success"></i>
               <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">Log
                 in
+              </span>
+            </a>
+          </div>
+          <div class="nav-item navbar-icon-link m-0">
+            <a href="/register" class="navbar-icon-link">
+              <i class="bi bi-plus-circle text-info"></i>
+              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">Sign
+                Up
               </span>
             </a>
           </div>
@@ -161,19 +169,19 @@
             </div>
           </div>
 
+          <% if (typeof user !=='undefined') { %>
+          <% if (user) { %>
+          <div class="nav-item navbar-icon-link m-0">
+            <a href="/logout" class="navbar-icon-link text-danger px-2 py-1 align-items-center">
+              <i class="bi bi-box-arrow-right align-items-center"></i>
+              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
+                Sign Out
+              </span>
+            </a>
+          </div>
+          <% } %>
+          <% } %>
         </div>
-        <% if (typeof user !=='undefined') { %>
-        <% if (user) { %>
-        <div class="nav-item navbar-icon-link ">
-          <a href="/logout" class="navbar-icon-link text-danger px-2 py-1 align-items-center">
-            <i class="bi bi-box-arrow-right align-items-center"></i>
-            <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
-              Log Out
-            </span>
-          </a>
-        </div>
-        <% } %>
-        <% } %>
       </div>
     </div>
   </nav>
@@ -184,7 +192,7 @@
       <div class="close-btn">
         <i class="bi bi-x-circle h3"></i>
       </div>
-      <form class="search-area-form" action="#">
+      <form class="search-area-form" action="/shop">
         <div class="mb-4 position-relative">
           <input class="search-area-input" type="search" name="search" id="search" placeholder="What are you looking for?" />
           <button class="search-area-button" type="submit">

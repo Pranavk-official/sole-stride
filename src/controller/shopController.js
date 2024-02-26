@@ -146,4 +146,49 @@ module.exports = {
     req.flash("success", "Address Addedd");
     res.redirect("/checkout");
   },
+  editAddress: async (req, res) => {
+    try {
+      const addressId = req.params.id;
+      const updatedAddress = req.body;
+
+      // Assuming you have a model for addresses, e.g., Address
+      const address = await Address.findByIdAndUpdate(
+        addressId,
+        updatedAddress,
+        {
+          new: true, // returns the new document if true
+        }
+      );
+
+      if (!address) {
+        return res
+          .status(404)
+          .send({ message: "Address not found"});
+      }
+
+      req.flash("success", "Address Edited");
+      res.redirect("/checkout");
+    } catch (error) {
+      console.error(error);
+      req.flash("error", "Error editing address. Please try again.");
+      res.redirect("/checkout");
+    }
+  },
+  deleteAddress: async (req, res) => {
+    let id = req.params.id;
+    try {
+      const result = await Address.deleteOne({ _id: id });
+      if (result.deletedCount ===  1) {
+        // If the document was successfully deleted, send a success response
+        res.status(200).json({ message: "Address deleted successfully" });
+      } else {
+        // If no document was found to delete, send an appropriate response
+        res.status(404).json({ message: "Address not found" });
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the database operation
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },  
 };

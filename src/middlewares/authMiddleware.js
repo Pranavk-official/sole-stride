@@ -48,9 +48,10 @@ module.exports = {
   // Check Blocked status for users
 
   checkBlockedUser: async (req, res, next) => {
-    if (req.user) {
+    
+    if (req.isAuthenticated()) {
       const user = await User.findOne({ _id: req.user.id });
-      console.log(user);
+      // console.log(user);
       if (user.isBlocked) {
         req.logout((err) => {
           if (err) {
@@ -61,9 +62,11 @@ module.exports = {
             return res.redirect("/login");
           }
         });
-      } else {
+      }else {
         next();
       }
+    } else {
+      next();
     }
   },
 };

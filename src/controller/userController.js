@@ -3,7 +3,7 @@ const Address = require("../model/addressSchema");
 const Product = require("../model/productSchema");
 const Order = require("../model/orderSchema");
 const bcrypt = require("bcrypt");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -26,7 +26,7 @@ module.exports = {
       delete: false,
     });
 
-    console.log(address);
+    // console.log(address);
 
     const locals = {
       title: "SoloStride - Profile",
@@ -94,25 +94,60 @@ module.exports = {
     req.flash("success", "Address Addedd");
     res.redirect("/user/address");
   },
+  getEditAddress: async (req, res) => {
+    const addressId = req.params.id;
+
+    try {
+      const address = await Address.findOne({ _id: addressId });
+      if (address) {
+        res.status(200).json({ status: true, address });
+      } else {
+        // Send a  404 status code with a JSON object indicating the address was not found
+        res.status(404).json({ status: false, message: "Address not found" });
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the database operation
+      console.error(error);
+      res.status(500).json({ status: false, message: "Internal server error" });
+    }
+  },
   editAddress: async (req, res) => {
-    console.log(req.params);
-    // await Address.create(req.body);
-    req.flash("success", "Address Edited");
-    res.redirect("/user/address");
+    try {
+      const addressId = req.params.id;
+      const updatedAddress = req.body;
+
+      // Assuming you have a model for addresses, e.g., Address
+      const address = await Address.findByIdAndUpdate(
+        addressId,
+        updatedAddress,
+        {
+          new: true, // returns the new document if true
+        }
+      );
+
+      if (!address) {
+        return res
+          .status(404)
+          .send({ message: "Address not found with id " + addressId });
+      }
+
+      req.flash("success", "Address Edited");
+      res.redirect("/user/address");
+    } catch (error) {
+      console.error(error);
+      req.flash("error", "Error editing address. Please try again.");
+      res.redirect("/user/address");
+    }
   },
 
   // ADDRESS
   deleteAddress: async (req, res) => {
     let id = req.params.id;
-    const address = await Address.findOneAndUpdate(
-      { _id: id },
-      { delete: true },
-      { new: true }
-    );
+    const address = await Address.deleteOne({ _id: id });
+
     if (address) {
       req.flash("success", "Address Deleted");
       return res.redirect("/user/address");
     }
   },
-  
 };

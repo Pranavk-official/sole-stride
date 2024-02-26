@@ -75,13 +75,15 @@ $(document).ready(() => {
             `#quantityInput-${productID}`
           );
           const currentQuantity = parseInt(quantityInput.value);
-          quantityInput.value = currentQuantity + 1;
+          // quantityInput.value = currentQuantity + 1;
           location.assign("/cart");
         } else {
           Swal.fire({
             icon: "error",
             title: "Limited Stock!",
             text: "The item you selected has only a limited quantity available.",
+          }).then(() => {
+            location.assign('/cart')
           });
         }
       } else {
@@ -100,14 +102,18 @@ $(document).ready(() => {
       );
       const currentQuantity = parseInt(quantityInput.value);
 
+      
       if (currentQuantity <= 1) {
+        quantityInput.value = currentQuantity+1
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "You can't decrease to zero!",
+        }).then(()=>{
+          location.assign('/cart')
         });
-
-        return;
+        
+        return
       }
 
       const response = await fetch(`/cart/decrease-quantity/${productId}`, {
