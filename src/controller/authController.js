@@ -24,8 +24,6 @@ module.exports = {
     res.render("auth/admin/login", {
       locals,
       layout: adminLayout,
-      success: req.flash("success"),
-      error: req.flash("error"),
     });
   },
   getAdminRegister: async (req, res) => {
@@ -36,8 +34,6 @@ module.exports = {
     res.render("auth/admin/register", {
       locals,
       layout: adminLayout,
-      success: req.flash("success"),
-      error: req.flash("error"),
     });
   },
   adminRegister: async (req, res) => {
@@ -209,7 +205,7 @@ module.exports = {
       return res.redirect("/login");
     }
 
-    const user = await User.findOne({ email: req.body.email, isAdmin: false });
+    const user = await User.findOne({ email: req.body.email, isAdmin: false});
 
     if (user) {
       if (user.isBlocked) {
@@ -470,13 +466,13 @@ module.exports = {
       }
 
       const user = await User.findById(userId);
-
+      const hashPwd = await bcrypt.hash(password, 10)
       if (user) {
         const updatedUser = await User.updateOne(
-          { id: user._id },
+          { _id: user._id },
           {
             $set: {
-              password: password,
+              password: hashPwd,
             },
           }
         );
@@ -521,6 +517,17 @@ module.exports = {
         req.flash("success", `Logged Out!!`);
         res.clearCookie("connect.sid");
         res.redirect("/login");
+      }
+    });
+  },
+  adminLogout: async (req, res) => {
+    req.logOut((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        req.flash("success", `Logged Out!!`);
+        res.clearCookie("connect.sid");
+        res.redirect("/admin/login");
       }
     });
   },
