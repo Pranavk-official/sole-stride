@@ -20,16 +20,6 @@ module.exports = {
     }
   },
 
-  isVerified: (req, res, next) => {
-    // console.log(req.body)
-    next();
-    // if(req.isAuthenticated() && !req.user.isVerified) {
-    //     res.redirect('/user/verify')
-    // } else {
-    //     next()
-    // }
-  },
-
   isAdmin: (req, res, next) => {
     if (req.isAuthenticated() && req.user.isAdmin) {
       next();
@@ -50,6 +40,7 @@ module.exports = {
   checkBlockedUser: async (req, res, next) => {
     
     if (req.isAuthenticated()) {
+      // console.log('middleware');
       const user = await User.findOne({ _id: req.user.id });
       // console.log(user);
       if (user.isBlocked) {
@@ -62,11 +53,8 @@ module.exports = {
             return res.redirect("/login");
           }
         });
-      }else {
-        next();
       }
-    } else {
-      next();
     }
+    next()
   },
 };

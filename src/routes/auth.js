@@ -15,6 +15,12 @@ const {
   isAdminLoggedOut,
 } = require("../middlewares/authMiddleware");
 
+router.use((req,res,next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next()
+})
+
 
 router
   .route("/login")
@@ -59,6 +65,6 @@ router
   .post(registerValidation, authController.adminRegister);
 
 router.get("/logout", authController.userLogout);
-router.get("/admin/logout", authController.userLogout);
+router.get("/admin/logout", authController.adminLogout);
 
 module.exports = router;

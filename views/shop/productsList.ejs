@@ -46,7 +46,8 @@
       </header>
       <div class="row">
         <!-- product-->
-        <% products.forEach(element => { %>
+        <% products?.forEach(element => { %>
+
         <div class="col-xl-4 col-6">
           <div class="product">
             <div class="product-image">
@@ -55,16 +56,16 @@
               <div class="product-hover-overlay">
                 <a class="product-hover-overlay-link" href="/shop/product/<%- element._id %>"></a>
                 <div class="product-hover-overlay-buttons">
-                  <button class="btn btn-outline-dark btn-product-left d-none d-sm-inline-block" onclick="addToCart('<%- element._id %>')">
-                    <i class="bi bi-cart h6 p-2"></i>
+                  <button class="btn btn-outline-primary btn-product-left d-none d-sm-inline-block" <% if (element.variants && element.variants.length >0) { %> onclick="addToCart('<%- element?._id %>','<%- element.variants[0]._id %>','<%- element.variants[0].color %>', '<%- element.variants[0].size %>')" <% } %>>
+                    <i class="bi bi-cart-fill fs-5"></i>
                   </button>
                   <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>">
                     <i class="bi bi-search"></i>
                     <span class="btn-buy-label ms-2">View</span>
                   </a>
-                  <a class="btn btn-outline-dark btn-product-right d-none d-sm-inline-block" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <i class="bi bi-arrows-angle-expand"></i>
-                  </a>
+                  <button id="wishlist-<%- element._id %>" class="btn btn-outline-danger btn-product-right d-none d-sm-inline-block justify-content-center" onclick="addToWishlist('<%- element._id %>')">
+                    <i class="bi bi-heart fs-5"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -185,7 +186,7 @@
       </div>
 
     </div>
-    
+
     <!-- / Grid End-->
     <!-- Sidebar-->
     <div class="sidebar col-xl-3 col-lg-4 order-lg-1">
@@ -343,17 +344,17 @@
     </div>
     <!-- /Sidebar end-->
 
-    
+
   </div>
   <!-- Pagination-->
-<% if (products.length > 0 && nextPage || current == pages) { %>
+  <% if (products.length > 0 && nextPage || current == pages) { %>
   <nav aria-label="Product Pagination">
     <ul class="pagination justify-content-center mt-5">
       <% if (current == 1) { %>
       <li class="page-item disabled">
         <a href="#" class="page-link">First</a>
       </li>
-  
+
       <% } else { %>
       <li class="page-item">
         <a href="?page=1" class="page-link">First</a>
@@ -372,7 +373,7 @@
       <li class="page-item">
         <a href="/shop/?page=<%= i %>" class="page-link"><%= i %></a>
       </li>
-  
+
       <% } %> <% if (i == Number(current)+ 4 && i < pages) { %>
       <li class="page-item disabled">
         <a href="#" class="page-link">...</a>
@@ -385,11 +386,138 @@
       <li class="page-item">
         <a href="/shop/?page=<%= pages %>" class="page-link">Last</a>
       </li>
-  
+
       <% } %>
     </ul>
   </nav>
   <% } %>
-  
+
 </div>
 
+<script defer>
+  const addToWishlist = async (productId) => {
+    let user = '<%- typeof user %>';
+
+    // Check if user is undefined
+    if (user === "undefined") {
+      // Use SweetAlert to show a warning and redirect to /login upon confirmation
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'You need to login to add items to wishlist!',
+        confirmButtonText: 'Login',
+        showCancelButton: true,
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to /login if the user confirms
+          window.location.assign('/login');
+        }
+      });
+    } else {
+      console.log(productId);
+
+      const heart = document.getElementById(`wishlist-${productId}`)
+      const response = await fetch(`/user/add-to-wishlist/`, {
+        method: 'POST',
+        body: {
+          productId
+        }
+      })
+
+       // Check if the request was successful
+       if (response.ok) {
+        // Assuming the server responds with a JSON object containing a success message
+        const data = await response.json();
+        if (data.success) {
+          // Update the UI to indicate the product has been added to the wishlist
+          heart.classList.remove('btn-outline-danger'); 
+          heart.classList.add('btn-danger'); 
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Product added to wishlist.',
+          });
+        } else {
+          // Handle the case where the product could not be added to the wishlist
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'There was an error adding the product to your wishlist.',
+          });
+        }
+      } else {
+        // Handle server errors
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'There was an error adding the product to your wishlist.',
+        });
+      }
+    }
+  }
+
+  const addToCart = async (productId, variantId, color, size) => {
+    let user = '<%- typeof user %>';
+
+    // Check if user is undefined
+    if (user === "undefined") {
+      // Use SweetAlert to show a warning and redirect to /login upon confirmation
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'You need to login to add items to Wishlist!',
+        confirmButtonText: 'Login',
+        showCancelButton: true,
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to /login if the user confirms
+          window.location.assign('/login');
+        }
+      });
+    } else {
+      console.log(user, productId, variantId, color, size);
+      try {
+        const response = await fetch(`/user/add-to-cart/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId,
+            variantId,
+            color,
+            size,
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        let cartCount = document.getElementById("cartCount");
+        if (cartCount) {
+          cartCount.innerText = data.count;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "Added to Cart",
+          text: "Your product has been added to the cart.",
+          confirmButtonText: "Continue Shopping",
+        });
+
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          error,
+        });
+      }
+    }
+  };
+</script>

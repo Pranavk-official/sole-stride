@@ -1,6 +1,4 @@
 // new-banner
-
-
 $('#banner_image').on('change', (e) => {
   let container = document.getElementById('banner-crp-container')
   container.style.display = "block"

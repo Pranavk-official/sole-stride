@@ -23,6 +23,11 @@
   <h1 class="h2"><%= locals.title ? locals.title : 'Dashboard' %></h1>
 
   <div class="btn-toolbar mb-2 mb-md-0">
+    <a href="/admin/stocks">
+      <button type="button" class="btn btn-sm btn-outline-info">
+        Manage Stocks
+      </button>
+    </a>
     <a href="/admin/products/add-product">
       <button type="button" class="btn btn-sm btn-outline-primary">
         Add Product
@@ -31,7 +36,7 @@
   </div>
 </div>
 
-<!-- <%- include('../../partials/flashMessage.ejs') %> -->
+
 
 <div class="container table-responsive">
 
@@ -41,8 +46,6 @@
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Image</th>
-        <th scope="col">Stock</th>
-        <th scope="col">Size</th>
         <th scope="col">Status</th>
         <th scope="col" class="text-center">List/Unlist</th>
         <th scope="col" class="text-center">Actions</th>
@@ -59,13 +62,7 @@
           <%= product.product_name %>
         </td>
         <td>
-          <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image.name %>" width="72rem" alt="">
-        </td>
-        <td>
-          <%- product.stock %>
-        </td>
-        <td>
-          <%- product.size %>
+          <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image ? product.primary_image.name : product.secondary_images[0].name %>" width="72rem" alt="">
         </td>
         <td>
           <% if (product.isActive) { %>
@@ -163,12 +160,13 @@
 
 <script defer>
   const toggleListing = async (productId, isActive, productName) => {
+    console.log(typeof isActive);
     const confirmed = await Swal.fire({
       title: 'Are you sure?',
-      text: isActive ? `You want to unlist the product ${productName}` : `You want to list the product ${productName}`,
+      text: `You want to ${isActive == 'true' ? 'unlist': 'list'} the product ${productName}`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: isActive ? 'Yes, unlist!' : 'Yes, list!',
+      confirmButtonText: `Yes, ${isActive == 'true' ? 'unlist': 'list'}!`,
       cancelButtonText: 'No, cancel!',
       reverseButtons: true
     });
@@ -184,7 +182,7 @@
       if (response.ok) {
         Swal.fire({
           title: 'Success!',
-          text: isActive ? 'Product has been unlisted.' : 'Product has been listed.',
+          text: `Product has been ${isActive == 'true' ? 'unlisted': 'listed'}!.` ,
           icon: 'success',
           timer: 1500
         }).then((result) => {
@@ -199,5 +197,44 @@
         });
       }
     }
+  };
+
+  const deleteProduct = async (productId, productName) => {
+   const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: `You want to delete the product ${productName}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+   });
+  
+   if (confirmed.isConfirmed) {
+      const response = await fetch(`/admin/products/delete-product/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Product has been deleted.',
+          icon: 'success',
+          timer: 1500
+        }).then((result) => {
+          location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong.',
+          icon: 'error',
+          timer: 1500
+        });
+      }
+   }
   };
 </script>

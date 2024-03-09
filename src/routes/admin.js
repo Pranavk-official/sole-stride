@@ -9,15 +9,21 @@ const productController = require("../controller/productController");
 const { categoryValidation } = require("../validators/adminValidator");
 
 const { isAdmin } = require("../middlewares/authMiddleware");
-const { categoryUpload, bannerUpload, productUpload } = require("../middlewares/multer");
+
+const {
+  categoryUpload,
+  bannerUpload,
+  productUpload,
+} = require("../middlewares/multer");
+
 const orderController = require("../controller/orderController");
+const attributeController = require("../controller/attributeController");
 
 /* Common Midleware for admin routes*/
 router.use(isAdmin, (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
+  if (req.user.isAdmin) {
     res.locals.admin = req.user;
   }
-  // console.log(req.session.flash);
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
   next();
@@ -74,46 +80,94 @@ router
   );
 
 router
-  .route("/category/delete-category")
+  .route("/category/delete-category/")
   .get(categoryController.deleteCategory);
 
 /**
  * Product Management
  */
 
-router.route("/products")
-    .get(productController.getAllProducts)
+router.route("/products").get(productController.getAllProducts);
+router.get("/stocks", productController.getStocks);
+router.patch("/update-stock/", productController.updateStock);
 
+router
+  .route("/products/add-product")
+  .get(productController.getAddProduct)
+  .post(
+    productUpload.fields([{ name: "images" }, { name: "primaryImage" }]),
+    productController.addProduct
+  );
 
-router.route("/products/add-product")
-    .get(productController.getAddProduct)
-    .post(productUpload.fields([{name:"images"},{name:"primaryImage"}]),productController.addProduct)
-
-router.route("/products/edit-product/:id")
-    .get(productController.getEditProduct)
-    .post(productUpload.fields([{name:"images"},{name:"primaryImage"}]),productController.editProduct)
-
+router
+  .route("/products/edit-product/:id")
+  .get(productController.getEditProduct)
+  .post(
+    productUpload.fields([{ name: "images" }, { name: "primaryImage" }]),
+    productController.editProduct
+  );
 
 // list/unlist product
 
-router.patch("/products/toggle-listing/:id", productController.toggleListing)
-    
+router.patch("/products/toggle-listing/:id", productController.toggleListing);
+
+// Product Delete
+router.delete("/products/delete-product/:id", productController.deleteProduct);
+
+// Product Image Delete
+router.delete("/products/delete-image/", productController.deleteImage);
+
+/**
+ * Attribute Management
+ */
+
+router.get("/attributes", attributeController.getAttributes);
+
+router
+  .route("/attributes/color/:id")
+  .get(attributeController.getColor)
+  .put(attributeController.editColor);
+
+router
+  .route("/attributes/size/:id")
+  .get(attributeController.getSize)
+  .put(attributeController.editSize);
+
+router
+  .route("/attributes/brand/:id")
+  .get(attributeController.getBrand)
+  .put(attributeController.editBrand);
+
+router
+  .route("/attributes/toggleListing/color/:id")
+  .patch(attributeController.toggleListingColor);
+
+router
+  .route("/attributes/toggleListing/size/:id")
+  .patch(attributeController.toggleListingSize);
+
+router
+  .route("/attributes/toggleListing/brand/:id")
+  .patch(attributeController.toggleListingBrand);
+
+router.post("/attributes/add-attribute", attributeController.addAttributes);
+
 /**
  * Customer Management
  */
 
 router.route("/users").get(adminController.getUsersList);
 
-router.route("/users/toggle-block/:id").patch(adminController.toggleBlock)
-
+router.route("/users/toggle-block/:id").patch(adminController.toggleBlock);
 
 /**
  * Order Management
  */
 
-
 router.route("/orders").get(orderController.getOrders);
 router.route("/orders/manage-order/:id").get(orderController.getOrderDetails);
-router.route("/orders/manage-order/changeStatus/:id").post(orderController.changeOrderStatus);
+router
+  .route("/orders/manage-order/changeStatus/:id")
+  .post(orderController.changeOrderStatus);
 
 module.exports = router;

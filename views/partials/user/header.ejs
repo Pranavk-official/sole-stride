@@ -88,16 +88,16 @@
           </div>
           <!-- User Not Logged - link to login page-->
           <% if (typeof user !=='undefined') { %>
-          <% if (user) { %>
-          <div class="nav-item navbar-icon-link">
-            <a href="/user/profile" class="navbar-icon-link">
-              <i class="bi bi-person text-success"></i>
-              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
-                Account
-              </span>
-            </a>
-          </div>
-          <% } %>
+            <% if (user) { %>
+            <div class="nav-item navbar-icon-link">
+              <a href="/user/profile" class="navbar-icon-link">
+                <i class="bi bi-person text-success"></i>
+                <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
+                  Account
+                </span>
+              </a>
+            </div>
+            <% } %>
           <% } else { %>
           <div class="nav-item navbar-icon-link m-0">
             <a href="/login" class="navbar-icon-link">
@@ -125,7 +125,7 @@
               </span>
             </a>
             <div class="d-none d-lg-block">
-              <a class="navbar-icon-link" id="cartdetails" href="/cart" data-bs-target="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="navbar-icon-link" id="cartdetails" href="/user/cart" data-bs-target="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="bi bi-cart3"></i>
                 <% if (typeof cartCount !== 'undefined') { %>
                 <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount ? cartCount : '0' %></div>
@@ -141,7 +141,7 @@
                     <div class="d-flex align-items-center">
                       <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
                       <div class="w-100">
-                        <button onclick="removeFromCart('<%- item.prod_details._id %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
+                        <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
                           </i>
                         </button>
                         <div class="ps-3">
@@ -163,7 +163,7 @@
                 <% } %>
                 <!-- buttons-->
                 <div class="d-flex justify-content-between">
-                  <a class="btn btn-link text-dark me-3" href="/cart">View Cart <i class="fa-arrow-right fa"></i></a><a class="btn btn-outline-dark" href="/checkout">Checkout</a>
+                  <a class="btn btn-link text-dark me-3" href="/user/cart">View Cart <i class="fa-arrow-right fa"></i></a><a class="btn btn-outline-dark" href="/checkout">Checkout</a>
                 </div>
               </div>
             </div>

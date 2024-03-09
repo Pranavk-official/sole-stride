@@ -1,4 +1,5 @@
 const adminLayout = "./layouts/adminLayout.ejs";
+
 const User = require("../model/userSchema");
 const Product = require("../model/productSchema");
 const Orders = require("../model/orderSchema");

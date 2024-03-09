@@ -50,21 +50,24 @@ app.use(
   })
 );
 
-app.use(flash());
-app.use(nocache());
 
 // passport session
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Custom middleware to expose flash messages to views
+
+app.use(flash());
+app.use(nocache());
+
+// Custom middleware 
 app.use(checkBlockedUser,cartList,(req, res, next) => {
-  if (req.user) {
+  if (req.user && req.isAuthenticated()) {
     res.locals.user = req.user;
       // console.log(req.session);
+      // console.log(req.session);
   }
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
   next();
 });
 
@@ -74,6 +77,12 @@ app.use("/user/", usersRouter);
 app.use("/", shopRouter);
 app.use("/admin", adminRouter);
 
+
+app.use((req,res,next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

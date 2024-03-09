@@ -25,84 +25,112 @@
 </div>
 
 <section class="new-product">
-  <form id="addProductForm" class="container row m-3 justify-content-evenly border">
+  <form id="addProductForm" class="container m-3 border">
     <legend class="h2 fw-bold text-center m-3">Add New Product</legend>
-    <div class="card col-md-4 pb-0">
-      <fieldset class="card-body align-items-center">
-        <legend>Add Product Images</legend>
-        <span class="m-2 text-success">file supports only: jpeg,jpg,png,webp</span>
-        <span class="fw-bold m-2">Select the Primary Image</span>
+    <div class="my-2 row g-2 container justify-content-evenly">
+      <div class="card col-md-4 pb-0">
+        <fieldset class="card-body align-items-center">
+          <legend>Add Product Images</legend>
+          <span class="m-2 text-success">file supports only: jpeg,jpg,png,webp</span>
+          <span class="fw-bold m-2">Select the Primary Image</span>
 
-        <div class="d-flex align-items-center justify-content-center">
-          <img id="prev" class="img-fluid img-thumbnail border my-1 rounded" width="100rem" height="100rem" src="" alt="" />
-        </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <img id="prev" class="img-fluid img-thumbnail border my-1 rounded" width="100rem" height="100rem" src="" alt="" />
+          </div>
 
-        <input id="primaryIMG" type="file" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-control FilUploader" class="mb-3" required />
-        <input id="result" type="hidden" name="" value="" />
-        <span class="fw-bold">Select secondary images <br />
-          <span class="fw-normal text-success">Maximum 3 images</span></span>
-        <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp,.svg" name="images" class="mb-3" multiple required />
-      </fieldset>
+          <input id="primaryIMG" type="file" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-control FilUploader" class="mb-3" required />
+          <input id="result" type="hidden" name="" value="" />
+          <span class="fw-bold">Select secondary images <br />
+            <span class="fw-normal text-success">Maximum 3 images</span></span>
+          <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp,.svg" name="images" class="mb-3" multiple required />
+        </fieldset>
+      </div>
+      <div class="card col-md-7">
+        <fieldset class="card-body">
+          <legend>Product Details</legend>
+          <div class="form-group mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input name="product_name" type="text" class="form-control" id="product_name" />
+            <small></small>
+          </div>
+          <div class="form-group mb-3">
+            <label for="brand" class="form-label">Brand Name</label>
+            <select class="form-select text-capitalize" name="brand" required>
+              <% brands.forEach(function(brand) { %>
+              <option class="text-capitalize" value="<%= brand._id %>">
+                <%= brand.name %>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="category" class="form-label">Category Name</label>
+            <select class="form-select text-capitalize" name="category" required>
+              <% categories.forEach(function(category) { %>
+              <option class="text-capitalize" value="<%= category._id %>">
+                <%= category.name %>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="description" class="form-label">Product Description</label>
+            <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+          </div>
+          <div class="row">
+            <div class="form-group mb-3 col">
+              <label for="actualPrice" class="form-label">Actual Price</label>
+              <input class="form-control" type="number" name="actualPrice" id="actualPrice" />
+              <small></small>
+            </div>
+            <div class="form-group mb-3 col">
+              <label for="sellingPrice" class="form-label">Selling Price</label>
+              <input class="form-control" type="number" name="sellingPrice" id="sellingPrice" />
+              <small></small>
+            </div>
+          </div>
+        </fieldset>
+      </div>
     </div>
-    <div class="card col-md-7">
-      <fieldset class="card-body">
-        <legend>Product Details</legend>
-        <div class="form-group mb-3">
-          <label for="product_name" class="form-label">Product Name</label>
-          <input name="product_name" type="text" class="form-control" id="product_name" />
-          <small></small>
-        </div>
-        <div class="row">
-          <div class="form-group col mb-3">
-            <label for="brand_name" class="form-label">Brand</label>
-            <input name="brand_name" type="text" class="form-control" id="brand_name" />
-            <small></small>
-          </div>
-          <div class="form-group col mb-3">
-            <label for="size" class="form-label">Size</label>
-            <input name="size" type="text" class="form-control" id="size" />
-            <small></small>
-          </div>
-          <div class="form-group col mb-3">
-            <label for="product_color" class="form-label">Color</label>
-            <input name="product_color" type="color" class="form-control" id="product_color" />
-            <small></small>
-          </div>
-          <div class="form-group col mb-3">
-            <label for="product_stock" class="form-label">Stock/Quantity</label>
-            <input name="stock" type="number" class="form-control" id="product_stock" min="1" />
-            <small></small>
-          </div>
-        </div>
-        <div class="form-group mb-3">
-          <label for="category" class="form-label">Category Name</label>
-          <select class="form-select text-capitalize" name="category" required>
-            <% categories.forEach(function(category) { %>
-            <option class="text-capitalize" value="<%= category._id %>">
-              <%= category.name %>
-            </option>
-            <% }); %>
-          </select>
-        </div>
-        <div class="form-group mb-3">
-          <label for="description" class="form-label">Product Description</label>
-          <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
-        </div>
-        <div class="row">
-          <div class="form-group mb-3 col">
-            <label for="actualPrice" class="form-label">Actual Price</label>
-            <input class="form-control" type="number" name="actualPrice" id="actualPrice" />
-            <small></small>
-          </div>
-          <div class="form-group mb-3 col">
-            <label for="sellingPrice" class="form-label">Selling Price</label>
-            <input class="form-control" type="number" name="sellingPrice" id="sellingPrice" />
-            <small></small>
+    <div class="container m-3">
+      <div class="card">
+        <div id="variantsContainer" class="card-body row justify-content-evenly g-2">
+          <p class="card-title">Variant</p>
+          <div class="variant col-md-3 card p-2">
+            <div class="form-group mb-3">
+              <label for="variantColor" class="form-label">Color</label>
+              <select class="form-select text-capitalize" name="variants[0].color" id="variantColor" required>
+                <% colors.forEach(function(color) { %>
+                <option class="text-capitalize" value="<%= color._id %>">
+                  <%= color.name %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="variantSize" class="form-label">Size</label>
+              <select class="form-select text-capitalize" name="variants[0].size" id="variantSize" required>
+                <% sizes.forEach(function(size) { %>
+                <option class="text-capitalize" value="<%= size._id %>">
+                  <%= size.value %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="variantStock" class="form-label">Variant Stock</label>
+              <input name="variants[0].stock" type="number" class="form-control" id="variantStock" min="1" />
+            </div>
           </div>
         </div>
-      </fieldset>
+        <div class="card-footer">
+          <button type="button" id="addVariantBtn" class="w-100 btn btn-secondary">Add Another Variant</button>
+        </div>
+      </div>
     </div>
-    <div class="d-flex justify-content-evenly m-4">
+
+
+    <div class="d-flex justify-content-evenly my-4">
       <button type="submit" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-warning">Clear</button>
     </div>
@@ -114,6 +142,9 @@
     </div>
   </div>
 </section>
+
+
+
 <style>
   .crop-product {
     position: absolute;
@@ -131,3 +162,52 @@
 
 <script defer src="/js/admin/products/add-product.js"></script>
 
+
+<script defer>
+  document.getElementById('addVariantBtn').addEventListener('click', function() {
+    const variantsContainer = document.getElementById('variantsContainer');
+
+    const currentVariants = variantsContainer.getElementsByClassName('variant').length;
+
+    // Check if the maximum number of variants has been reached
+    if (currentVariants >= 12) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'You can only add up to  12 variants.',
+      });
+      return;
+    }
+
+    const newVariant = document.createElement('div');
+    newVariant.className = 'variant';
+    newVariant.classList.add('card','p-2','col-md-3')
+    newVariant.innerHTML = `
+          <div class="form-group mb-3">
+            <label for="variantColor" class="form-label">Color</label>
+            <select class="form-select text-capitalize" name="variants[${currentVariants}].color" id="variantColor" required>
+              <% colors.forEach(function(color) { %>
+              <option class="text-capitalize" value="<%= color._id %>">
+                <%= color.name %>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="variantSize" class="form-label">Size</label>
+            <select class="form-select text-capitalize" name="variants[${currentVariants}].size" id="variantSize" required>
+              <% sizes.forEach(function(size) { %>
+              <option class="text-capitalize" value="<%= size._id %>">
+                <%= size.value %>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group mb-3">
+            <label for="variantStock" class="form-label">Variant Stock</label>
+            <input name="variants[${currentVariants}].stock" type="number" class="form-control" id="variantStock" min="1" />
+          </div>
+        `;
+    variantsContainer.appendChild(newVariant);
+  });
+</script>

@@ -112,6 +112,7 @@ module.exports = {
     if(req.session.verifyToken){
       delete req.session.verifyToken
     }
+    console.log(req.session);
     const locals = {
       title: "SoleStride - Login",
     };
@@ -204,40 +205,40 @@ module.exports = {
       // return res.status(422).json({ errors: errors.array() });
       return res.redirect("/login");
     }
-
+    
     const user = await User.findOne({ email: req.body.email, isAdmin: false});
-
+    
     if (user) {
       if (user.isBlocked) {
         req.flash("error", "You are blocked by the admin!!!!!!");
         return res.redirect("/login");
       }
-
+      
       if (!user.isVerified) {
         if (!req.session.verifyToken) {
           req.session.verifyToken = user._id;
         }
         const isOtpSent = sendOtpEmail(user, res);
-
+        
         if (isOtpSent) {
           req.flash(
             "success",
             "OTP send to email, Please verify your email!!!!!"
-          );
-          return res.redirect("/verify-otp");
-        } else {
-          req.flash("error", "User verification falied try again by loggin in");
-          return res.redirect("/login");
-        }
-      } else {
-        passport.authenticate("user-local", (err, user, info) => {
-          if (err) {
-            console.log(err);
-            return next(err);
+            );
+            return res.redirect("/verify-otp");
+          } else {
+            req.flash("error", "User verification falied try again by loggin in");
+            return res.redirect("/login");
           }
-          if (!user) {
-            console.log(info);
-            req.flash("error", "Invalid Credentials");
+        } else {
+          passport.authenticate("user-local", (err, user, info) => {
+            if (err) {
+              console.log(err);
+              return next(err);
+            }
+            if (!user) {
+              console.log(info);
+              req.flash("error", "Invalid Credentials");
             return res.redirect("/login");
           }
           req.logIn(user, (err) => {
@@ -245,6 +246,8 @@ module.exports = {
               console.log(err);
               return next(err);
             }
+            req.flash("success", "Admin Logged In");
+            req.flash('success','User Successfully Logged In');
             return res.redirect("/");
           });
         })(req, res, next);

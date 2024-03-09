@@ -162,7 +162,7 @@ document.getElementById("primaryIMG").addEventListener("change", function (e) {
             document.getElementById("prev").src = cropedImg;
             document.getElementById("result").value = cropedImg;
             container.style.display = "none";
-            document.querySelector(".btn-group").style.display = "block";
+            // document.querySelector(".btn-group").style.display = "block";
           }
           cropper.destroy();
         });
@@ -191,17 +191,11 @@ document
     event.preventDefault();
 
     let isProductNameValid = checkProductName(),
-      isBrandNameValid = checkBrandName(),
-      isSizeValid = checkSize(),
-      isStockValid = checkStock(),
       isActualPriceValid = checkActualPrice(),
       isSellingPriceValid = checkSellingPrice();
 
     let isFormValid =
       isProductNameValid &&
-      isBrandNameValid &&
-      isSizeValid &&
-      isStockValid &&
       isActualPriceValid &&
       isSellingPriceValid;
 
@@ -258,15 +252,6 @@ addProductForm.addEventListener(
     switch (e.target.id) {
       case "product_name":
         checkProductName();
-        break;
-      case "brand_name":
-        checkBrandName();
-        break;
-      case "size":
-        checkSize();
-        break;
-      case "product_stock":
-        checkStock();
         break;
       case "actualPrice":
         checkActualPrice();

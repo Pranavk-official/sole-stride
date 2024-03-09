@@ -28,7 +28,7 @@ module.exports = {
     });
   },
   addCategory: async (req, res) => {
-    console.log(req.body, req.files);
+    // console.log(req.body, req.files);
     const name = String(req.body.category_name).toLowerCase()
     const category = await Category.findOne({ name: name });
     if (category) {
@@ -56,7 +56,7 @@ module.exports = {
     try {
       const { status, imageName } = req.body;
 
-      console.log(req.body);
+      // console.log(req.body);
     let name = req.body.name.toLowerCase()
     let editCategory = {
       name: name,

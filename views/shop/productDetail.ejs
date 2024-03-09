@@ -1,19 +1,19 @@
 <section class="product-details">
   <div class="container">
     <div class="row">
-
       <div class="col-lg-7 pt-4 order-2 order-lg-1">
         <div class="row">
           <div class="d-none d-md-block col-md-2 pe-0">
             <div class="owl-thumbs" data-slider-id="1">
               <button class="owl-thumb-item detail-thumb-item mb-3">
-                <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="Modern Jacket 0">
+                <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="Modern Jacket 0" />
               </button>
               <% product.secondary_images.forEach((element) => { %>
               <button class="owl-thumb-item detail-thumb-item mb-3">
-                <img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="Modern Jacket 0" element.secondary_images>
+                <img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="Modern Jacket 0" element.secondary_images />
               </button>
               <% }) %>
+
 
             </div>
           </div>
@@ -23,13 +23,14 @@
             <div class="owl-carousel detail-slider owl-theme owl-dots-modern" data-slider-id="1">
               <div class="item">
                 <a class="glightbox" href="/uploads/product-images/<%- product.primary_image.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery">
-                  <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="<%- product.name %>">
+                  <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="<%- product.name %>" />
                 </a>
               </div>
               <% product.secondary_images.forEach(element => { %>
-              <div class="item"><a class="glightbox" href="/uploads/product-images/<%- element.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery"><img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="<%- product.product_name %>"></a></div>
+              <div class="item">
+                <a class="glightbox" href="/uploads/product-images/<%- element.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery"><img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="<%- product.product_name %>" /></a>
+              </div>
               <% }) %>
-
             </div>
           </div>
         </div>
@@ -43,60 +44,82 @@
         <h1 class="mb-4"><%- product.product_name %></h1>
         <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-4">
           <ul class="list-inline mb-2 mb-sm-0">
-            <li class="list-inline-item h4 fw-light mb-0">$<%- product.sellingPrice %></li>
+            <li class="list-inline-item h4 fw-light mb-0">
+              $<%- product.sellingPrice %>
+            </li>
             <li class="list-inline-item text-muted fw-light">
               <del>$<%- product.actualPrice %></del>
             </li>
           </ul>
           <div class="d-flex align-items-center">
             <ul class="list-inline me-2 mb-0">
-              <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
-              <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
-              <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
-              <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
-              <li class="list-inline-item me-0"><i class="fa fa-star text-gray-300"></i></li>
-            </ul><span class="text-muted text-uppercase text-sm">25 reviews</span>
+              <li class="list-inline-item me-0">
+                <i class="fa fa-star text-primary"></i>
+              </li>
+              <li class="list-inline-item me-0">
+                <i class="fa fa-star text-primary"></i>
+              </li>
+              <li class="list-inline-item me-0">
+                <i class="fa fa-star text-primary"></i>
+              </li>
+              <li class="list-inline-item me-0">
+                <i class="fa fa-star text-primary"></i>
+              </li>
+              <li class="list-inline-item me-0">
+                <i class="fa fa-star text-gray-300"></i>
+              </li>
+            </ul>
+            <span class="text-muted text-uppercase text-sm">25 reviews</span>
           </div>
         </div>
         <p class="mb-4 text-muted"><%- product.description %></p>
-        <form action="#">
-          <div class="row">
-            <div class="col-sm-6 col-lg-12 detail-option mb-3">
-              <h6 class="detail-option-heading">Size: <span class="fw-bold"><%- product.size %></span></h6>
-            </div>
-            <div class="col-sm-6 col-lg-12 detail-option mb-3">
-              <h6 class="detail-option-heading">Brand <span class="fw-bold text-secondary"><%- product.brand_name %></span></h6>
-            </div>
-            <div class="col-12 detail-option mb-3">
-              <h6 class="detail-option-heading">Colour</h6>
-              <ul class="list-inline mb-0 colours-wrapper">
-                <li class="list-inline-item">
-                  <!-- <label class="btn-colour" for="colour_Blue" style="background-color: '<%- product.color %>'"> -->
-                  </label>
-                  <input class="form-color" disabled type="color" name="colour" value="<%- product.color %>">
-                </li>
-              </ul>
-            </div>
-            <div class="col-12 col-lg-6 detail-option mb-5">
-              <label class="detail-option-heading fw-bold">Items <span>(required)</span></label>
-              <input class="form-control detail-quantity" name="items" type="number" value="1" min="1">
+        <div class="row">
+
+          <div class="col-12 detail-option mb-3">
+            <h6 class="detail-option-heading">
+              Colour <span>(required)</span>
+            </h6>
+            <ul class="list-inline mb-0 colours-wrapper">
+              <% let renderedColors = {}; %>
+              <% let index = 0; %>
+              <% product.variants.forEach((variant) => { %>
+              <% if (!renderedColors[variant.color.hex]) { %>
+              <% renderedColors[variant.color.hex] = true; %>
+              <li class="list-inline-item">
+                <label onclick="selectColor('<%= variant.color.hex %>', '<%= index %>')" class="btn-colour <%= index === 0 ? 'active' : '' %>" for="colour_<%- variant.color.name %>" style="background-color: <%- variant.color.hex %>">
+                </label>
+                <input class="input-invisible" type="radio" name="colour" value="value_Blue" id="colour_<%- variant.color.name %>" required />
+              </li>
+              <% index++; %>
+              <% } %>
+              <% }) %>
+            </ul>
+          </div>
+          <div class="col-sm-6 col-lg-12 detail-option mb-3">
+            <h6 class="detail-option-heading">
+              Size <span>(required)</span>
+            </h6>
+            <div class="size-box">
+              <div class="size-list row justify-content-sm-start">
+
+              </div>
             </div>
           </div>
-          <ul class="list-inline">
-            <li class="list-inline-item">
-              <button class="btn btn-dark btn-lg mb-1" onclick="addToCart('<%- product._id %>')">
-                <i class="bi bi-cart me-2"></i>
-                Add to Cart
-              </button>
-            </li>
-            <li class="list-inline-item">
-              <a class="btn btn-outline-secondary mb-1" href="#">
-                <i class="far fa-heart me-2"></i>
-                Add to wishlist
-              </a>
-            </li>
-          </ul>
-        </form>
+        </div>
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <button class="btn btn-dark btn-lg mb-1" onclick="addToCart('<%- product._id %>')">
+              <i class="bi bi-cart me-2"></i>
+              Add to Cart
+            </button>
+          </li>
+          <li class="list-inline-item">
+            <a class="btn btn-outline-secondary mb-1" href="#">
+              <i class="far fa-heart me-2"></i>
+              Add to wishlist
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -104,9 +127,15 @@
 <section class="mt-5">
   <div class="container">
     <ul class="nav nav-tabs flex-column flex-sm-row" role="tablist">
-      <li class="nav-item"><a class="nav-link detail-nav-link active" data-bs-toggle="tab" href="#description" role="tab">Description</a></li>
-      <li class="nav-item"><a class="nav-link detail-nav-link" data-bs-toggle="tab" href="#additional-information" role="tab">Additional Information</a></li>
-      <li class="nav-item"><a class="nav-link detail-nav-link" data-bs-toggle="tab" href="#reviews" role="tab">Reviews</a></li>
+      <li class="nav-item">
+        <a class="nav-link detail-nav-link active" data-bs-toggle="tab" href="#description" role="tab">Description</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link detail-nav-link" data-bs-toggle="tab" href="#additional-information" role="tab">Additional Information</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link detail-nav-link" data-bs-toggle="tab" href="#reviews" role="tab">Reviews</a>
+      </li>
     </ul>
     <div class="tab-content py-4">
       <div class="tab-pane active px-3" id="description" role="tabpanel">
@@ -124,19 +153,21 @@
               <tbody>
                 <tr>
                   <th class="text-uppercase fw-normal border-0">Product #</th>
-                  <td class="text-muted border-0"><%- product.product_name %></td>
+                  <td class="text-muted border-0">
+                    <%- product.product_name %>
+                  </td>
                 </tr>
                 <tr>
-                  <th class="text-uppercase fw-normal ">Size</th>
-                  <td class="text-muted "><%- product.size %></td>
+                  <th class="text-uppercase fw-normal">Size</th>
+                  <td class="text-muted"><%- product.size %></td>
                 </tr>
                 <tr>
-                  <th class="text-uppercase fw-normal ">Actual Price</th>
-                  <td class="text-muted ">$<%- product.actualPrice %></td>
+                  <th class="text-uppercase fw-normal">Actual Price</th>
+                  <td class="text-muted">$<%- product.actualPrice %></td>
                 </tr>
                 <tr>
-                  <th class="text-uppercase fw-normal ">Selling Price</th>
-                  <td class="text-muted ">$<%- product.sellingPrice %></td>
+                  <th class="text-uppercase fw-normal">Selling Price</th>
+                  <td class="text-muted">$<%- product.sellingPrice %></td>
                 </tr>
               </tbody>
             </table>
@@ -169,49 +200,71 @@
         <div class="row mb-5">
           <div class="col-lg-10 col-xl-9">
             <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5"><img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-1.jpg" alt="Han Solo"><span class="text-uppercase text-muted">Dec 2018</span></div>
+              <div class="flex-shrink-0 text-center me-4 me-xl-5">
+                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-1.jpg" alt="Han Solo" /><span class="text-uppercase text-muted">Dec 2018</span>
+              </div>
               <div>
                 <h5 class="mt-2 mb-1">Han Solo</h5>
-                <div class="mb-2"><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
+                <div class="mb-2">
+                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
                 </div>
-                <p class="text-muted">One morning, when Gregor Samsa woke from troubled dreams, he found
-                  himself transformed in his bed into a horrible vermin. He lay on his armour-like
-                  back, and if he lifted his head a little he could see his brown belly, slightly
-                  domed and divided by arches into stiff sections </p>
+                <p class="text-muted">
+                  One morning, when Gregor Samsa woke from troubled dreams, he
+                  found himself transformed in his bed into a horrible vermin.
+                  He lay on his armour-like back, and if he lifted his head a
+                  little he could see his brown belly, slightly domed and
+                  divided by arches into stiff sections
+                </p>
               </div>
             </div>
             <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5"><img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-2.jpg" alt="Luke Skywalker"><span class="text-uppercase text-muted">Dec 2018</span></div>
+              <div class="flex-shrink-0 text-center me-4 me-xl-5">
+                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-2.jpg" alt="Luke Skywalker" /><span class="text-uppercase text-muted">Dec 2018</span>
+              </div>
               <div>
                 <h5 class="mt-2 mb-1">Luke Skywalker</h5>
-                <div class="mb-2"><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i>
+                <div class="mb-2">
+                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i>
                 </div>
-                <p class="text-muted">The bedding was hardly able to cover it and seemed ready to slide
-                  off any moment. His many legs, pitifully thin compared with the size of the rest of
-                  him, waved about helplessly as he looked. &quot;What's happened to me?&quot; he
-                  thought. It wasn't a dream. </p>
+                <p class="text-muted">
+                  The bedding was hardly able to cover it and seemed ready to
+                  slide off any moment. His many legs, pitifully thin compared
+                  with the size of the rest of him, waved about helplessly as he
+                  looked. &quot;What's happened to me?&quot; he thought. It
+                  wasn't a dream.
+                </p>
               </div>
             </div>
             <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5"><img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-3.jpg" alt="Princess Leia"><span class="text-uppercase text-muted">Dec 2018</span></div>
+              <div class="flex-shrink-0 text-center me-4 me-xl-5">
+                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-3.jpg" alt="Princess Leia" /><span class="text-uppercase text-muted">Dec 2018</span>
+              </div>
               <div>
                 <h5 class="mt-2 mb-1">Princess Leia</h5>
-                <div class="mb-2"><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i><i class="fa fa-xs fa-star text-gray-200"></i>
+                <div class="mb-2">
+                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i><i class="fa fa-xs fa-star text-gray-200"></i>
                 </div>
-                <p class="text-muted">His room, a proper human room although a little too small, lay
-                  peacefully between its four familiar walls. A collection of textile samples lay
-                  spread out on the table. </p>
+                <p class="text-muted">
+                  His room, a proper human room although a little too small, lay
+                  peacefully between its four familiar walls. A collection of
+                  textile samples lay spread out on the table.
+                </p>
               </div>
             </div>
             <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5"><img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-4.jpg" alt="Jabba Hut"><span class="text-uppercase text-muted">Dec 2018</span></div>
+              <div class="flex-shrink-0 text-center me-4 me-xl-5">
+                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-4.jpg" alt="Jabba Hut" /><span class="text-uppercase text-muted">Dec 2018</span>
+              </div>
               <div>
                 <h5 class="mt-2 mb-1">Jabba Hut</h5>
-                <div class="mb-2"><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
+                <div class="mb-2">
+                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
                 </div>
-                <p class="text-muted">Samsa was a travelling salesman - and above it there hung a
-                  picture that he had recently cut out of an illustrated magazine and housed in a
-                  nice, gilded frame. </p>
+                <p class="text-muted">
+                  Samsa was a travelling salesman - and above it there hung a
+                  picture that he had recently cut out of an illustrated
+                  magazine and housed in a nice, gilded frame.
+                </p>
               </div>
             </div>
             <div class="py-5 px-3">
@@ -221,31 +274,43 @@
                   <div class="col-sm-6">
                     <div class="mb-4">
                       <label class="form-label" for="name">Your name *</label>
-                      <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required="required">
+                      <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required="required" />
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="mb-4">
                       <label class="form-label" for="rating">Your rating *</label>
                       <select class="custom-select focus-shadow-0" name="rating" id="rating">
-                        <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5/5)</option>
-                        <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734; (4/5)</option>
-                        <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734; (3/5)</option>
-                        <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2/5)</option>
-                        <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1/5)</option>
+                        <option value="5">
+                          &#9733;&#9733;&#9733;&#9733;&#9733; (5/5)
+                        </option>
+                        <option value="4">
+                          &#9733;&#9733;&#9733;&#9733;&#9734; (4/5)
+                        </option>
+                        <option value="3">
+                          &#9733;&#9733;&#9733;&#9734;&#9734; (3/5)
+                        </option>
+                        <option value="2">
+                          &#9733;&#9733;&#9734;&#9734;&#9734; (2/5)
+                        </option>
+                        <option value="1">
+                          &#9733;&#9734;&#9734;&#9734;&#9734; (1/5)
+                        </option>
                       </select>
                     </div>
                   </div>
                 </div>
                 <div class="mb-4">
                   <label class="form-label" for="email">Your email *</label>
-                  <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" required="required">
+                  <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" required="required" />
                 </div>
                 <div class="mb-4">
                   <label class="form-label" for="review">Review text *</label>
                   <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
                 </div>
-                <button class="btn btn-outline-dark" type="submit">Post review</button>
+                <button class="btn btn-outline-dark" type="submit">
+                  Post review
+                </button>
               </form>
             </div>
           </div>
@@ -264,32 +329,20 @@
       <div class="col-lg-2 col-md-4 col-6">
         <div class="product">
           <div class="product-image">
-            <div class="ribbon ribbon-info">Fresh</div><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494312-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+            <div class="ribbon ribbon-info">Fresh</div>
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494312-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
           <div class="py-2">
             <p class="text-muted text-sm mb-1">Jackets</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">White Tee</a></h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image"><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-590881-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Denim</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">Black blouse</a></h3>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">White Tee</a>
+            </h3>
             <span class="text-muted">$40.00</span>
           </div>
         </div>
@@ -299,33 +352,20 @@
       <div class="col-lg-2 col-md-4 col-6">
         <div class="product">
           <div class="product-image">
-            <div class="ribbon ribbon-primary">Sale</div><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-596319-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Accessories</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">College jacket</a>
-            </h3><span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image"><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/ethan-haddox-484912-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-590881-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
           <div class="py-2">
             <p class="text-muted text-sm mb-1">Denim</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">Carrot-fit jeans</a>
-            </h3><span class="text-muted">$40.00</span>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">Black blouse</a>
+            </h3>
+            <span class="text-muted">$40.00</span>
           </div>
         </div>
       </div>
@@ -333,16 +373,66 @@
       <!-- product-->
       <div class="col-lg-2 col-md-4 col-6">
         <div class="product">
-          <div class="product-image"><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494231-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+          <div class="product-image">
+            <div class="ribbon ribbon-primary">Sale</div>
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-596319-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="py-2">
+            <p class="text-muted text-sm mb-1">Accessories</p>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">College jacket</a>
+            </h3>
+            <span class="text-muted">$40.00</span>
+          </div>
+        </div>
+      </div>
+      <!-- /product-->
+      <!-- product-->
+      <div class="col-lg-2 col-md-4 col-6">
+        <div class="product">
+          <div class="product-image">
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/ethan-haddox-484912-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="py-2">
+            <p class="text-muted text-sm mb-1">Denim</p>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">Carrot-fit jeans</a>
+            </h3>
+            <span class="text-muted">$40.00</span>
+          </div>
+        </div>
+      </div>
+      <!-- /product-->
+      <!-- product-->
+      <div class="col-lg-2 col-md-4 col-6">
+        <div class="product">
+          <div class="product-image">
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494231-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
           <div class="py-2">
             <p class="text-muted text-sm mb-1">Jackets</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">Striped T-Shirt</a>
-            </h3><span class="text-muted">$40.00</span>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">Striped T-Shirt</a>
+            </h3>
+            <span class="text-muted">$40.00</span>
           </div>
         </div>
       </div>
@@ -350,15 +440,20 @@
       <!-- product-->
       <div class="col-lg-2 col-md-4 col-6">
         <div class="product">
-          <div class="product-image"><img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/averie-woodard-319832-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay"><a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons"><a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+          <div class="product-image">
+            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/averie-woodard-319832-unsplash.jpg" alt="product" />
+            <div class="product-hover-overlay">
+              <a class="product-hover-overlay-link" href="detail.html"></a>
+              <div class="product-hover-overlay-buttons">
+                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
               </div>
             </div>
           </div>
           <div class="py-2">
             <p class="text-muted text-sm mb-1">Shirts</p>
-            <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="detail.html">Short top</a></h3>
+            <h3 class="h6 text-uppercase mb-1">
+              <a class="text-dark" href="detail.html">Short top</a>
+            </h3>
             <span class="text-muted">$40.00</span>
           </div>
         </div>
@@ -367,3 +462,140 @@
     </div>
   </div>
 </section>
+
+<script>
+  const addToCart = async (productId) => {
+    const variantId = document.querySelector('.size-option.active').getAttribute('data-variant-id');
+    const color = document.querySelector('.size-option.active').getAttribute('data-color');
+    const size = document.querySelector('.size-option.active').getAttribute('data-size');
+
+
+    console.log(productId, variantId, color, size);
+    try {
+      const response = await fetch(`/user/add-to-cart/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId,
+          variantId,
+          color,
+          size,
+        })
+      });
+
+      if (response.redirected) {
+        // Show SweetAlert and redirect on confirmation
+        Swal.fire({
+          title: 'Warning!',
+          text: 'Please log in to add items to your cart.',
+          icon: 'warning',
+          confirmButtonText: 'Log In'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/login'; // Redirect to login page
+          }
+        });
+        return; // Exit the function after handling the unauthenticated case
+      }
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      let cartCount = document.getElementById("cartCount");
+      if (cartCount) {
+        cartCount.innerText = data.count;
+      }
+      Swal.fire({
+        icon: "success",
+        title: "Added to Cart",
+        text: "Your product has been added to the cart.",
+        confirmButtonText: "Continue Shopping",
+      });
+
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        error,
+      });
+    }
+  };
+
+
+  var productData = <%- JSON.stringify(product) %>; // Assuming product data is passed to the view
+
+  function selectColor(colorHex) {
+    document.querySelectorAll('.btn-colour').forEach(function(el) {
+      el.classList.remove('selected-color');
+    });
+    document.querySelector(`.btn-colour[style="background-color: ${colorHex}"]`).classList.add('selected-color');
+
+    var sizesForColor = productData.variants.filter(function(variant) {
+      return variant.color.hex === colorHex;
+    });
+
+    var firstSize = null;
+
+    var sizeList = document.querySelector('.size-list');
+    sizeList.innerHTML = '';
+    var renderedSizes = {};
+    sizesForColor.forEach((variant, index) => {
+      if (!renderedSizes[variant.size.value]) {
+        renderedSizes[variant.size.value] = true;
+        var li = document.createElement('label');
+        li.classList.add('col-2', 'btn', 'btn-sm', 'btn-outline-secondary', 'detail-option-btn-label')
+        li.innerHTML = `
+                ${variant.size.value}
+                <input
+                  class="input-invisible"
+                  type="radio"
+                  name="size"
+                  value="value_${variant.size._id}"
+                  id="size_${variant.size.value}"
+                  required
+                />
+               `
+        //  li.innerText = variant.size.value;
+        li.classList.add('size-option');
+        li.setAttribute('data-variant-id', variant._id); // Store the variant ID
+        li.setAttribute('data-color', variant.color._id); // Store the color
+        li.setAttribute('data-size', variant.size._id); // Store the size
+
+        li.addEventListener('click', function() {
+          document.querySelectorAll('.size-option').forEach(function(el) {
+            el.classList.remove('active');
+          });
+          li.classList.add('active');
+        });
+
+        sizeList.appendChild(li);
+
+        if (index === 0) {
+          firstSize = li
+        }
+      }
+    });
+
+    if (firstSize) {
+      firstSize.click();
+    }
+  }
+
+  // function addToCart(variantId) {
+  //      // Implement the logic to add the selected product variant to the cart
+  //      // This could involve making an AJAX request to your backend to update the cart
+  //      console.log('Adding to cart:', variantId);
+  // }
+
+  // Initial setup to select the first color if available
+  if (productData.variants.length > 0) {
+    selectColor(productData.variants[0].color.hex);
+  }
+</script>

@@ -10,12 +10,33 @@ const userSchema = new mongoose.Schema(
       {
         product_id: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
+          ref: "Product",
+          required: true,
+        },
+        variant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "product.variants",
+          required: true,
+        },
+        color: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Color",
+        },
+        size: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Size",
           required: true,
         },
         quantity: {
           type: Number,
           required: true,
+          min: [1, `Quantity Can't be less than 1`],
+        },
+        itemTotal: {
+          type: Number,
+        },
+        price: {
+          type: Number,
         },
       },
     ],
@@ -51,8 +72,9 @@ const userSchema = new mongoose.Schema(
       default: Date.now,
       immutable: true,
     },
-    token: {
+    referralToken: {
       type: String,
+      unique: true,
     },
     isBlocked: {
       type: Boolean,
@@ -69,10 +91,6 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

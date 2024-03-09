@@ -2,32 +2,45 @@ const express = require("express");
 const router = express.Router();
 const shopController = require("../controller/shopController");
 const cartController = require("../controller/cartController");
+
 const {
   isLoggedIn,
   checkBlockedUser,
 } = require("../middlewares/authMiddleware");
+
 const { cartList } = require("../middlewares/cartMiddleware");
 const userController = require("../controller/userController");
 
 router.use((req, res, next) => {
-  console.log(req.session.id);
-  if (req.user) {
+  if (req.isAuthenticated()) {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length;
   }
-  // res.locals.success = req.flash('success')
-  // res.locals.error = req.flash('error')
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
   next();
 });
-/* GET users listing. */
+
 router.get("/", shopController.getHome);
 router.get("/shop", shopController.getProductList);
-router.get("/cart", checkBlockedUser, cartController.getCart);
+router.get("/user/cart", isLoggedIn, cartController.getCart);
 router.get("/shop/order-success", cartController.getOrderSuccess);
-router.get("/cart/add-to-cart/:id", cartController.addToCart);
-router.get("/cart/remove-from-cart/:id", cartController.removeCartItem);
-router.get("/cart/increase-quantity/:id", cartController.incrementCartItem);
-router.get("/cart/decrease-quantity/:id", cartController.decrementCartItem);
+
+router.post("/user/add-to-cart/", cartController.addToCart);
+
+router.get(
+  "/cart/remove-from-cart/:id/:variant",
+  cartController.removeCartItem
+);
+router.get(
+  "/cart/increase-quantity/:id/:variant",
+  cartController.incrementCartItem
+);
+router.get(
+  "/cart/decrease-quantity/:id/:variant",
+  cartController.decrementCartItem
+);
+
 router.get("/checkout", shopController.getCheckout);
 router.post("/checkout/add-address", shopController.addAddress);
 

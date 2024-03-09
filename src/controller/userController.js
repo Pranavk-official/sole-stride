@@ -47,6 +47,17 @@ module.exports = {
       user: req.user,
     });
   },
+  addToWishlist: async (req,res) => {
+    if(!req.isAuthenticated()){
+      return res.status(401).json({'success': false, 'message': 'Please log in to add product to wishlist'})
+    }
+
+    const {productId} = req.body
+    const product = await Product.findById(productId)
+
+    
+  },
+
   resetPass: async (req, res) => {
     try {
       // console.log(req.body);

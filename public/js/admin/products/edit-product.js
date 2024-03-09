@@ -1,13 +1,15 @@
 $(document).ready(function () {
-  previewImg = (e) => {
-    console.log(e.target.value);
+ let addImgCount = 0;
+ let changeProdImg = []; // Array to track which secondary images are being changed or deleted
+
+ previewImg = (e) => {
+  console.log(e.target.value)
     let image = URL.createObjectURL(e.target.files[0]);
     let imgPreview = document.getElementById("img" + e.target.id);
     imgPreview.src = image;
-  };
+ };
 
-  let addImgCount = 0;
-  addSecImage = () => {
+ addSecImage = () => {
     const secImage = document.querySelector(".secondary-img");
     const img = document.createElement("img");
     img.setAttribute("src", "");
@@ -26,28 +28,24 @@ $(document).ready(function () {
     inp.setAttribute("accept", ".jpeg,.png,.jpg,.webp");
     inp.setAttribute("class", "form-control mb-2 mt-3 prod-img");
     inp.setAttribute("id", addImgCount);
-    inp.setAttribute(
-      "onchange",
-      `previewImg(event,'${addImgCount}','prod_img_2')`
-    );
+    inp.setAttribute("onchange", `previewImg(event,'${addImgCount}','prod_img_2')`);
     inpWrap.appendChild(inp);
 
     const dlt = document.createElement("i");
     dlt.setAttribute("class", "fa-regular fa-circle-xmark m-3");
     dlt.setAttribute("style", "cursor: pointer;");
-    dlt.setAttribute(
-      "onclick",
-      `deleteImg('${addImgCount}','sec_img','${addImgCount}')`
-    );
+    dlt.setAttribute("onclick", `deleteImg('${addImgCount}','sec_img','${addImgCount}')`);
     inpWrap.appendChild(dlt);
     addImgCount++;
-  };
-  //delete existing image
-  deleteImg = (img_id, path, filename) => {
+ };
+
+ // Function to delete existing image
+ deleteImg = (img_id, path, filename) => {
     if (path == "secondary_img") {
       changeProdImg.push(img_id);
     }
     document.getElementById("img" + filename).remove();
     document.getElementById(filename).parentElement.remove();
-  };
+ };
+
 });

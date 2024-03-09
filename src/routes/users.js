@@ -8,6 +8,10 @@ const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
 
 router.use(isLoggedIn, async (req, res, next) => {
+  if(req.user && req.user.isAdmin){
+    return res.redirect('/admin')
+  }
+
   if (req.user) {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length;
@@ -16,6 +20,8 @@ router.use(isLoggedIn, async (req, res, next) => {
 
     res.locals.orderCount = userOrder
   }
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
   next();
 });
 
@@ -62,5 +68,7 @@ router.post("/cancel-order/:id", orderController.cancelOrder);
  */
 
 router.get("/wishlist", userController.getWishlist);
+router.post("/add-to-wishlist", userController.getWishlist);
+router.delete("/remove-from-wishlist", userController.getWishlist);
 
 module.exports = router;

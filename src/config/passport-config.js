@@ -15,7 +15,8 @@ async function authenticateUser(email, password, done) {
     return done(null, false, { message: "No user found with that email" });
   }
 
-  const isValid = await user.matchPassword(password);
+  // const isValid = await user.matchPassword(password);
+  const isValid = await bcrypt.compare(password, user.password);
 
   console.log(isValid);
 

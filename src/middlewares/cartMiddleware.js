@@ -27,8 +27,8 @@ module.exports = {
         // console.log(prod.price);
       }
 
-    //   console.log(req.user.id);
-
+      // console.log(cartEntries);
+      res.locals.cartCount = user.cart.length
       res.locals.cartEntries = cartEntries;
       res.locals.cartTotalPrice = totalPrice;
     }

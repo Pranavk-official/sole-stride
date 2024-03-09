@@ -1,5 +1,4 @@
 <!-- Hero Section-->
-<%- include('./partials/flashMessage.ejs') %>
 <section>
   <!-- Hero Slider-->
 
@@ -45,7 +44,7 @@
     <!-- Brands Slider-->
     <div class="owl-carousel owl-theme brands-slider">
       <!-- item-->
-      <% categories.forEach((category, index) => { %>
+      <% categories?.forEach((category, index) => { %>
         <div class="item d-flex align-items-center justify-content-center">
           <div class="w-8rem">
             <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />

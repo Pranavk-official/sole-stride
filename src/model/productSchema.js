@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
-
-const productSchema = new mongoose.Schema(
+const {Schema, ObjectId} = mongoose
+const productSchema = new Schema(
   {
     product_name: {
       type: String,
       required: true,
     },
-    brand_name: {
-      type: String,
+    brand: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
       required: true,
     },
     category: {
@@ -22,39 +23,41 @@ const productSchema = new mongoose.Schema(
     primary_image: {
       name: {
         type: String,
-        required: true,
       },
       path: {
         type: String,
-        required: true,
       },
     },
     secondary_images: [
       {
         name: {
           type: String,
-          required: true,
         },
         path: {
           type: String,
+        },
+      },
+    ],
+    variants: [
+      {
+        color: {
+          type: ObjectId, // Reference to Color object ID
+          ref: "Color", // Reference to the 'Color' model
+          required: true,
+        },
+        size: {
+          type: ObjectId, // Reference to Size object ID
+          ref: "Size", // Reference to the 'Size' model
+          required: true,
+        },
+        stock: {
+          type: Number,
           required: true,
         },
       },
     ],
     price: {
       type: Number,
-    },
-    size: {
-      type: String,
-      required: true,
-    },
-    color: {
-      type: String,
-      required: true,
-    },
-    stock: {
-      type: Number,
-      required: true,
     },
     actualPrice: {
       type: Number,
@@ -71,10 +74,11 @@ const productSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   {
     timestamps: true,
+    strict: false,
   }
 );
 
