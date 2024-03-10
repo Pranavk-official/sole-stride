@@ -22,6 +22,15 @@ module.exports = {
   },
   editProfile: async (req, res) => {
     console.log(req.body);
+    const user = await User.findById(req.user.id)
+
+    const {firstName, lastName, phone} = req.body
+
+    user.firstName = firstName
+    user.lastName = lastName
+    user.phone = phone
+
+    await user.save()
   },
 
   getAddress: async (req, res) => {

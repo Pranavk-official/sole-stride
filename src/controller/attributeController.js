@@ -1,4 +1,5 @@
 const layout = "./layouts/adminLayout";
+const Product = require("../model/productSchema");
 const Color = require("../model/attributes/colorSchema");
 const Size = require("../model/attributes/sizeSchema");
 const Brand = require("../model/attributes/brandSchema");
@@ -17,6 +18,7 @@ module.exports = {
     });
   },
 
+  // Get Attribute Details to frontend
   getColor: async (req, res) => {
     let id = req.params.id;
     try {
@@ -56,10 +58,24 @@ module.exports = {
       res.status(500).json({ error: "Failed to fetch brand" });
     }
   },
-  addAttributes: async (req, res) => {
+
+  // Add attributes
+  addColor: async (req, res) => {
     console.log(req.body);
     try {
-      const { colorName, colorHex, size, brand } = req.body;
+      const { colorName, colorHex } = req.body;
+
+      // Check if color name or hex already exists in the database
+      const existingColor = await Color.findOne({
+        $or: [{ name: colorName.toLowerCase() }, { hex: colorHex }],
+      });
+
+      if (existingColor) {
+        // If a color with the same name or hex is found, send an error response
+        return res
+          .status(400)
+          .json({ success: false , message: "Color name or hex already exists" });
+      }
 
       if (colorName && colorHex) {
         const newColor = new Color({
@@ -67,6 +83,26 @@ module.exports = {
           hex: colorHex,
         });
         await newColor.save();
+        res.status(200).json({ success: true , message: "Color added successfully" });
+      } else {
+        res.status(400).json({ success: false , message: "Missing color name or hex" });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false , message: "Failed to add color" });
+    }
+  },
+  addSize: async (req, res) => {
+    console.log(req.body);
+    try {
+      const { size } = req.body;
+
+      // Check if the size already exists in the database
+      const existingSize = await Size.findOne({ value: size });
+
+      if (existingSize) {
+        console.log(existingSize);
+        // Size already exists, send a response indicating this
+        return res.status(400).json({ success: false , message: "Size already exists" });
       }
 
       if (size) {
@@ -75,24 +111,54 @@ module.exports = {
         });
 
         await newSize.save();
+        // Send a success response
+        return res.status(200).json({ success: true , message: "Size added successfully" });
       }
+
+      // If size is not provided, send an error response
+      return res.status(400).json({ success: false , 'message': "Size is required" });
+    } catch (error) {
+      console.log(error);
+      // Handle any errors that occur during the process
+      return res.status(500).json({ success: false , 'message': "Failed to add size" });
+    }
+  },
+  addBrand: async (req, res) => {
+    console.log(req.body);
+    try {
+      const { brand } = req.body;
+
       if (brand) {
-        const newBrand = new Brand({
+        // Check if the brand already exists in the database
+        const existingBrand = await Brand.findOne({
           name: brand.toLowerCase(),
         });
 
-        await newBrand.save();
-      }
+        if (existingBrand) {
+          // If the brand exists, send a response indicating that the brand already exists
+          return res.status(400).json({ success: false , message: "Brand already exists" });
+        } else {
+          // If the brand does not exist, proceed to create and save the new brand
+          const newBrand = new Brand({
+            name: brand.toLowerCase(),
+          });
 
-      //   res.status(200).json({ message: "Attributes added successfully" });
-      req.flash("success", "Attributes added successfully");
-      res.redirect("/admin/attributes");
+          await newBrand.save();
+          // Send a success response
+          return res.status(200).json({ success: true , message: "Brand added successfully" });
+        }
+      } else {
+        // If no brand is provided, send an error response
+        return res.status(400).json({ success: false , message: "Brand name is required" });
+      }
     } catch (error) {
-      // res.status(500).json({ error: "Failed to add attributes" });
-      req.flash("error", "Failed to add attributes");
-      res.redirect("/admin/attributes");
+      // Handle any errors that occur during the process
+      console.error(error);
+      return res.status(500).json({ success: false , message: "Failed to add brand" });
     }
   },
+
+  // Edit Attributes
   editColor: async (req, res) => {
     let id = req.params.id;
     const { colorName, colorHex } = req.body;
@@ -120,7 +186,6 @@ module.exports = {
       res.redirect("/admin/attributes");
     }
   },
-
   editSize: async (req, res) => {
     let id = req.params.id;
     const { size } = req.body;
@@ -164,33 +229,82 @@ module.exports = {
     }
   },
 
+  // Hard Delete Attributes (After deleting the attribute it's not recoverable)
   deleteColor: async (req, res) => {
     let id = req.params.id;
     try {
-      const result = await Color.findByIdAndDelete(id);
-      if (result) {
-        res.status(200).json({ message: "Color deleted successfully" });
+      // Check if any product is using the color
+      const productCount = await Product.countDocuments({
+        "variants.color": id,
+      });
+
+      if (productCount > 0) {
+        // If the color is used by any product, send an error response
+        return res
+          .status(400)
+          .json({ success: false , message: "Color is in use by some products" });
       } else {
-        res.status(404).json({ error: "Color not found" });
+        // If the color is not used, proceed to delete the color
+        const result = await Color.findByIdAndDelete(id);
+        if (result) {
+          return res
+            .status(200)
+            .json({ success: true , message: "Color deleted successfully" });
+        } else {
+          return res.status(404).json({ success: false , message: "Color not found" });
+        }
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to delete color" });
+      return res.status(500).json({ error: "Failed to delete color" });
     }
   },
-
   deleteSize: async (req, res) => {
     let id = req.params.id;
     try {
-      const result = await Size.findByIdAndDelete(id);
-      if (result) {
-        res.status(200).json({ message: "Size deleted successfully" });
+      // Check if any products are using the size
+      const productUsingSize = await Product.findOne({ "variants.size": id });
+
+      if (productUsingSize) {
+        // If the size is in use, send a response indicating that the size is in use
+        return res.status(400).json({ success: false , message: "Size is in use by a product" });
       } else {
-        res.status(404).json({ error: "Size not found" });
+        // If the size is not in use, proceed to delete the size
+        const result = await Size.findByIdAndDelete(id);
+        if (result) {
+          res.status(200).json({ success: true , message: "Size deleted successfully" });
+        } else {
+          res.status(404).json({ success: false , message: "Size not found" });
+        }
       }
     } catch (error) {
       res.status(500).json({ error: "Failed to delete size" });
     }
   },
+  deleteBrand: async (req, res) => {
+    let id = req.params.id;
+    try {
+      // Check if the brand is used by any product
+      const productsUsingBrand = await Product.find({ brand: id });
+
+      if (productsUsingBrand.length > 0) {
+        // If the brand is used by any product, send a response indicating that the brand is in use
+        return res
+          .status(400)
+          .json({ success: false , message: "Brand is in use by some products" });
+      } else {
+        // If the brand is not used by any product, proceed to delete the brand
+        const result = await Brand.findByIdAndDelete(id);
+        if (result) {
+          res.status(200).json({ success: true , message: "Brand deleted successfully" });
+        } else {
+          res.status(404).json({ success: false , message: "Brand not found" });
+        }
+      }
+    } catch (error) {
+      res.status(500).json({ success: false , message: "Failed to delete brand" });
+    }
+  },
+  // Soft Delete Attributes
   toggleListingColor: async (req, res) => {
     let id = req.params.id;
     try {
@@ -200,12 +314,10 @@ module.exports = {
         await color.save();
         let status = color.isDeleted ? "Unlisted" : "Listed";
 
-        res
-          .status(200)
-          .json({
-            color: color,
-            message: `The Color : ${color.name} is ${status}`,
-          });
+        res.status(200).json({
+          color: color,
+          message: `The Color : ${color.name} is ${status}`,
+        });
       } else {
         res.status(404).json({ error: "Color not found" });
       }
@@ -213,7 +325,6 @@ module.exports = {
       res.status(500).json({ error: "Failed to toggle listing status" });
     }
   },
-
   toggleListingSize: async (req, res) => {
     let id = req.params.id;
     try {
@@ -222,12 +333,10 @@ module.exports = {
         size.isDeleted = !size.isDeleted; // Toggle the listing status
         await size.save();
         let status = size.isDeleted ? "Unlisted" : "Listed";
-        res
-          .status(200)
-          .json({
-            size: size,
-            message: `The Size : ${size.value} is ${status}`,
-          });
+        res.status(200).json({
+          size: size,
+          message: `The Size : ${size.value} is ${status}`,
+        });
       } else {
         res.status(404).json({ error: "Size not found" });
       }
@@ -243,12 +352,10 @@ module.exports = {
         brand.isActive = !brand.isActive; // Toggle the listing status
         await brand.save();
         let status = brand.isActive ? "Unlisted" : "Listed";
-        res
-          .status(200)
-          .json({
-            brand: brand,
-            message: `The Brand : ${brand.name} is ${status}`,
-          });
+        res.status(200).json({
+          brand: brand,
+          message: `The Brand : ${brand.name} is ${status}`,
+        });
       } else {
         res.status(404).json({ error: "Size not found" });
       }

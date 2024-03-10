@@ -22,16 +22,16 @@
     <%= locals.title ? locals.title : 'Attribute Management' %>
   </h1>
   <div class="btn-group btn-toolbar mb-2 mb-md-0">
-    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#addAttributeModal">Add Brand</button>
-    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addAttributeModal">Add Color</button>
-    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#addAttributeModal">Add Attributes</button>
+    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#addBrandModal">Add Brand</button>
+    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addColorModal">Add Color</button>
+    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#addSizeModal">Add Size</button>
   </div>
 </div>
 
 
 <!-- Atribute List -->
 
-<section id="attributeSection">
+<section id="attributeSection" class="text-capitalize">
   <div class="container row">
     <div class="col">
       <div class="container table-responsive">
@@ -61,7 +61,7 @@
                   <% } else { %>
                   <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
                   <% } %>
-                  <button type="button" onclick="deleteColor('<%- color._id%>')" class="btn btn-sm btn-danger" data-color-id="<%- color._id %>"><i class="bi bi-trash"></i></button>
+                  <button type="button" onclick="deleteAttribute('<%- color._id%>','color','<%- color.name%>')" class="btn btn-sm btn-danger" data-color-id="<%- color._id %>"><i class="bi bi-trash"></i></button>
                 </div>
               </td>
             </tr>
@@ -94,7 +94,7 @@
                   <% } else { %>
                   <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
                   <% } %>
-                  <button type="button" onclick="deleteSize('<%- size._id%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                  <button type="button" onclick="deleteAttribute('<%- size._id%>','size','<%- size.value%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                 </div>
               </td>
             </tr>
@@ -127,7 +127,7 @@
                   <% } else { %>
                   <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
                   <% } %>
-                  <button type="button" onclick="deleteBrand('<%- brand._id%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                  <button type="button" onclick="deleteAttribute('<%- brand._id%>','brand','<%- brand.name%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                 </div>
               </td>
             </tr>
@@ -141,17 +141,18 @@
 
 <!-- End Attribute List -->
 
-<!-- Add Atribute Modal -->
-<div class="modal fade" id="addAttributeModal" tabindex="-1" aria-labelledby="addAttributeModalLabel">
+<!-- Add Atrribute Modal -->
+<!-- Color -->
+<div class="modal fade" id="addColorModal" tabindex="-1" aria-labelledby="addColorModalLabel">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addAttributeModalLabel">Add Attribute</h5>
+        <h5 class="modal-title" id="addColorModalLabel">Add Color</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="card">
-          <form id="addAttributeForm" class="card-body" action="/admin/attributes/add-attribute" method="POST">
+          <form id="addColorForm" class="card-body">
             <div class="row">
               <fieldset class="col card mx-2">
                 <legend>Color</legend>
@@ -164,6 +165,27 @@
                   <input name="colorHex" type="color" class="form-control" id="colorHex">
                 </div>
               </fieldset>
+            </div>
+            <!-- Add more form fields as needed -->
+            <button type="submit" class="btn btn-primary m-2 w-100">Add Color</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Size -->
+<div class="modal fade" id="addSizeModal" tabindex="-1" aria-labelledby="addSizeModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSizeModalLabel">Add New Size</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <form id="addSizeForm" class="card-body">
+            <div class="row">
               <fieldset class="col card mx-2">
                 <legend>Size</legend>
                 <div class="mb-3">
@@ -171,6 +193,27 @@
                   <input name="size" type="number" min="6" class="form-control" id="size">
                 </div>
               </fieldset>
+            </div>
+            <!-- Add more form fields as needed -->
+            <button type="submit" onclick="addAttribute('addSizeForm', 'size')" class="btn btn-primary m-2 w-100">Add Size</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Brand -->
+<div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addBrandModalLabel">Add Color</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <form id="addBrandForm" class="card-body" action="/admin/attributes/add-attribute" method="POST">
+            <div class="row">
               <fieldset class="col card mx-2">
                 <legend>Brand</legend>
                 <div class="mb-3">
@@ -180,7 +223,7 @@
               </fieldset>
             </div>
             <!-- Add more form fields as needed -->
-            <button type="submit" class="btn btn-primary m-2 w-100">Add Attribute</button>
+            <button type="submit" class="btn btn-primary m-2 w-100">Add Color</button>
           </form>
         </div>
       </div>
@@ -284,6 +327,87 @@
 <!-- End Brand Size -->
 
 <script defer>
+  function addAttribute(formId, type) {
+    const form = document.getElementById(formId);
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      // Collect form data
+      let data;
+      if (type === 'size') {
+        const size = document.getElementById('size').value
+        data = {
+          size: parseInt(size)
+        }
+      } else if (type === 'color') {
+        const color = document.getElementById('colorName').value
+        const colorHex = document.getElementById('colorHex').value
+        data = {
+          color,
+          colorHex
+        }
+      } else if (type === 'brand') {
+        const brand = document.getElementById('brand')
+        data = {
+          brand
+        }
+      }
+
+      // Confirmation dialog
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You want to add this ${type}!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, add it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch(`/admin/attributes/add-${type}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+              // Handle non-2xx responses
+              const errorData = await response.json();
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: errorData.message || 'Something went wrong!',
+              });
+              return;
+            }
+
+            const responseData = await response.json();
+            Swal.fire({
+              icon: responseData.success ? 'success' : 'error',
+              title: responseData.success ? 'Success' : 'Oops...',
+              text: responseData.message,
+            }).then(() => {
+              if (responseData.success) {
+                // Optionally, close the modal and refresh the page or update the UI
+                location.assign('/admin/attributes');
+              }
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            });
+          }
+        }
+      });
+    });
+  }
+
   function toggleListing(id, type) {
     console.log(type);
     Swal.fire({
@@ -309,12 +433,12 @@
             return response.json();
           })
           .then(data => {
-            
+
             Swal.fire({
               icon: 'success',
               title: 'Success',
               text: data.message.toUpperCase(),
-            }).then(()=>{
+            }).then(() => {
               location.assign('/admin/attributes')
             });
           })
@@ -392,4 +516,52 @@
       });
     }
   });
+
+  function deleteAttribute(id, type, attribute) {
+    console.log(type);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You want to delete this ${type}: ${attribute}!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`/admin/attributes/delete-${type}/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(async (response) => {
+            if (!response.ok) {
+              // If the response is not OK, read the response body to get the error message
+              const text = await response.text();
+              throw new Error(text);
+            }
+            return response.json();
+          })
+          .then(data => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message.toUpperCase(),
+            }).then(() => {
+              location.reload(); // Reload the current window
+            });
+          })
+          .catch(error => {
+            console.log(error);
+            // Display an error message based on the error caught
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.message,
+            });
+          });
+      }
+    });
+  }
 </script>

@@ -24,8 +24,8 @@ router.use(isAdmin, (req, res, next) => {
   if (req.user.isAdmin) {
     res.locals.admin = req.user;
   }
-  // res.locals.success = req.flash("success");
-  // res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 
@@ -150,7 +150,21 @@ router
   .route("/attributes/toggleListing/brand/:id")
   .patch(attributeController.toggleListingBrand);
 
-router.post("/attributes/add-attribute", attributeController.addAttributes);
+router
+  .route("/attributes/delete-color/:id")
+  .delete(attributeController.deleteColor);
+
+router
+  .route("/attributes/delete-size/:id")
+  .delete(attributeController.deleteSize);
+
+router
+  .route("/attributes/delete-brand/:id")
+  .delete(attributeController.deleteBrand);
+
+router.post("/attributes/add-color", attributeController.addColor);
+router.post("/attributes/add-size", attributeController.addSize);
+router.post("/attributes/add-brand", attributeController.addBrand);
 
 /**
  * Customer Management
