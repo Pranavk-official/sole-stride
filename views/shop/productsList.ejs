@@ -395,68 +395,6 @@
 </div>
 
 <script defer>
-  const addToWishlist = async (productId) => {
-    let user = '<%- typeof user %>';
-
-    // Check if user is undefined
-    if (user === "undefined") {
-      // Use SweetAlert to show a warning and redirect to /login upon confirmation
-      Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'You need to login to add items to wishlist!',
-        confirmButtonText: 'Login',
-        showCancelButton: true,
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Redirect to /login if the user confirms
-          window.location.assign('/login');
-        }
-      });
-    } else {
-      console.log(productId);
-
-      const heart = document.getElementById(`wishlist-${productId}`)
-      const response = await fetch(`/user/add-to-wishlist/`, {
-        method: 'POST',
-        body: {
-          productId
-        }
-      })
-
-       // Check if the request was successful
-       if (response.ok) {
-        // Assuming the server responds with a JSON object containing a success message
-        const data = await response.json();
-        if (data.success) {
-          // Update the UI to indicate the product has been added to the wishlist
-          heart.classList.remove('btn-outline-danger'); 
-          heart.classList.add('btn-danger'); 
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Product added to wishlist.',
-          });
-        } else {
-          // Handle the case where the product could not be added to the wishlist
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'There was an error adding the product to your wishlist.',
-          });
-        }
-      } else {
-        // Handle server errors
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'There was an error adding the product to your wishlist.',
-        });
-      }
-    }
-  }
-
   const addToCart = async (productId, variantId, color, size) => {
     let user = '<%- typeof user %>';
 
@@ -493,11 +431,11 @@
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok.');
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Network response was not ok.');
         }
 
         const data = await response.json();
-        console.log(data);
         let cartCount = document.getElementById("cartCount");
         if (cartCount) {
           cartCount.innerText = data.count;
@@ -514,8 +452,7 @@
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Something went wrong!",
-          error,
+          text: error.message, // Display the actual error message
         });
       }
     }

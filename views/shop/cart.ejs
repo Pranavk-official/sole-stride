@@ -46,7 +46,7 @@
             <% cartList.forEach(item => { %>
             <div class="cart-item">
               <div class="row d-flex align-items-center text-start text-md-center">
-                <div class="col-12 col-md-5"><a class="cart-remove close mt-3 d-md-none" href="#"><i class="bi bi-x-lg"> </i></a>
+                <div class="col-12 col-md-5"><button class="btn cart-remove close mt-3 d-md-none" onclick="removeFromCart('<%- item.product_id._id %>', '<%- item.variant %>')" ><i class="bi bi-x-lg text-danger"> </i></button>
                   <div class="d-flex align-items-center"><a href="/shop/product/<%- item.product_id._id %>"><img class="cart-item-img" src="/uploads/product-images/<%= item.product_id.primary_image.name %>" alt="..."></a>
                     <div class="cart-title text-start"><a class="text-uppercase text-dark" href="/shop/product/<%- item.product_id._id %>"><strong><%= item.product_id.product_name %></strong></a><br><span class="text-muted text-sm">Size: <%- item.size.value %></span><br><span class="text-muted text-sm">Colour: <span class="text-capitalize"><%- item.color.name %></span></span>
                     </div>

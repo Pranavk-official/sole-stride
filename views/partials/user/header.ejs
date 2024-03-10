@@ -134,24 +134,32 @@
               <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4" aria-labelledby="cartdetails">
                 <div class="navbar-cart-product-wrapper">
                   <% if (typeof cartEntries !== 'undefined' && typeof cartTotalPrice !== 'undefined') { %>
-
-                  <% cartEntries.forEach((item, index) => { %>
-                  <!-- cart item-->
-                  <div class="navbar-cart-product">
-                    <div class="d-flex align-items-center">
-                      <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
-                      <div class="w-100">
-                        <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
-                          </i>
-                        </button>
-                        <div class="ps-3">
-                          <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small class="d-block text-muted">Quantity: <%- item.cart.quantity %>
-                          </small><strong class="d-block text-sm">$<%- item.price %></strong>
+                    <% if (cartEntries.length > 0) { %>
+                      <% cartEntries.forEach((item, index) => { %>
+                      <!-- cart item-->
+                      <div class="navbar-cart-product">
+                        <div class="d-flex align-items-center">
+                          <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
+                          <div class="w-100">
+                            <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
+                              </i>
+                            </button>
+                            <div class="ps-3">
+                              <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small class="d-block text-muted">Quantity: <%- item.cart.quantity %>
+                              </small><strong class="d-block text-sm">$<%- item.price %></strong>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <% }) %>
+                      <% }) %>
+                      <% } else { %>
+                        <div class="navbar-cart-product">
+                          <div class="d-flex align-items-center">
+                            <p class="h5">Cart is Empty</p>
+                          </div>
+                        </div>
+                     
+                    <% } %>
 
                 </div>
                 <% if (cartTotalPrice > 0) { %>

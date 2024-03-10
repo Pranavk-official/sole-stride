@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    wishlist: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WishList",
+    },
     username: {
       type: String,
       required: true,

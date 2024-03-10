@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {Schema, ObjectId} = mongoose
+const { Schema, ObjectId } = mongoose;
 const productSchema = new Schema(
   {
     product_name: {
@@ -54,6 +54,12 @@ const productSchema = new Schema(
           type: Number,
           required: true,
         },
+      },
+    ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
       },
     ],
     price: {

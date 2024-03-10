@@ -1,4 +1,4 @@
-<section class="product-details">
+<section class="product-details container">
   <div class="container">
     <div class="row">
       <div class="col-lg-7 pt-4 order-2 order-lg-1">
@@ -114,10 +114,10 @@
             </button>
           </li>
           <li class="list-inline-item">
-            <a class="btn btn-outline-secondary mb-1" href="#">
+            <button class="btn btn-outline-secondary mb-1" onclick="addToWishlist('<%- product._id %>')">
               <i class="far fa-heart me-2"></i>
               Add to wishlist
-            </a>
+            </button>
           </li>
         </ul>
       </div>
@@ -267,52 +267,60 @@
                 </p>
               </div>
             </div>
-            <div class="py-5 px-3">
-              <h5 class="text-uppercase mb-4">Leave a review</h5>
-              <form class="form" id="contact-form" method="post" action="contact.php">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="mb-4">
-                      <label class="form-label" for="name">Your name *</label>
-                      <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required="required" />
+            <% if (typeof user !== 'undefined') { %>
+              <div class="py-5 px-3">
+                <h5 class="text-uppercase mb-4">Leave a review</h5>
+                <form class="form" id="contact-form" method="POST" action="/user/add-review">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="mb-4">
+                        <label class="form-label" for="name">Your username *</label>
+                        <input class="form-control readonly" type="text" name="username" id="username" placeholder="Enter your username" value="<%- user.username %>" disabled />
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="mb-4">
+                        <label class="form-label" for="name">Your name *</label>
+                        <input class="form-control disabled" type="text" name="name" id="name" placeholder="Enter your name" value="<%- user.firstName + ' ' + user.lastName %>" readonly disabled />
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="mb-4">
+                        <label class="form-label" for="rating">Your rating *</label>
+                        <select class="custom-select focus-shadow-0" name="rating" id="rating">
+                          <option value="5">
+                            &#9733;&#9733;&#9733;&#9733;&#9733; (5/5)
+                          </option>
+                          <option value="4">
+                            &#9733;&#9733;&#9733;&#9733;&#9734; (4/5)
+                          </option>
+                          <option value="3">
+                            &#9733;&#9733;&#9733;&#9734;&#9734; (3/5)
+                          </option>
+                          <option value="2">
+                            &#9733;&#9733;&#9734;&#9734;&#9734; (2/5)
+                          </option>
+                          <option value="1">
+                            &#9733;&#9734;&#9734;&#9734;&#9734; (1/5)
+                          </option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-sm-6">
-                    <div class="mb-4">
-                      <label class="form-label" for="rating">Your rating *</label>
-                      <select class="custom-select focus-shadow-0" name="rating" id="rating">
-                        <option value="5">
-                          &#9733;&#9733;&#9733;&#9733;&#9733; (5/5)
-                        </option>
-                        <option value="4">
-                          &#9733;&#9733;&#9733;&#9733;&#9734; (4/5)
-                        </option>
-                        <option value="3">
-                          &#9733;&#9733;&#9733;&#9734;&#9734; (3/5)
-                        </option>
-                        <option value="2">
-                          &#9733;&#9733;&#9734;&#9734;&#9734; (2/5)
-                        </option>
-                        <option value="1">
-                          &#9733;&#9734;&#9734;&#9734;&#9734; (1/5)
-                        </option>
-                      </select>
-                    </div>
+                  <div class="mb-4">
+                    <label class="form-label" for="email">Your email *</label>
+                    <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" value="<%- user.email %>" readonly disabled/>
                   </div>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label" for="email">Your email *</label>
-                  <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" required="required" />
-                </div>
-                <div class="mb-4">
-                  <label class="form-label" for="review">Review text *</label>
-                  <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
-                </div>
-                <button class="btn btn-outline-dark" type="submit">
-                  Post review
-                </button>
-              </form>
-            </div>
+                  <div class="mb-4">
+                    <label class="form-label" for="review">Comment </label>
+                    <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
+                  </div>
+                  <button class="btn btn-outline-dark" type="submit">
+                    Post review
+                  </button>
+                </form>
+              </div>
+            <% } %>
           </div>
         </div>
       </div>
@@ -469,8 +477,6 @@
     const color = document.querySelector('.size-option.active').getAttribute('data-color');
     const size = document.querySelector('.size-option.active').getAttribute('data-size');
 
-
-    console.log(productId, variantId, color, size);
     try {
       const response = await fetch(`/user/add-to-cart/`, {
         method: "POST",
@@ -485,8 +491,7 @@
         })
       });
 
-      if (response.redirected) {
-        // Show SweetAlert and redirect on confirmation
+      if (response.status === 401) {
         Swal.fire({
           title: 'Warning!',
           text: 'Please log in to add items to your cart.',
@@ -501,11 +506,11 @@
       }
 
       if (!response.ok) {
-        throw new Error('Network response was not ok.');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Network response was not ok.');
       }
 
       const data = await response.json();
-      console.log(data);
       let cartCount = document.getElementById("cartCount");
       if (cartCount) {
         cartCount.innerText = data.count;
@@ -522,8 +527,7 @@
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong!",
-        error,
+        text: error.message, // Display the actual error message
       });
     }
   };

@@ -63,12 +63,8 @@ const increaseCartQuantity = async (productID, variantId) => {
       `#itemTotal-${productID}-${variantId}`
     );
 
-    const cartTotal = document.querySelector(
-      `#cartTotal`
-    );
-    const grandTotal = document.querySelector(
-      `#grandTotal`
-    );
+    const cartTotal = document.querySelector(`#cartTotal`);
+    const grandTotal = document.querySelector(`#grandTotal`);
 
     grandTotal.innerHTML = `$${data.totalPrice}`;
     itemTotal.innerHTML = `$${cart.price}`;
@@ -109,12 +105,8 @@ const decreaseCartQuantity = async (productId, variantId) => {
   );
   if (data && data.success) {
     const cart = data.cart;
-    const cartTotal = document.querySelector(
-      `#cartTotal`
-    );
-    const grandTotal = document.querySelector(
-      `#grandTotal`
-    );
+    const cartTotal = document.querySelector(`#cartTotal`);
+    const grandTotal = document.querySelector(`#grandTotal`);
     const itemTotal = document.querySelector(
       `#itemTotal-${productId}-${variantId}`
     );
@@ -130,27 +122,90 @@ const decreaseCartQuantity = async (productId, variantId) => {
   }
 };
 
+// Add to Wishlist
+const addToWishlist = async (productId) => {
+  let user = "<%- typeof user %>";
 
-//   //   //add to wish list function
-//   //   addToWishlist = async (id) => {
-//   //     const heart = document.getElementById(`heart${id}`);
-//   //     await fetch(`/view_product/add-to-wishlist/${id}`, {
-//   //       method: "GET",
-//   //     })
-//   //       .then((response) => response.json())
-//   //       .then((data) => {
-//   //         if (data.success) {
-//   //           heart.classList.remove("fa-regular");
-//   //           heart.classList.add("fa-solid");
-//   //           heart.classList.add("text-danger");
-//   //         } else {
-//   //           heart.classList.remove("fa-solid");
-//   //           heart.classList.remove("text-danger");
-//   //           heart.classList.add("fa-regular");
-//   //         }
-//   //       });
-//   //   };
-// });
+  if (user === "undefined") {
+    Swal.fire({
+      icon: "warning",
+      title: "Oops...",
+      text: "You need to login to add items to wishlist!",
+      confirmButtonText: "Login",
+      showCancelButton: true,
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.assign("/login");
+      }
+    });
+  } else {
+    console.log(productId);
+
+    const heart = document.getElementById(`wishlist-${productId}`);
+    const response = await fetch(`/user/add-to-wishlist/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success) {
+        if (heart) {
+          heart.classList.remove("btn-outline-danger");
+          heart.classList.add("btn-danger");
+        }
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Product added to wishlist.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.message, // Display the message from the backend
+        });
+      }
+    } else {
+      // Handle server errors based on status code
+      switch (response.status) {
+        case 401:
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please log in to add product to wishlist",
+          });
+          break;
+        case 404:
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Product or user not found",
+          });
+          break;
+        case 400:
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Product already exists in wishlist",
+          });
+          break;
+        default:
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "There was an error adding the product to your wishlist.",
+          });
+      }
+    }
+  }
+};
 
 // const submitOrder = document.getElementById("submitOrder");
 // if (submitOrder) {

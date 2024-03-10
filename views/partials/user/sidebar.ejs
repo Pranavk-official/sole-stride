@@ -36,9 +36,14 @@
                         <% } %>
                     </a>
                 </li>
-                <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3"
-                        href="/user/wishlist"><i class="ci-heart opacity-60 me-2"></i>Wishlist<span
-                            class="fs-sm text-muted ms-auto">3</span></a></li>
+                <li class="border-bottom mb-0">
+                    <a class="nav-link-style d-flex align-items-center px-4 py-3" href="/user/wishlist">
+                        <i class="ci-heart opacity-60 me-2"></i>
+                        Wishlist
+                        <% if (typeof wishlistCount !== 'undefined') { %>
+                            <span class="fs-sm text-muted ms-auto"><%= wishlistCount %></span>
+                        <% } %>
+                    </a></li>
             </ul>
             <div class="d-flex justify-content-center my-3 pb-3">
                 <a href="/logout">

@@ -1,11 +1,15 @@
 const User = require("../model/userSchema");
 const Address = require("../model/addressSchema");
 const Product = require("../model/productSchema");
+const WishList = require("../model/wishlistSchema");
 const Order = require("../model/orderSchema");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
 module.exports = {
+  /**
+   * User Profile Mangement
+   */
   getProfile: async (req, res) => {
     const locals = {
       title: "SoloStride - Profile",
@@ -38,26 +42,135 @@ module.exports = {
       user: req.user,
     });
   },
+
+  /***
+   * User Wishlist Mangement
+   */
+
   getWishlist: async (req, res) => {
     const locals = {
       title: "SoloStride - Wishlist",
     };
+    let user = await User.findById(req.user.id);
+    let wishlist = await WishList.findById(user.wishlist).populate({
+      path: "products",
+      populate: { path: "brand" },
+    });
+    // console.log(wishlist);
+
     res.render("user/wishlist", {
       locals,
-      user: req.user,
+      wishlist,
+      products: wishlist.products,
     });
   },
-  addToWishlist: async (req,res) => {
-    if(!req.isAuthenticated()){
-      return res.status(401).json({'success': false, 'message': 'Please log in to add product to wishlist'})
+
+  addToWishlist: async (req, res) => {
+    console.log(req.body);
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({
+        success: false,
+        message: "Please log in to add product to wishlist",
+      });
     }
 
-    const {productId} = req.body
-    const product = await Product.findById(productId)
+    const { productId } = req.body;
+    let product,
+      user,
+      userWishListID,
+      userWishListData,
+      productsInWishList,
+      productAlreadyInWishList;
 
-    
+    try {
+      product = await Product.findById(productId);
+      user = await User.findById(req.user.id);
+
+      if (!product) {
+        console.log("Product not found");
+        return res
+          .status(404)
+          .json({ success: false, message: "Product not found" });
+      }
+
+      if (!user) {
+        console.log("User not found");
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+
+      userWishListID = user.wishlist;
+
+      if (!userWishListID) {
+        const newWishList = new WishList({ userId: user._id });
+        await newWishList.save();
+        userWishListID = newWishList._id;
+        await User.findByIdAndUpdate(user._id, {
+          $set: { wishlist: userWishListID },
+        });
+      }
+
+      userWishListData = await WishList.findById(userWishListID);
+      productsInWishList = userWishListData.products;
+
+      productAlreadyInWishList = productsInWishList.some((existingProduct) =>
+        existingProduct.equals(product._id)
+      );
+
+      if (productAlreadyInWishList) {
+        console.log("Product already exists in wishlist");
+        return res.status(400).json({
+          success: false,
+          message: "Product already exists in wishlist",
+        });
+      }
+
+      await WishList.findByIdAndUpdate(userWishListID, {
+        $push: { products: product._id },
+      });
+
+      console.log("Product added to wishlist");
+      return res
+        .status(201)
+        .json({ success: true, message: "Product added to wishlist" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred, server facing issues !",
+      });
+    }
+  },
+  removeFromWishlist: async (req, res) => {
+    try {
+      const { productId } = req.body;
+      const user = await User.findById(req.user.id);
+
+      const updatedWishList = await WishList.findByIdAndUpdate(user.wishlist, {
+        $pull: { products: productId },
+      });
+
+      if (updatedWishList) {
+        return res.status(201).json({
+          success: true,
+          message: "Removed item from wishlist",
+        });
+      } else {
+        return res.status(500).json({
+          success: true,
+          message: "failed to remove product from wishlist try again",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        success: true,
+        message: "failed to remove product from wishlist try again",
+      });
+    }
   },
 
+  // Password Reset From Profile
   resetPass: async (req, res) => {
     try {
       // console.log(req.body);
@@ -98,6 +211,10 @@ module.exports = {
       return res.redirect("/user/profile");
     }
   },
+
+  /**
+   * User Address Management
+   */
 
   addAddress: async (req, res) => {
     console.log(req.body);
@@ -151,7 +268,6 @@ module.exports = {
     }
   },
 
-  // ADDRESS
   deleteAddress: async (req, res) => {
     let id = req.params.id;
     const address = await Address.deleteOne({ _id: id });

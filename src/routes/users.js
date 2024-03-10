@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../model/userSchema");
+const WishList = require("../model/wishlistSchema");
 const Order = require("../model/orderSchema");
 const { isLoggedIn } = require("../middlewares/authMiddleware");
 const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
+const reviewController = require("../controller/reviewController");
 
 router.use(isLoggedIn, async (req, res, next) => {
   if(req.user && req.user.isAdmin){
@@ -16,9 +18,13 @@ router.use(isLoggedIn, async (req, res, next) => {
     res.locals.user = req.user;
     res.locals.cartCount = req.user.cart.length;
 
+    const userWishlist = await WishList.findOne({userId: req.user.id})
     const userOrder = await Order.find({customer_id: req.user.id}).countDocuments()
+    
+    const wishlistCount = userWishlist.products.length
 
     res.locals.orderCount = userOrder
+    res.locals.wishlistCount = wishlistCount
   }
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
@@ -68,7 +74,13 @@ router.post("/cancel-order/:id", orderController.cancelOrder);
  */
 
 router.get("/wishlist", userController.getWishlist);
-router.post("/add-to-wishlist", userController.getWishlist);
-router.delete("/remove-from-wishlist", userController.getWishlist);
+router.post("/add-to-wishlist", userController.addToWishlist);
+router.delete("/remove-from-wishlist", userController.removeFromWishlist);
+
+
+/**
+ * User Review
+ */
+router.post("/add-review", reviewController.postReview);
 
 module.exports = router;

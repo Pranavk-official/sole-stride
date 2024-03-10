@@ -169,7 +169,7 @@ const handleCartUpdate = async (req, res, increment = true) => {
 
 module.exports = {
   getCart: async (req, res) => {
-    let errors = []
+    let errors = [];
     if (!req.isAuthenticated()) {
       req.flash("error", "Please log in to view cart.");
       return res.redirect("/login");
@@ -228,12 +228,16 @@ module.exports = {
 
       for (const item of user.cart) {
         try {
-          const product = await Product.findOne({ _id: item.product_id }).populate('variants.color variants.size');
+          const product = await Product.findOne({
+            _id: item.product_id,
+          }).populate("variants.color variants.size");
           if (product) {
             let notFound = false;
             if (!product.isActive) {
-              notFound = true
-              errors.push(`The Product ${product.product_name} is not available!!`)
+              notFound = true;
+              errors.push(
+                `The Product ${product.product_name} is not available!!`
+              );
             }
             const variant = product.variants.find(
               (v) => v._id.toString() === item.variant.toString()
@@ -244,17 +248,21 @@ module.exports = {
               if (item.quantity > stock) {
                 item.outOfStock = true;
               }
-              if(item.outOfStock & !notFound){
-                errors.push(`The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`)
+              if (item.outOfStock & !notFound) {
+                errors.push(
+                  `The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`
+                );
               }
             } else {
-              errors.push(`The Variant of Product ${product.product_name} is not found!!`)
+              errors.push(
+                `The Variant of Product ${product.product_name} is not found!!`
+              );
               console.log(
                 `Variant with ID ${item.variant} not found for product ${item.product}`
               );
             }
           } else {
-            errors.push(`The Product ${product.product_name} is not found!!`)
+            errors.push(`The Product ${product.product_name} is not found!!`);
             console.log(`Product with ID ${item.product} not found`);
           }
         } catch (error) {
@@ -268,7 +276,7 @@ module.exports = {
         cartList: userCart.cart,
         cartCount,
         totalPrice,
-        errorMsg: errors
+        errorMsg: errors,
       });
     }
   },
@@ -280,29 +288,71 @@ module.exports = {
       });
     }
 
-    // let productId = req.bod;
     let userId = req.user.id;
-    console.log(req.body);
     let { productId, variantId, color, size } = req.body;
 
-    let updatedUser = await addProductToCart(
-      userId,
-      productId,
-      variantId,
-      color,
-      size
-    );
-    if (updatedUser) {
-      let cartCount = updatedUser.cart.length;
-      res.json({
-        status: true,
-        count: cartCount,
-      });
-    } else {
-      res.json({
-        status: false,
-        message: "Quantity Exceeds Product Stock",
-      });
+    try {
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res
+          .status(404)
+          .json({ status: false, message: "Product not found" });
+      }
+
+      const variant = product.variants.find(
+        (v) => v._id.toString() === variantId
+      );
+      if (!variant) {
+        return res
+          .status(404)
+          .json({ status: false, message: "Variant not found" });
+      }
+      console.log(variant);
+      // TODO: quantity
+      const stock = variant.stock;
+      if (stock === 0) {
+        return res
+          .status(409)
+          .json({ status: false, message: "Product Out Of Stock" });
+      }
+
+      // Check if the product already exists in the cart
+      const user = await User.findById(userId).select("cart");
+      const productInCart = user.cart.find(
+        (item) =>
+          item.product_id.toString() === productId &&
+          item.variant.toString() === variantId
+      );
+
+      if (productInCart) {
+        return res
+          .status(400)
+          .json({ status: false, message: "Product already in cart" });
+      }
+
+      let updatedUser = await addProductToCart(
+        userId,
+        productId,
+        variantId,
+        color,
+        size
+      );
+      if (updatedUser) {
+        let cartCount = updatedUser.cart.length;
+        return res.json({
+          status: true,
+          count: cartCount,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ status: false, message: "Quantity Exceeds Product Stock" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ status: false, message: "An error occurred" });
     }
   },
 

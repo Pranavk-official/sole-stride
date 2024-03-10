@@ -213,7 +213,7 @@ module.exports = {
     }
 
     if (req.user.cart.length < 1) {
-      return res.redirect("/cart");
+      return res.redirect("/user/cart");
     }
 
     let user = await User.findById(req.user.id);
