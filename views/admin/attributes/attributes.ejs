@@ -167,7 +167,7 @@
               </fieldset>
             </div>
             <!-- Add more form fields as needed -->
-            <button type="submit" class="btn btn-primary m-2 w-100">Add Color</button>
+            <button type="submit" onclick="addAttribute('addColorForm', 'color')" class="btn btn-primary m-2 w-100">Add Color</button>
           </form>
         </div>
       </div>
@@ -212,7 +212,7 @@
       </div>
       <div class="modal-body">
         <div class="card">
-          <form id="addBrandForm" class="card-body" action="/admin/attributes/add-attribute" method="POST">
+          <form id="addBrandForm" class="card-body">
             <div class="row">
               <fieldset class="col card mx-2">
                 <legend>Brand</legend>
@@ -223,7 +223,7 @@
               </fieldset>
             </div>
             <!-- Add more form fields as needed -->
-            <button type="submit" class="btn btn-primary m-2 w-100">Add Color</button>
+            <button type="submit" onclick="addAttribute('addBrandForm', 'brand')" class="btn btn-primary m-2 w-100">Add Color</button>
           </form>
         </div>
       </div>
@@ -335,24 +335,34 @@
 
       // Collect form data
       let data;
-      if (type === 'size') {
-        const size = document.getElementById('size').value
-        data = {
-          size: parseInt(size)
-        }
-      } else if (type === 'color') {
-        const color = document.getElementById('colorName').value
-        const colorHex = document.getElementById('colorHex').value
-        data = {
-          color,
-          colorHex
-        }
-      } else if (type === 'brand') {
-        const brand = document.getElementById('brand')
-        data = {
-          brand
-        }
+
+      switch (type) {
+        case 'size':
+          const size = document.getElementById('size').value;
+          data = {
+            size: parseInt(size)
+          };
+          break;
+        case 'color':
+          const color = document.getElementById('colorName').value;
+          const colorHex = document.getElementById('colorHex').value;
+          data = {
+            color,
+            colorHex
+          };
+          break;
+        case 'brand':
+          const brand = document.getElementById('brand').value; // Assuming 'brand' is an input element
+          console.log(brand);
+          data = {
+            brand
+          };
+          break;
+        default:
+          // Optional: Handle the case where 'type' is not 'size', 'color', or 'brand'
+          console.log('Invalid type');
       }
+
 
       // Confirmation dialog
       Swal.fire({
