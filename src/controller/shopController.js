@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Banner = require("../model/bannerSchema");
 const Category = require("../model/categorySchema");
+const Brand = require("../model/attributes/brandSchema");
 const Product = require("../model/productSchema");
 const Address = require("../model/addressSchema");
 const User = require("../model/userSchema");
@@ -50,6 +51,83 @@ module.exports = {
       error: req.flash("error"),
       success: req.flash("success"),
     });
+  },
+  search: async (req, res, next) => {
+    try {
+      console.log(req.query);
+      let search = "";
+
+      if (req.query.search) {
+        search = req.query.search.trim();
+      }
+
+      let page = 1;
+
+      if (req.query.page) {
+        page = req.query.page;
+      }
+
+      const categoryID = req.query.category;
+      const brandID = req.query.brand;
+
+      const limit = 9;
+
+      const sortBy = req.query.sortBy;
+
+      let sortQuery = {};
+
+      if (sortBy) {
+        if (sortBy === "lowPrice") {
+          sortQuery = { sellingPrice: 1 };
+        } else if (sortBy === "highPrice") {
+          sortQuery = { sellingPrice: -1 };
+        }
+      }
+
+      let filterQuery = {};
+
+      if (search) {
+        filterQuery.product_name = { $regex: search, $options: "i" };
+      }
+
+      if (categoryID) {
+        filterQuery.category = categoryID;
+      }
+      
+      if (brandID) {
+        filterQuery.brand = brandID;
+      }
+
+      const products = await Product.find(filterQuery)
+        .sort(sortQuery)
+        .populate("variants.$.color variants.$.size")
+        .skip((page - 1) * limit)
+        .limit(limit * 1)
+        .exec();
+
+      const count = await Product.find(filterQuery).countDocuments();
+
+      const categories = await Category.find({isActive: true});
+      const brands = await Brand.find({});
+      return res.render("shop/search.ejs", {
+        sortBy,
+        brandID,
+        categoryID,
+        brands,
+        products,
+        categories,
+        count,
+        pages: Math.ceil(count / limit),
+        current: page,
+        previous: page - 1,
+        nextPage: Number(page) + 1,
+        limit,
+        search,
+      });
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
   },
   getProduct: async (req, res) => {
     const productId = req.params.id;
@@ -229,12 +307,13 @@ module.exports = {
       .filter((result) => result.status === "rejected")
       .map((result) => result.reason);
 
-
     if (invalidCartItems.length > 0) {
       console.log(invalidCartItems);
       req.flash(
         "error",
-        `The following items are not available: ${invalidCartItems.join(", ").replaceAll('Error:', '')}`
+        `The following items are not available: ${invalidCartItems
+          .join(", ")
+          .replaceAll("Error:", "")}`
       );
 
       return res.redirect("/user/cart");
@@ -258,12 +337,12 @@ module.exports = {
       .map((result) => result.reason);
 
     if (insufficientStockItems.length > 0) {
-      console.log(insufficientStockItems)
+      console.log(insufficientStockItems);
       req.flash(
         "error",
-        `Insufficient stock for the following items: ${insufficientStockItems.join(
-          ", "
-        ).replaceAll('Error: ', '')}`
+        `Insufficient stock for the following items: ${insufficientStockItems
+          .join(", ")
+          .replaceAll("Error: ", "")}`
       );
 
       return res.redirect("/user/cart");

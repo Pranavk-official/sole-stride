@@ -1,0 +1,427 @@
+<!-- Hero Section-->
+<section class="hero">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb justify-content-center">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active">Shop</li>
+    </ol>
+    <!-- Hero Content-->
+    <div class="hero-content pb-5 text-center">
+      <h1 class="hero-heading">Shop / Products</h1>
+      <div class="row">
+        <div class="col-xl-8 offset-xl-2">
+          <p class="lead text-muted">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="row mb-5">
+    <!-- Grid -->
+    <div class="products-grid col-xl-9 col-lg-8 order-lg-2">
+      <header class="product-grid-header">
+        <!-- <div class="me-3 mb-3">
+                Showing <strong>1-12 </strong>of <strong>158 </strong>products
+              </div> -->
+        <!-- <div class="me-3 mb-3">
+                <span class="me-2">Show</span>
+                <a class="product-grid-header-show active" href="#">12 </a>
+                <a class="product-grid-header-show " href="#">24 </a>
+                <a class="product-grid-header-show " href="#">All </a>
+              </div> -->
+        <div class="mb-3 d-flex align-items-center">
+          <span class="d-inline-block me-2">Sort by</span>
+          <select class="form-select w-auto border-0">
+            <option value="orderby_0">Default</option>
+            <option value="orderby_1">Popularity</option>
+            <option value="orderby_2">Rating</option>
+            <option value="orderby_3">Newest first</option>
+          </select>
+        </div>
+      </header>
+      <div class="row">
+        <!-- product-->
+        <% products?.forEach(element => { %>
+
+        <div class="col-xl-4 col-6">
+          <div class="product">
+            <div class="product-image">
+              <div class="ribbon ribbon-info">Fresh</div>
+              <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
+              <div class="product-hover-overlay">
+                <a class="product-hover-overlay-link" href="/shop/product/<%- element._id %>"></a>
+                <div class="product-hover-overlay-buttons">
+                  <button class="btn btn-outline-primary btn-product-left d-none d-sm-inline-block" <% if (element.variants && element.variants.length >0) { %> onclick="addToCart('<%- element?._id %>','<%- element.variants[0]._id %>','<%- element.variants[0].color %>', '<%- element.variants[0].size %>')" <% } %>>
+                    <i class="bi bi-cart-fill fs-5"></i>
+                  </button>
+                  <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>">
+                    <i class="bi bi-search"></i>
+                    <span class="btn-buy-label ms-2">View</span>
+                  </a>
+                  <button id="wishlist-<%- element._id %>" class="btn btn-outline-danger btn-product-right d-none d-sm-inline-block justify-content-center" onclick="addToWishlist('<%- element._id %>')">
+                    <i class="bi bi-heart fs-5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="py-2">
+              <p class="text-muted text-sm mb-1"><%- element.brand_name %></p>
+              <h3 class="h6 text-uppercase mb-1">
+                <a class="text-dark" href="#"><%- element.product_name %></a>
+              </h3>
+              <div class="row g-2">
+                <span class="text-muted col">$<%- element.sellingPrice %></span>
+                <span class="text-muted col"><del>$<%- element.actualPrice %></del></span>
+                <br />
+                <span class="fw-bold h5 col">Size:
+                  <span class="fw-normal text-muted"><%- element.size %></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Quickview Modal    -->
+        <!-- <div class="modal fade quickview" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <button class="close modal-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                      <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">
+                        <use xlink:href="#close-1"> </use>
+                      </svg>
+                    </button>
+                    <div class="modal-body">
+                      <div class="ribbon ribbon-primary">Sale</div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="owl-carousel owl-theme owl-dots-modern detail-full" data-slider-id="1">
+                            <div class="detail-full-item-modal" style="background: center center url('https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/photo/kyle-loftus-596319-detail-1.jpg') no-repeat; background-size: cover;"> </div>
+                            <div class="detail-full-item-modal" style="background: center center url('https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/photo/kyle-loftus-596319-detail-2.jpg') no-repeat; background-size: cover;"> </div>
+                            <div class="detail-full-item-modal" style="background: center center url('https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/photo/kyle-loftus-596319-detail-3.jpg') no-repeat; background-size: cover;"> </div>
+                            <div class="detail-full-item-modal" style="background: center center url('https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/photo/kyle-loftus-594535-unsplash-detail-3.jpg') no-repeat; background-size: cover;"> </div>
+                            <div class="detail-full-item-modal" style="background: center center url('https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/photo/kyle-loftus-594535-unsplash-detail-4.jpg') no-repeat; background-size: cover;"> </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center">
+                          <div>
+                            <h2 class="mb-4 mt-4 mt-lg-1"><%- element.product_name %></h2>
+                            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-4">
+                              <ul class="list-inline mb-2 mb-sm-0">
+                                <li class="list-inline-item h4 fw-light mb-0">$<%- element.sellingPrice %></li>
+                                <li class="list-inline-item text-muted fw-light">
+                                  <del>$<%- element.actualPrice %></del>
+                                </li>
+                              </ul>
+                              <div class="d-flex align-items-center">
+                                <ul class="list-inline me-2 mb-0">
+                                  <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
+                                  <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
+                                  <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
+                                  <li class="list-inline-item me-0"><i class="fa fa-star text-primary"></i></li>
+                                  <li class="list-inline-item me-0"><i class="fa fa-star text-gray-300"></i></li>
+                                </ul><span class="text-muted text-uppercase text-sm">25 reviews</span>
+                              </div>
+                            </div>
+                            <p class="mb-4 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
+                            <form action="#">
+                              <div class="row">
+                                <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                                  <h6 class="detail-option-heading">Size <span>(required)</span></h6>
+                                  <p><%- element.size %></p>
+                                </div>
+                                <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                                  <h6 class="detail-option-heading">Type <span>(required)</span></h6>
+                                  <label class="btn btn-sm btn-outline-secondary detail-option-btn-label" for="material_0"> Hoodie
+                                    <input class="input-invisible" type="radio" name="material" value="value_0" id="material_0" required>
+                                  </label>
+                                  <label class="btn btn-sm btn-outline-secondary detail-option-btn-label" for="material_1"> College
+                                    <input class="input-invisible" type="radio" name="material" value="value_1" id="material_1" required>
+                                  </label>
+                                </div>
+                                <div class="col-12 detail-option mb-3">
+                                  <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
+                                  <ul class="list-inline mb-0 colours-wrapper">
+                                    <li class="list-inline-item">
+                                      <label class="btn-colour" for="colour_Blue" style="background-color: #668cb9"> </label>
+                                      <input class="input-invisible" type="radio" name="colour" value="value_Blue" id="colour_Blue" required>
+                                    </li>
+                                    <li class="list-inline-item">
+                                      <label class="btn-colour" for="colour_White" style="background-color: #fff"> </label>
+                                      <input class="input-invisible" type="radio" name="colour" value="value_White" id="colour_White" required>
+                                    </li>
+                                    <li class="list-inline-item">
+                                      <label class="btn-colour" for="colour_Violet" style="background-color: #8b6ea4"> </label>
+                                      <input class="input-invisible" type="radio" name="colour" value="value_Violet" id="colour_Violet" required>
+                                    </li>
+                                    <li class="list-inline-item">
+                                      <label class="btn-colour" for="colour_Red" style="background-color: #dd6265"> </label>
+                                      <input class="input-invisible" type="radio" name="colour" value="value_Red" id="colour_Red" required>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="col-12 col-lg-6 detail-option mb-5">
+                                  <label class="detail-option-heading fw-bold">Items <span>(required)</span></label>
+                                  <input class="form-control detail-quantity" name="items" type="number" value="1">
+                                </div>
+                              </div>
+                              <ul class="list-inline">
+                                <li class="list-inline-item">
+                                  <button class="btn btn-dark btn-lg mb-1" type="submit"> <i class="bi bi-cart h6 p-2 me-2"></i>Add to Cart</button>
+                                </li>
+                                <li class="list-inline-item"><a class="btn btn-outline-secondary mb-1" href="#"> <i class="far fa-heart me-2"></i>Add to wishlist</a></li>
+                              </ul>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+        <% }) %>
+        <!-- /product-->
+      </div>
+
+    </div>
+
+    <!-- / Grid End-->
+    <!-- Sidebar-->
+    <div class="sidebar col-xl-3 col-lg-4 order-lg-1">
+      <div class="sidebar-block px-3 px-lg-0 me-lg-4">
+        <a class="d-lg-none block-toggler" data-bs-toggle="collapse" href="#categoryFilterMenu" aria-expanded="false" aria-controls="categoryFilterMenu">Filter by Categories</a>
+        <!-- Category filter menu-->
+        <div class="expand-lg collapse" id="categoryFilterMenu">
+          <h6 class="sidebar-heading d-none d-lg-block">Categories</h6>
+
+          <div class="mt-4 mt-lg-0" id="categories">
+            <% categories.forEach((element,i) => { %>
+            <div class="mb-1">
+              <div class="form-check">
+                <input class="form-check-input" id="category-<%- i %>" type="radio" name="category" value="<%- element._id %>" <%- element._id.toString() === categoryID ? 'checked' : '' %> />
+                <label class="form-check-label text-capitalize" for="category-<%- i %>"><%- element.name %></label>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-block px-3 px-lg-0 me-lg-4">
+        <a class="d-lg-none block-toggler" data-bs-toggle="collapse" href="#sortSelect" aria-expanded="false" aria-controls="priceFilterMenu">Sort by price</a>
+        <div class="expand-lg collapse" id="sortSelect">
+          <h6 class="sidebar-heading d-none d-lg-block">Price</h6>
+          <div class="mt-4 mt-lg-0" id="slider-snap"></div>
+
+          <div class="mb-1">
+            <div class="form-check">
+              <input class="form-check-input" id="sortPriceLow" type="radio" name="sortPrice" value="lowPrice" <% if (sortBy==='lowPrice' ) { %> checked <% } %> />
+              <label class="form-check-label text-capitalize" for="sortPriceLow">Price Low to High</label>
+            </div>
+          </div>
+
+          <div class="mb-1">
+            <div class="form-check">
+              <input class="form-check-input" id="sortPriceHigh" type="radio" name="sortPrice" value="highPrice" <% if (sortBy==='highPrice' ) { %> checked <% } %> />
+              <label class="form-check-label text-capitalize" for="sortPriceHigh">Price High to Low</label>
+            </div>
+          </div>
+
+          <!-- <div class="nouislider-values">
+              <div class="min">
+                From $<span id="slider-snap-value-lower"></span>
+              </div>
+              <div class="max">
+                To $<span id="slider-snap-value-upper"></span>
+              </div>
+              <input class="slider-snap-input" type="hidden" name="pricefrom" id="slider-snap-input-lower" value="40" />
+              <input class="slider-snap-input" type="hidden" name="priceto" id="slider-snap-input-upper" value="110" />
+            </div> -->
+        </div>
+      </div>
+
+      <div class="sidebar-block px-3 px-lg-0 me-lg-4">
+        <a class="d-lg-none block-toggler" data-bs-toggle="collapse" href="#brandFilterMenu" aria-expanded="false" aria-controls="brandFilterMenu">Filter by brand</a>
+        <!-- Brand filter menu - this menu has .show class, so is expanded by default-->
+        <div class="expand-lg collapse" id="brandFilterMenu">
+          <h6 class="sidebar-heading d-none d-lg-block">Brands</h6>
+          <div class="mt-4 mt-lg-0" id="brands">
+            <% brands.forEach((element,i) => { %>
+            <div class="mb-1">
+              <div class="form-check">
+                <input class="form-check-input" id="brand-<%- i %>" type="radio" name="brand" value="<%- element._id %>" <%- element._id.toString() === brandID ? 'checked' : '' %> />
+                <label class="form-check-label text-capitalize" for="brand-<%- i %>"><%- element.name %></label>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /Sidebar end-->
+
+
+  </div>
+  <!-- Pagination-->
+  <% if (products.length > 0 && nextPage || current == pages) { %>
+  <nav aria-label="Product Pagination">
+    <ul class="pagination justify-content-center mt-5">
+      <% if (current == 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">First</a>
+      </li>
+
+      <% } else { %>
+      <li class="page-item">
+        <a href="?page=1" class="page-link">First</a>
+      </li>
+      <% } %> <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+      <% if (i !== 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %> <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+      <% if (i == current) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link"><%= i %> </a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/shop/?page=<%= i %>" class="page-link"><%= i %></a>
+      </li>
+
+      <% } %> <% if (i == Number(current)+ 4 && i < pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %> <% } %> <% if (current == pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">Last</a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/shop/?page=<%= pages %>" class="page-link">Last</a>
+      </li>
+
+      <% } %>
+    </ul>
+  </nav>
+  <% } %>
+
+</div>
+
+<script defer>
+  const searchProduct = document.getElementById('search');
+  const sortSelect = document.getElementById('sortPriceLow') || document.getElementById('sortPriceHigh'); // Assuming 'sortby' is the correct ID for the sort select element
+
+  // Function to handle the change event for categories
+  function handleCategoryChange() {
+    const categoryId = this.value; // Use 'this' to refer to the radio button that triggered the event
+    const sortValue = sortSelect.value;
+    const searchValue = searchProduct.value;
+    const url = `/search/?category=${categoryId || ''}&sortBy=${sortValue}&search=${searchValue}`;
+    window.location.href = url;
+  }
+
+  // Attach the event listener to each category radio button
+  document.querySelectorAll('#categories .form-check-input').forEach(radioButton => {
+    radioButton.addEventListener('change', handleCategoryChange);
+  });
+
+  // Function to handle the change event for brands
+  function handleBrandChange() {
+    const brandId = this.value; // Use 'this' to refer to the radio button that triggered the event
+    const sortValue = sortSelect.value;
+    const searchValue = searchProduct.value;
+    const url = `/search/?brand=${brandId || ''}&sortBy=${sortValue}&search=${searchValue}`;
+    window.location.href = url;
+  }
+
+  // Attach the event listener to each brand radio button
+  document.querySelectorAll('#brands .form-check-input').forEach(radioButton => {
+    radioButton.addEventListener('change', handleBrandChange);
+  });
+
+  // Function to handle the change event for sort options
+  function handleSortChange() {
+    const sortValue = this.value; // Use 'this' to refer to the radio button that triggered the event
+    const categoryId = document.querySelector('#categories .form-check-input:checked')?.value;
+    const searchValue = searchProduct.value;
+    const url = `/search/?category=${categoryId || ''}&sortBy=${sortValue}&search=${searchValue}`;
+    window.location.href = url;
+  }
+
+  // Attach the event listener to each sort radio button
+  document.querySelectorAll('#sortSelect .form-check-input').forEach(radioButton => {
+    radioButton.addEventListener('change', handleSortChange);
+  });
+
+
+
+
+  const addToCart = async (productId, variantId, color, size) => {
+    let user = '<%- typeof user %>';
+
+    // Check if user is undefined
+    if (user === "undefined") {
+      // Use SweetAlert to show a warning and redirect to /login upon confirmation
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'You need to login to add items to Wishlist!',
+        confirmButtonText: 'Login',
+        showCancelButton: true,
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to /login if the user confirms
+          window.location.assign('/login');
+        }
+      });
+    } else {
+      console.log(user, productId, variantId, color, size);
+      try {
+        const response = await fetch(`/user/add-to-cart/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId,
+            variantId,
+            color,
+            size,
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Network response was not ok.');
+        }
+
+        const data = await response.json();
+        let cartCount = document.getElementById("cartCount");
+        if (cartCount) {
+          cartCount.innerText = data.count;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "Added to Cart",
+          text: "Your product has been added to the cart.",
+          confirmButtonText: "Continue Shopping",
+        });
+
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.message, // Display the actual error message
+        });
+      }
+    }
+  };
+</script>

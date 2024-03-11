@@ -88,16 +88,16 @@
           </div>
           <!-- User Not Logged - link to login page-->
           <% if (typeof user !=='undefined') { %>
-            <% if (user) { %>
-            <div class="nav-item navbar-icon-link">
-              <a href="/user/profile" class="navbar-icon-link">
-                <i class="bi bi-person text-success"></i>
-                <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
-                  Account
-                </span>
-              </a>
-            </div>
-            <% } %>
+          <% if (user) { %>
+          <div class="nav-item navbar-icon-link">
+            <a href="/user/profile" class="navbar-icon-link">
+              <i class="bi bi-person text-success"></i>
+              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
+                Account
+              </span>
+            </a>
+          </div>
+          <% } %>
           <% } else { %>
           <div class="nav-item navbar-icon-link m-0">
             <a href="/login" class="navbar-icon-link">
@@ -134,32 +134,32 @@
               <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end p-4" aria-labelledby="cartdetails">
                 <div class="navbar-cart-product-wrapper">
                   <% if (typeof cartEntries !== 'undefined' && typeof cartTotalPrice !== 'undefined') { %>
-                    <% if (cartEntries.length > 0) { %>
-                      <% cartEntries.forEach((item, index) => { %>
-                      <!-- cart item-->
-                      <div class="navbar-cart-product">
-                        <div class="d-flex align-items-center">
-                          <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
-                          <div class="w-100">
-                            <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
-                              </i>
-                            </button>
-                            <div class="ps-3">
-                              <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small class="d-block text-muted">Quantity: <%- item.cart.quantity %>
-                              </small><strong class="d-block text-sm">$<%- item.price %></strong>
-                            </div>
-                          </div>
+                  <% if (cartEntries.length > 0) { %>
+                  <% cartEntries.forEach((item, index) => { %>
+                  <!-- cart item-->
+                  <div class="navbar-cart-product">
+                    <div class="d-flex align-items-center">
+                      <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
+                      <div class="w-100">
+                        <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
+                          </i>
+                        </button>
+                        <div class="ps-3">
+                          <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small class="d-block text-muted">Quantity: <%- item.cart.quantity %>
+                          </small><strong class="d-block text-sm">$<%- item.price %></strong>
                         </div>
                       </div>
-                      <% }) %>
-                      <% } else { %>
-                        <div class="navbar-cart-product">
-                          <div class="d-flex align-items-center">
-                            <p class="h5">Cart is Empty</p>
-                          </div>
-                        </div>
-                     
-                    <% } %>
+                    </div>
+                  </div>
+                  <% }) %>
+                  <% } else { %>
+                  <div class="navbar-cart-product">
+                    <div class="d-flex align-items-center">
+                      <p class="h5">Cart is Empty</p>
+                    </div>
+                  </div>
+
+                  <% } %>
 
                 </div>
                 <% if (cartTotalPrice > 0) { %>
@@ -200,7 +200,7 @@
       <div class="close-btn">
         <i class="bi bi-x-circle h3"></i>
       </div>
-      <form class="search-area-form" action="/shop">
+      <form class="search-area-form" action="/search/">
         <div class="mb-4 position-relative">
           <input class="search-area-input" type="search" name="search" id="search" placeholder="What are you looking for?" />
           <button class="search-area-button" type="submit">

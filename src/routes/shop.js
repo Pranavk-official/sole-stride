@@ -5,7 +5,6 @@ const cartController = require("../controller/cartController");
 
 const {
   isLoggedIn,
-  checkBlockedUser,
 } = require("../middlewares/authMiddleware");
 
 const { cartList } = require("../middlewares/cartMiddleware");
@@ -23,6 +22,12 @@ router.use((req, res, next) => {
 
 router.get("/", shopController.getHome);
 router.get("/shop", shopController.getProductList);
+router.get("/shop/product/:id", shopController.getProduct);
+
+router.get("/search", shopController.search)
+
+
+
 router.get("/user/cart", isLoggedIn, cartController.getCart);
 router.get("/shop/order-success", cartController.getOrderSuccess);
 
@@ -51,7 +56,6 @@ router
   .delete(shopController.deleteAddress);
 
 router.get("/contact", shopController.getContact);
-router.get("/shop/product/:id", shopController.getProduct);
 // router.get('/productTest', shopController.getProductTest);
 
 module.exports = router;
