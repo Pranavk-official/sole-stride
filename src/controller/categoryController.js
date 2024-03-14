@@ -2,6 +2,7 @@ const fs = require("fs");
 
 const layout = "./layouts/adminLayout.ejs";
 const Category = require("../model/categorySchema");
+const Product = require("../model/productSchema");
 
 module.exports = {
   getAllCategory: async (req, res) => {
@@ -54,13 +55,12 @@ module.exports = {
   editCategory: async (req, res) => {
     try {
       const { status, imageName } = req.body;
-
-      // console.log(req.body);
       let name = req.body.name.toLowerCase();
       let editCategory = {
         name: name,
         isActive: status === "true" ? true : false,
       };
+
       if (req.files) {
         editCategory.image = {
           filename: req.files.category_image[0].filename,
@@ -68,28 +68,33 @@ module.exports = {
           path: req.files.category_image[0].path,
         };
 
-        //deleting old image from the multer
+        // Deleting old image from the multer
         fs.unlink(`./public/uploads/category-images/${imageName}`, (err) => {
           if (err) {
-            throw err;
+            console.error(err); // Log the error instead of throwing it
           }
         });
       }
-      // update banner deatails
+
+      // Update category details
       const id = req.params.id;
       const update_category = await Category.findByIdAndUpdate(
-        { _id: id },
+        id, // Directly use the id instead of { _id: id }
         editCategory,
-        { new: true }
+        { new: true } // This option returns the updated document
       );
 
       if (update_category) {
         res.json({
           success: true,
+          category: update_category, // Optionally return the updated category
         });
+      } else {
+        res.status(404).json({ success: false, message: "Category not found" });
       }
     } catch (error) {
       console.error(error.message);
+      res.status(500).json({ success: false, message: "Server error" });
     }
   },
   deleteCategory: async (req, res) => {
@@ -102,12 +107,10 @@ module.exports = {
 
       if (productsUsingCategory.length > 0) {
         // If the category is used by any product, send a response indicating that the category is in use
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Category is in use by some products",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Category is in use by some products",
+        });
       } else {
         // If the category is not used by any product, proceed to delete the category
         // delete banner image from file
@@ -128,6 +131,7 @@ module.exports = {
         }
       }
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ success: false, message: "Failed to delete category" });
