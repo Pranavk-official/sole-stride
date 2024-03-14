@@ -33,6 +33,7 @@ module.exports = {
     await user.save()
   },
 
+
   getAddress: async (req, res) => {
     const address = await Address.find({
       customer_id: req.user.id,
@@ -279,11 +280,37 @@ module.exports = {
 
   deleteAddress: async (req, res) => {
     let id = req.params.id;
-    const address = await Address.deleteOne({ _id: id });
-
-    if (address) {
-      req.flash("success", "Address Deleted");
-      return res.redirect("/user/address");
+    try {
+      // Check if the address is in use by any orders
+      const order = await Order.findOne({ "address._id": id });
+      if (order) {
+        console.log(order);
+        // If the address is in use, perform a soft delete by setting the delete boolean to true
+        const result = await Address.findByIdAndUpdate(
+          id,
+          { delete: true },
+          { new: true }
+        );
+        if (result) {
+          console.log(result);
+          res
+            .status(200)
+            .json({ message: "Address marked as deleted successfully" });
+        } else {
+          res.status(404).json({ message: "Address not found" });
+        }
+      } else {
+        // If the address is not in use, proceed with the deletion
+        const result = await Address.deleteOne({ _id: id });
+        if (result.deletedCount === 1) {
+          res.status(200).json({ message: "Address deleted successfully" });
+        } else {
+          res.status(404).json({ message: "Address not found" });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
     }
   },
 };
