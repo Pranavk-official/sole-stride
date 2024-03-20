@@ -37,21 +37,21 @@
         <div class="row gx-4 gy-3">
           <div class="col-sm-6">
             <label class="form-label" for="account-fn">First Name</label>
-            <input name="firstName" class="form-control" type="text" id="account-fn" value="<%- user.firstName %>">
+            <input name="firstName" class="form-control text-capitalize" type="text" id="account-fn" value="<%- user.firstName %>">
             <small></small>
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="account-ln">Last Name</label>
-            <input name="lastName" class="form-control" type="text" id="account-ln" value="<%- user.lastName %>">
+            <input name="lastName" class="form-control text-capitalize" type="text" id="account-ln" value="<%- user.lastName %>">
             <small></small>
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="account-email">Email Address</label>
-            <input class="form-control" type="email" id="account-email" value="<%- user.email %>" disabled>
+            <input class="form-control text-uppercase" type="email" id="account-email" value="<%- user.email %>" disabled>
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="account-phone">Phone Number</label>
-            <input name="phone" class="form-control" type="text" id="account-phone" placeholder="+91 80534 89572" required>
+            <input name="phone" class="form-control text-capitalize" type="text" id="account-phone" value="<%- user.phone %>" placeholder="+91 80534 89572" required>
             <small></small>
           </div>
           <div class="col-12">
@@ -65,7 +65,7 @@
       <!-- Change Password Form -->
       <form action="/user/reset-password" method="POST" id="reset-password-form">
         <hr class="my-4">
-        <div class="bg-secondary rounded-3 p-4 mb-4">
+        <div class="bg-secondary-light rounded-3 p-4 mb-4">
           <h4>Change Password</h4>
         </div>
         <div class="col px-5 mx-5">
