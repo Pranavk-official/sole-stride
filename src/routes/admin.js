@@ -18,14 +18,17 @@ const {
 
 const orderController = require("../controller/orderController");
 const attributeController = require("../controller/attributeController");
+const couponController = require("../controller/couponController");
+const returnController = require("../controller/returnController");
+const offerController = require("../controller/offerController");
 
 /* Common Midleware for admin routes*/
 router.use(isAdmin, (req, res, next) => {
   if (req.user.isAdmin) {
     res.locals.admin = req.user;
   }
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  // res.locals.success = req.flash("success");
+  // res.locals.error = req.flash("error");
   next();
 });
 
@@ -174,6 +177,22 @@ router.route("/users").get(adminController.getUsersList);
 
 router.route("/users/toggle-block/:id").patch(adminController.toggleBlock);
 
+
+/***
+ * Coupon Management
+ */
+
+router.get('/coupons', couponController.getCoupons)
+router.post('/coupons/add-coupon', couponController.addCoupon)
+
+router
+  .route("/coupons/edit/:id")
+  .get(couponController.getCoupon)
+  .put(couponController.editCoupon);
+
+router.patch("/coupon/toggleStatus/:id", couponController.toggleStatus)
+router.delete("/coupon/delete-coupon/:id", couponController.deleteCoupon)
+
 /**
  * Order Management
  */
@@ -183,5 +202,35 @@ router.route("/orders/manage-order/:id").get(orderController.getOrderDetails);
 router
   .route("/orders/manage-order/changeStatus/:id")
   .post(orderController.changeOrderStatus);
+
+/**
+ * Order Return
+ */
+
+router.get('/returns', returnController.getReturnRequests)
+
+
+
+
+
+
+/**
+ * Offer Management
+ *  - Category Offer
+ *  - Product Offer
+ *  - Refferals
+ */
+
+// Category Offer
+router.get('/category-offers', offerController.getCategoryOffers)
+router.get('/category-details/:id', categoryController.getCategoryDetails)
+router.patch('/category-offer/:id', offerController.addCatOffer)
+router.patch('/toggle-active-category/:id', offerController.toggleActiveCatOffer)
+
+// Product Offer
+router.get('/product-offers', offerController.getProductOffers)
+router.get('/product-details/:id', productController.getProdDetails)
+router.patch('/product-offer/:id', offerController.addProdOffer)
+router.patch('/toggle-active-product/:id', offerController.toggleActiveProdOffer)
 
 module.exports = router;

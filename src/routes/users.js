@@ -2,29 +2,31 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../model/userSchema");
+const Cart = require("../model/cartSchema");
 const WishList = require("../model/wishlistSchema");
 const Order = require("../model/orderSchema");
 const { isLoggedIn } = require("../middlewares/authMiddleware");
 const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
 const reviewController = require("../controller/reviewController");
+const checkoutController = require("../controller/checkoutController");
 
 router.use(isLoggedIn, async (req, res, next) => {
-  if(req.user && req.user.isAdmin){
-    return res.redirect('/admin')
+  if (req.user && req.user.isAdmin) {
+    return res.redirect("/admin");
   }
 
   if (req.user) {
     res.locals.user = req.user;
-    res.locals.cartCount = req.user.cart.length;
 
-    const userWishlist = await WishList.findOne({userId: req.user.id})
-    const userOrder = await Order.find({customer_id: req.user.id}).countDocuments()
+    const cart = await Cart.find({ userId: req.user.id });
+    res.locals.cartCount = cart && cart.items ? cart.items.length : 0;
     
-    const wishlistCount = userWishlist.products.length
+    const userWishlist = await WishList.findOne({ userId: req.user.id });
+    const userOrder = await Order.find({ customer_id: req.user.id }).countDocuments();
 
-    res.locals.orderCount = userOrder
-    res.locals.wishlistCount = wishlistCount
+    res.locals.orderCount = userOrder;
+    res.locals.wishlistCount = userWishlist ? userWishlist.products.length : 0;
   }
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
@@ -63,11 +65,14 @@ router
  * User Order Management
  */
 
-router.post("/place-order", orderController.placeOrder);
+router.post("/place-order", checkoutController.placeOrder);
+router.post("/verify-payment", checkoutController.verifyPayment);
 
 router.route("/orders").get(orderController.getUserOrders);
-router.get("/order/:id", orderController.getUserOrder);
-router.post("/cancel-order/:id", orderController.cancelOrder);
+router.get("/order/:orderId", orderController.getSingleOrder);
+router.post("/cancel-order/:id/:itemId/:variant", orderController.cancelOrder);
+router.post("/return-order/", orderController.returnOrder);
+router.post("/cancel-all-order/:id/", orderController.cancelAllOrders);
 
 /**
  * User Wishlist
@@ -77,10 +82,24 @@ router.get("/wishlist", userController.getWishlist);
 router.post("/add-to-wishlist", userController.addToWishlist);
 router.delete("/remove-from-wishlist", userController.removeFromWishlist);
 
-
 /**
  * User Review
  */
 router.post("/add-review", reviewController.postReview);
+
+/**
+ * User Wallet
+ */
+
+router.get("/wallet", userController.getWallet);
+router.post('/add-to-wallet', userController.addToWallet)
+router.post('/verify-wallet-payment', userController.verifyPayment)
+
+/**
+ * User Refferals
+ */
+
+router.get("/referrals", userController.getRefferals);
+
 
 module.exports = router;
