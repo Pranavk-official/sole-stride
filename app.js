@@ -19,6 +19,7 @@ const { checkBlockedUser } = require("./src/middlewares/authMiddleware");
 const authRouter = require("./src/routes/auth");
 const adminRouter = require("./src/routes/admin");
 const shopRouter = require("./src/routes/shop");
+const checkoutRouter = require("./src/routes/checkout");
 const usersRouter = require("./src/routes/users");
 const { cartList } = require("./src/middlewares/cartMiddleware");
 
@@ -45,7 +46,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 2,
     },
   })
 );
@@ -61,6 +62,8 @@ app.use(nocache());
 
 // Custom middleware 
 app.use(checkBlockedUser,cartList,(req, res, next) => {
+
+  // console.log(req.params);
   if (req.user && req.isAuthenticated()) {
     res.locals.user = req.user;
       // console.log(req.session);
@@ -75,6 +78,7 @@ app.use(checkBlockedUser,cartList,(req, res, next) => {
 app.use("/", authRouter);
 app.use("/user/", usersRouter);
 app.use("/", shopRouter);
+app.use("/checkout", checkoutRouter);
 app.use("/admin", adminRouter);
 
 
