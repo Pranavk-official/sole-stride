@@ -223,6 +223,14 @@
 
 <script defer>
   const searchProduct = document.getElementById('search');
+  // Get the search value from the url query
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchValue = urlParams.get('search');
+  console.log(searchValue);
+  if (searchValue) {
+    searchProduct.value = searchValue;
+  }
 
   console.log(searchProduct.value);
 
@@ -263,6 +271,7 @@
 
   // Function to handle the change event for sort options
   function handleSortChange() {
+    console.log(searchProduct.value);
     const sortValue = this.value; // Use 'this' to refer to the radio button that triggered the event
     const categoryId = document.querySelector('#categories .form-check-input:checked')?.value;
     const brandId = document.querySelector('#brands .form-check-input:checked')?.value;
@@ -282,13 +291,15 @@
   form.addEventListener('submit', function(event) {
     event.preventDefault();
 
+    console.log(searchProduct);
+
     const categoryId = document.querySelector('#categories .form-check-input:checked')?.value;
     const brandId = document.querySelector('#brands .form-check-input:checked')?.value;
     const sortValue = sortSelect ? sortSelect.value : ''; // Check if sortSelect is not null
     const searchValue = searchProduct.value;
     console.log(searchValue);
     const url = `/shop/?category=${categoryId || ''}&brand=${brandId || ''}&sortBy=${sortValue}&search=${searchValue}`;
-    searchProduct.value = searchValue; // clear search input
+    // searchProduct.value = searchValue; // clear search input
     window.location.href = url;
   });
 
