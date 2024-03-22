@@ -173,11 +173,11 @@
                   </button>
                 </div>
                 <!-- <a class="btn btn-sm btn-info" href="/user/address/edit-address/<%- item._id %>" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil fs-6"></i></a> -->
-                <form id="deleteAddress" action="/user/address/delete-address/<%- item._id %>?_method=DELETE" method="POST">
-                  <button class="btn btn-sm btn-danger" type="submit" data-bs-toggle="tooltip" title="Remove">
-                    <i class="bi bi-trash fs-6"></i>
-                  </button>
-                </form>
+                <button class="btn btn-sm btn-danger" onclick="deleteAddress('<%- item._id %>')" type="submit" data-bs-toggle="tooltip" title="Remove">
+                  <i class="bi bi-trash fs-6"></i>
+                </button>
+                <!-- <form id="deleteAddress" action="/user/address/delete-address/<%- item._id %>?_method=DELETE" method="POST">
+                </form> -->
               </td>
             </tr>
             <% }) %>
