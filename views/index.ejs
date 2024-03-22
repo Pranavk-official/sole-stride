@@ -46,11 +46,13 @@
       <!-- item-->
       <% categories?.forEach((category, index) => { %>
         <div class="item d-flex align-items-center justify-content-center">
+          <a href="/shop?category=<%- category._id %>">
           <div class="w-8rem">
             <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
-            <p class="text-muted text-capitalize"><%- category.name %></p>
+              <p class="text-muted text-capitalize"><%- category.name %></p>
+            </div>
+          </a>
           </div>
-        </div>
       <% }) %>
       
       
@@ -77,6 +79,9 @@
         <div class="product-slider-item">
           <div class="product">
             <div class="product-image">
+              <% if (element.onOffer) { %>
+                <div class="ribbon ribbon-info">On offer <%- element.offerDiscountRate %>%</div>
+              <% } %>
               <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
               <div class="product-hover-overlay">
                 <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
