@@ -374,9 +374,12 @@ module.exports = {
       title: "SoloStride - User Wallet",
     };
 
+
+    // TODO : pagination with 14 results per page
+
     const userWallet = await Wallet.findOne({ userId: req.user.id });
 
-    let transactions = userWallet.transactions;
+    let transactions = userWallet.transactions.reverse();
 
     if (!userWallet) {
       transactions = []; 
@@ -488,10 +491,12 @@ module.exports = {
 
     console.log(user.successfullRefferals);
 
+    successfullRefferals = user.successfullRefferals.reverse();
+
     res.render("user/refferals", {
       locals,
       refferalCode: user.referralCode,
-      successfullRefferals: user.successfullRefferals
+      successfullRefferals
     })
   },
 };
