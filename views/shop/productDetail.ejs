@@ -18,8 +18,10 @@
             </div>
           </div>
           <div class="col-12 col-md-10 detail-carousel">
-            <div class="ribbon ribbon-info">Fresh</div>
-            <div class="ribbon ribbon-primary">Sale</div>
+            <% if (product.onOffer) { %>
+              <div class="ribbon ribbon-info">On offer <%- product.offerDiscountRate %>%</div>
+            <% } %>
+            <!-- <div class="ribbon ribbon-primary">Sale</div> -->
             <div class="owl-carousel detail-slider owl-theme owl-dots-modern" data-slider-id="1">
               <div class="item">
                 <a class="glightbox" href="/uploads/product-images/<%- product.primary_image.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery">
@@ -45,10 +47,22 @@
         <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between mb-4">
           <ul class="list-inline mb-2 mb-sm-0">
             <li class="list-inline-item h4 fw-light mb-0">
-              $<%- product.sellingPrice %>
+              <% if (!product.onOffer) { %>
+                $<%- product.sellingPrice  %>
+              <% } else { %>   
+                  $<%- product.offerDiscountPrice %>
+              <% } %>
             </li>
             <li class="list-inline-item text-muted fw-light">
-              <del>$<%- product.actualPrice %></del>
+              <% if (!product.onOffer) { %>
+                <del>
+                  $<%- product.actualPrice %>
+                </del>
+                <% } else { %>   
+                  <del>
+                    $<%- product.sellingPrice  %>
+                  </del>
+              <% } %>
             </li>
           </ul>
           <div class="d-flex align-items-center">
@@ -86,7 +100,7 @@
               <% if (!renderedColors[variant.color.hex]) { %>
               <% renderedColors[variant.color.hex] = true; %>
               <li class="list-inline-item">
-                <label onclick="selectColor('<%= variant.color.hex %>', '<%= index %>')" class="btn-colour <%= index === 0 ? 'active' : '' %>" for="colour_<%- variant.color.name %>" style="background-color: <%- variant.color.hex %>">
+                <label onclick="selectColor('<%= variant.color.hex %>', '<%= index %>')" class="btn-colour <%= index === 0 ? 'active' : '' %>" for="colour_<%- variant.color.name %>" style="background-color: <%- variant.color.hex %>" data-color-id="<%- variant.color._id %>">
                 </label>
                 <input class="input-invisible" type="radio" name="colour" value="value_Blue" id="colour_<%- variant.color.name %>" required />
               </li>
@@ -105,6 +119,8 @@
               </div>
             </div>
           </div>
+          <p class="lead text-danger d-none" id="isOutOfStock"></p>
+          <p class="lead text-warning d-none" id="limitedStock"></p>
         </div>
         <ul class="list-inline">
           <li class="list-inline-item">
@@ -332,146 +348,40 @@
     <header class="text-center">
       <h6 class="text-uppercase mb-5">You might also like</h6>
     </header>
-    <div class="row">
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <div class="ribbon ribbon-info">Fresh</div>
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494312-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+    <div class="row text-capitalize">
+      <% if (related && related.length > 0) { %>
+        <% related.forEach((prd) => { %>
+          <!-- product-->
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="product">
+              <div class="product-image">
+                <!-- <div class="ribbon ribbon-info">Fresh</div> -->
+                <img class="img-fluid" src="/uploads/product-images/<%= prd.primary_image.name %>" alt="product" />
+                <div class="product-hover-overlay">
+                  <a class="product-hover-overlay-link" href="/shop/product/<%= prd._id %>"></a>
+                  <div class="product-hover-overlay-buttons">
+                    <a class="btn btn-dark btn-buy" href=""><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="py-2">
+                <p class="text-muted text-sm mb-1"><%= prd.category.name %></p>
+                <h3 class="h6 text-uppercase mb-1">
+                  <a class="text-dark" href="/shop/product/<%= prd._id %>"><%= prd.product_name %></a>
+                </h3>
+                <span class="text-muted">$<%= prd.sellingPrice %></span>
               </div>
             </div>
           </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Jackets</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">White Tee</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-590881-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Denim</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">Black blouse</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <div class="ribbon ribbon-primary">Sale</div>
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/kyle-loftus-596319-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Accessories</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">College jacket</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/ethan-haddox-484912-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Denim</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">Carrot-fit jeans</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/serrah-galos-494231-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Jackets</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">Striped T-Shirt</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
-      <!-- product-->
-      <div class="col-lg-2 col-md-4 col-6">
-        <div class="product">
-          <div class="product-image">
-            <img class="img-fluid" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/product/averie-woodard-319832-unsplash.jpg" alt="product" />
-            <div class="product-hover-overlay">
-              <a class="product-hover-overlay-link" href="detail.html"></a>
-              <div class="product-hover-overlay-buttons">
-                <a class="btn btn-dark btn-buy" href="detail.html"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-              </div>
-            </div>
-          </div>
-          <div class="py-2">
-            <p class="text-muted text-sm mb-1">Shirts</p>
-            <h3 class="h6 text-uppercase mb-1">
-              <a class="text-dark" href="detail.html">Short top</a>
-            </h3>
-            <span class="text-muted">$40.00</span>
-          </div>
-        </div>
-      </div>
-      <!-- /product-->
+          <!-- /product-->
+        <% }) %>
+      <% } %>
+
     </div>
   </div>
 </section>
 
-<script>
+<script defer>
   const addToCart = async (productId) => {
     const variantId = document.querySelector('.size-option.active').getAttribute('data-variant-id');
     const color = document.querySelector('.size-option.active').getAttribute('data-color');
@@ -490,6 +400,13 @@
           size,
         })
       });
+
+      console.log(response);
+
+      if (response.redirected) {
+        window.location.href = response.url;
+        return;
+      }
 
       if (response.status === 401) {
         Swal.fire({
@@ -551,6 +468,7 @@
     sizeList.innerHTML = '';
     var renderedSizes = {};
     sizesForColor.forEach((variant, index) => {
+      // console.log(variant);
       if (!renderedSizes[variant.size.value]) {
         renderedSizes[variant.size.value] = true;
         var li = document.createElement('label');
@@ -572,6 +490,7 @@
         li.setAttribute('data-color', variant.color._id); // Store the color
         li.setAttribute('data-size', variant.size._id); // Store the size
 
+
         li.addEventListener('click', function() {
           document.querySelectorAll('.size-option').forEach(function(el) {
             el.classList.remove('active');
@@ -581,6 +500,9 @@
 
         sizeList.appendChild(li);
 
+        
+        
+        
         if (index === 0) {
           firstSize = li
         }
@@ -602,4 +524,5 @@
   if (productData.variants.length > 0) {
     selectColor(productData.variants[0].color.hex);
   }
+
 </script>
