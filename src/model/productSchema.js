@@ -73,9 +73,19 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
-    onSale: {
+    onOffer: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    offerDiscountPrice: {
+      type: Number,
+      min: 0,
+      default: 0
+    },
+    offerDiscountRate: {
+      type: Number,
+      min: 0,
+      default: 0
     },
     isActive: {
       type: Boolean,
