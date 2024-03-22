@@ -1,7 +1,8 @@
 const emailEl = document.querySelector("#email");
-const passwordEl = document.querySelector("#password");
+
 
 const form = document.querySelector("#forgot-pass-form");
+
 
 const checkEmail = () => {
   let valid = false;
@@ -98,6 +99,7 @@ form.addEventListener("submit", function (e) {
     form.submit();
   }
 });
+
 
 const debounce = (fn, delay = 500) => {
   let timeoutId;

@@ -82,54 +82,67 @@ const showSuccess = (input) => {
   error.textContent = "";
 };
 
-updateForm.addEventListener("submit", function (e) {
+updateForm.addEventListener("submit", async function (e) {
   e.preventDefault();
-  
+
   let isFirstNameValid = checkFirstName(),
     isLastNameValid = checkLastName(),
     isPhoneValid = checkPhone();
-  
+
   let isFormValid = isFirstNameValid && isLastNameValid && isPhoneValid;
 
   if (isFormValid) {
-    updateForm.submit();
-    // const formData = new FormData(updateForm);
-    // console.log(formData);
-    // Swal.fire({
-    //   title: "Are you sure?",
-    //   text: "You want to update your profile?",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#d33",
-    //   confirmButtonText: "Yes, Update!",
-    // }).then(async (result) => {
-    //   if (result.isConfirmed) {
-    //     const formData = new FormData(form);
-    //     const response = await fetch("/user/profile", {
-    //       method: "POST",
-    //       body: formData,
-    //     });
+    const formData = new FormData(updateForm);
+    const body = Object.fromEntries(formData.entries());
+    console.log(body);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update your profile?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Update!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch("/user/profile", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
 
-    //     if (response.ok) {
-    //       Swal.fire({
-    //         title: "Success!",
-    //         text: "Password has been reset.",
-    //         icon: "success",
-    //         timer: 1500,
-    //       }).then(() => {
-    //         location.assign("/user/profile");
-    //       });
-    //     } else {
-    //       Swal.fire({
-    //         title: "Error!",
-    //         text: "Something went wrong.",
-    //         icon: "error",
-    //         timer: 1500,
-    //       });
-    //     }
-    //     // form.submit()
-    //   }
-    // });
+          const data = await response.json();
+
+          if (response.ok) {
+            Swal.fire({
+              title: "Success!",
+              text: data.message,
+              icon: "success",
+              timer: 1500,
+            }).then(() => {
+              location.assign("/user/profile");
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: data.message || "Something went wrong.",
+              icon: "error",
+              timer: 1500,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            title: "Error!",
+            text: "An error occurred while updating your profile.",
+            icon: "error",
+            timer: 1500,
+          });
+        }
+      }
+    });
   }
 });
