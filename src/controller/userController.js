@@ -3,8 +3,41 @@ const Address = require("../model/addressSchema");
 const Product = require("../model/productSchema");
 const WishList = require("../model/wishlistSchema");
 const Order = require("../model/orderSchema");
+const Wallet = require("../model/walletSchema");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+
+// Razorpay
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+
+var instance = new Razorpay({
+  key_id: process.env.RAZ_KEY_ID,
+  key_secret: process.env.RAZ_KEY_SECRET,
+});
+
+
+
+function generateRefferalCode(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let referralCode = '';
+  for (let i = 0; i < length; i++) {
+      referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return referralCode;
+}
+
+
+const createRazorpayOrder = async (order_id, total) => {
+  let options = {
+    amount: total * 100, // amount in the smallest currency unit
+    currency: "INR",
+    receipt: order_id.toString(),
+  };
+  const order = await instance.orders.create(options);
+
+  return order;
+};
 
 module.exports = {
   /**
@@ -21,18 +54,29 @@ module.exports = {
     });
   },
   editProfile: async (req, res) => {
-    console.log(req.body);
-    const user = await User.findById(req.user.id)
+    try {
+      console.log(req.body);
+      const user = await User.findById(req.user.id);
 
-    const {firstName, lastName, phone} = req.body
+      const { firstName, lastName, phone } = req.body;
 
-    user.firstName = firstName
-    user.lastName = lastName
-    user.phone = phone
+      user.firstName = firstName || user.firstName;
+      user.lastName = lastName || user.lastName;
+      user.phone = phone || user.phone;
 
-    await user.save()
+      await user.save();
+
+      // Send a success response back to the client
+      res.status(200).json({ message: "Profile updated successfully", user });
+    } catch (error) {
+      // Handle errors and send an error response
+      console.error(error);
+      res.status(500).json({
+        message: "An error occurred while updating the profile",
+        error,
+      });
+    }
   },
-
 
   getAddress: async (req, res) => {
     const address = await Address.find({
@@ -67,11 +111,18 @@ module.exports = {
       populate: { path: "brand" },
     });
     // console.log(wishlist);
+    let products;
+
+    if (!wishlist) {
+      products = [];
+    } else {
+      products = wishlist.products;
+    }
 
     res.render("user/wishlist", {
       locals,
       wishlist,
-      products: wishlist.products,
+      products,
     });
   },
 
@@ -312,5 +363,135 @@ module.exports = {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
+  },
+
+  /**
+   * User Wallet
+   */
+
+  getWallet: async (req, res) => {
+    const locals = {
+      title: "SoloStride - User Wallet",
+    };
+
+    const userWallet = await Wallet.findOne({ userId: req.user.id });
+
+    let transactions = userWallet.transactions;
+
+    if (!userWallet) {
+      transactions = []; 
+    }
+
+    console.log(userWallet);
+    res.render("user/wallet", {
+      locals,
+      userWallet,
+      transactions,
+    });
+  },
+  addToWallet: async (req, res) => {
+    try {
+      const { amount, notes } = req.body;
+      const id = crypto.randomBytes(8).toString("hex");
+      const payment = await createRazorpayOrder(id, amount);
+
+      const user = await User.findOne({ _id: req.user.id });
+
+      if (!payment) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to create payment" });
+      }
+
+      res.json({ success: true, payment, user });
+    } catch (error) {
+      const { message } = error;
+      res.status(500).json({ success: false, message });
+    }
+  },
+
+  // Helper function to generate a random id
+
+  verifyPayment: async (req, res) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body.response;
+    const secret = process.env.RAZ_KEY_SECRET;
+    const { amount } = req.body.order;
+    const userId = req.user.id;
+
+    try {
+      const hmac = crypto
+        .createHmac("sha256", secret)
+        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+        .digest("hex");
+
+      const isSignatureValid = hmac === razorpay_signature;
+
+      if (isSignatureValid) {
+        const wallet = await Wallet.findOne({ userId: userId });
+
+        if (!wallet) {
+          const newWallet = new Wallet({
+            userId,
+            balance: Math.ceil(amount / 100),
+            transactions: [
+              {
+                date: new Date(),
+                amount: Math.ceil(amount / 100),
+                message: "Initial deposit",
+                type: "Credit",
+              },
+            ],
+          });
+          await newWallet.save();
+          return res
+            .status(200)
+            .json({ success: true, message: "Wallet created successfully" });
+        } else {
+          wallet.balance += Math.ceil(amount / 100);
+          wallet.transactions.push({
+            date: new Date(),
+            amount: Math.ceil(amount / 100),
+            message: "Money added to wallet from Razorpay",
+            type: "Credit",
+          });
+
+          await wallet.save();
+          return res
+            .status(200)
+            .json({
+              success: true,
+              message: "Money added to wallet successfully",
+            });
+        }
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  },
+
+  getRefferals: async(req, res) => {
+    const locals = {
+      title: "SoloStride - User Refferals"
+    }
+
+    const user = await User.findOne({ _id: req.user.id });
+
+    if(!user.referralCode){
+      const refferalCode = generateRefferalCode(8);
+
+      user.referralCode = refferalCode;
+      await user.save();
+    }
+
+    console.log(user.successfullRefferals);
+
+    res.render("user/refferals", {
+      locals,
+      refferalCode: user.referralCode,
+      successfullRefferals: user.successfullRefferals
+    })
   },
 };

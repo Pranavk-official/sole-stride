@@ -29,7 +29,7 @@ module.exports = {
       current: page,
       pages: Math.ceil(count / perPage),
       nextPage: hasNextPage ? nextPage : null,
-      currentRoute: "/user/products/",
+      currentRoute: "/admin/products/",
     });
   },
   getAddProduct: async (req, res) => {
@@ -252,7 +252,7 @@ module.exports = {
   },
 
   /**
-   * Varinat Product Stock Management
+   * Variant Product Stock Management
    */
 
   getStocks: async (req, res) => {
@@ -420,4 +420,24 @@ module.exports = {
       res.status(500).json({ message: "Server error" });
     }
   },
+
+  // get product details for Offer
+  getProdDetails: async (req,res) => {
+    
+    const productId = req.params.id
+    try {
+      const product = await Product.findOne({_id: productId})
+      
+      if(!product) {
+        return res.status(404).json({success: false, message: 'Product not found'})
+      }
+      
+      return res.status(200).json({success: true, product})
+      
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({success: false, message: 'Internal Server Error'})
+    }
+
+  }
 };

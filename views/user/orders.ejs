@@ -19,7 +19,7 @@
     <!-- Content  -->
     <section class="col-lg-8">
       <div class="container table-responsive">
-        <table class="table table-hover table-sm">
+        <!-- <table class="table table-hover table-sm">
           <thead class="bg-secondary-subtle">
             <tr>
               <th class="py-4 text-uppercase text-sm">Order #</th>
@@ -30,27 +30,72 @@
             </tr>
           </thead>
           <tbody>
-            <% orderDetails.forEach(element => { %>
-            <tr>
-              <th class="py-4 align-middle">#<%- element._id %></th>
-              <td class="py-4 align-middle">
-                <%= element.createdAt.toLocaleDateString('en-GB') %>
-              </td>
-              <td class="py-4 align-middle">$<%- element.total_amount %></td>
-              <td class="py-4 align-middle">
-                <span class="badge p-2 text-uppercase <% if (element.status == 'confirmed') { %> badge-primary-light <% } else if (element.status == 'Shipped') { %> badge-info-light <% } else if (element.status == 'Delivered') { %> badge-success-light <% } else if (element.status == 'Cancelled') { %> badge-danger-light <% } else { %> badge-warning-light <% } %>"><%- element.status %></span>
-              </td>
-              <td class="py-4 align-middle">
-                <% if (element.status != 'Cancelled' ) { %>
-                <a href="/user/order/<%- element._id %>">
-                  <button class="btn btn-outline-dark btn-sm">View</button>
-                </a>
-                <% } %>
-              </td>
-            </tr>
-            <% }) %>
+            <% if (typeof orderDetails !== 'undefined' && orderDetails.length > 0) { %>
+              <% orderDetails.forEach(element => { %>
+              <tr>
+                <th class="py-4 align-middle">#<%- element._id %></th>
+                <td class="py-4 align-middle">
+                  <%= element.createdAt.toLocaleDateString('en-GB') %>
+                </td>
+                <td class="py-4 align-middle">$<%- element.payable %></td>
+                <td class="py-4 align-middle">
+                  <span class="badge p-2 text-uppercase <% if (element.orderStatus == 'Placed') { %> badge-primary-light <% } else if (element.orderStatus == 'Shipped') { %> badge-info-light <% } else if (element.orderStatus == 'Delivered') { %> badge-success-light <% } else if (element.orderStatus == 'Cancelled') { %> badge-danger-light <% } else { %> badge-warning-light <% } %>"><%- element.orderStatus %></span>
+                </td>
+                <td class="py-4 align-middle">
+                  <% if (element.orderStatus != 'Cancelled' ) { %>
+                  <a href="/user/order/<%- element._id %>">
+                    <button class="btn btn-outline-dark btn-sm">View</button>
+                  </a>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+
+            <% } else { %>
+              <tr class="align-middle text-center text-uppercase">
+                <td colspan="5"  class="text-bg-danger">No orders found</td>
+              </tr>
+            <% } %>
           </tbody>
-        </table>
+        </table> -->
+        <div class="row col-md-12">
+          <% orderDetails.forEach(function(order) { %>
+              <a class="text-decoration-none text-capitalize" href="/user/order/<%= order._id %>">
+                  <div role="button" class="bg-primary-light orders px-3 py-2 mb-4  card">
+                      <div class="d-flex flex-row justify-content-between">
+                          <div class="orde-details">
+                              <div class="h5 text-muted">Order: <%= new Date(order.createdAt).toLocaleString() %></div>
+                              <span class="">
+                                  <span class="fw-bold">payment:</span> <%= order.paymentMethod %><br>
+                                  <p class="h6"><%= order.shippingAddress.name %>,<%= order.shippingAddress.phone %></p>
+                                  <p class="text-normal">
+                                      <%= order.shippingAddress?.house_name %>(H),
+                                      <%= order.shippingAddress?.locality %>,
+                                      <%= order.shippingAddress?.area_street %>,<br>
+                                      <%= order.shippingAddress?.landmark %>,
+                                      <%= order.shippingAddress?.state %>
+                                      <span class="fw-bold">
+                                          -<%= order.shippingAddress?.pincode %>
+                                      </span>
+                                  </p>
+                              </span>
+                          </div>
+                          <div class="status fw-bold lead text-uppercase text-success">
+                              <%= order.status %>
+                          </div>
+                          <% if (order.coupon) { %>
+                          <div class="coupendetails pt-4">
+                              Offer Applied
+                              <div class="bg-warning rounded px-1"><%= order.coupon.code %> </div>
+                              <div class="fw-bold px-1"><%= order.coupon.rateOfDiscount %>%off</div>
+                          </div>
+                          <% } %>
+                      </div>
+                  </div>
+              </a>
+          <% }); %>
+      </div>
+      
         <!-- Pagination-->
         <% if (orderDetails.length > 0 && nextPage || current == pages) { %>
         <nav aria-label="Product Pagination">
