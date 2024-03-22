@@ -23,6 +23,14 @@
 
 <div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2"><%= locals.title ? locals.title : 'Dashboard' %></h1>
+  <header class=" text-center mb-20">
+    <form action="/admin/category/" method="get" class="d-inline">
+      <div class="input-group input-group-sm border bg-primary rounded-pill" style="width: 500px;">
+        <input type="text" class="form-control border-0 bg-white rounded-pill" placeholder="Search categories..." name="search">
+        <button class="btn border-0 btn-outline-primary text-white rounded-pill" type="submit">Search</button>
+      </div>
+    </form>
+  </header>
   <div class="btn-toolbar mb-2 mb-md-0">
     <a href="/admin/category/add-category">
       <button type="button" class="btn btn-sm btn-outline-primary">
@@ -33,7 +41,7 @@
 </div>
 
 <div class="container my-5">
-  <div class="table-responsive">
+  <div class="table-responsive text-capitalize">
     <table class="table table-striped table-hover table-sm">
       <thead>
         <tr class="text-center">

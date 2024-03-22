@@ -52,56 +52,63 @@
       </tr>
     </thead>
     <tbody>
-
-      <% products.forEach((product,index)=> { %>
-      <tr class="align-middle">
-        <td>
-          <%= index+1 %>
-        </td>
-        <td>
-          <%= product.product_name %>
-        </td>
-        <td class="justify-content-center">
-          <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image ? product.primary_image.name : product.secondary_images[0].name %>" width="70rem" alt="">
-        </td>
-        <td >
-          <% if (product.isActive) { %>
-            <span class="badge rounded-pill bg-success">Listed</span>
-            <% } else { %>
-            <span class="badge rounded-pill bg-info">Unlisted</span>
-            <% } %>
-        </td>
-        <td class="text-center">
-          <div class="d-flex flex-row justify-content-center">
+      <% if (products && products.length > 0) { %>
+        <% products.forEach((product,index)=> { %>
+        <tr class="align-middle">
+          <td>
+            <%= index+1 %>
+          </td>
+          <td>
+            <%= product.product_name %>
+          </td>
+          <td class="justify-content-center">
+            <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image ? product.primary_image.name : product.secondary_images[0].name %>" width="70rem" alt="">
+          </td>
+          <td >
             <% if (product.isActive) { %>
-            <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-danger btn-sm">
-              <i class="bi bi-slash-circle-fill"></i> Unlist
-            </button>
-            <% } else { %>
-            <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-success btn-sm">
-              <i class="bi bi-check-circle-fill"></i> List
-            </button>
-            <% } %>
-          </div>
-        </td>
-        <td class="text-center">
-          <div class="btn-group">
-
-            <a href="/admin/products/edit-product/<%- product._id %>">
-              <button class="btn btn-warning btn-sm">
-                <i class="bi bi-pencil-square"></i>
+              <span class="badge rounded-pill bg-success">Listed</span>
+              <% } else { %>
+              <span class="badge rounded-pill bg-info">Unlisted</span>
+              <% } %>
+          </td>
+          <td class="text-center">
+            <div class="d-flex flex-row justify-content-center">
+              <% if (product.isActive) { %>
+              <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-danger btn-sm">
+                <i class="bi bi-slash-circle-fill"></i> Unlist
               </button>
-            </a>
-            <button class="btn btn-danger btn-sm" onclick="deleteProduct('<%- product._id %>')">
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-      <% }) %>
+              <% } else { %>
+              <button onclick="toggleListing('<%- product._id %>','<%- product.isActive %>' ,'<%- product.product_name %>')" class="btn btn-success btn-sm">
+                <i class="bi bi-check-circle-fill"></i> List
+              </button>
+              <% } %>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="btn-group">
+  
+              <a href="/admin/products/edit-product/<%- product._id %>">
+                <button class="btn btn-warning btn-sm">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </a>
+              <button class="btn btn-danger btn-sm" onclick="deleteProduct('<%- product._id %>')">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+
+        <% } else { %>
+         <tr>
+          <td colspan="6" class="text-danger">No products Available - Add new products</td>
+         </tr>
+      <% } %>
 
     </tbody>
   </table>
+  
   <!-- Pagination-->
   <% if (products.length > 0 && nextPage || current == pages) { %>
   <nav aria-label="Product Pagination">

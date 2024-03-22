@@ -26,7 +26,7 @@
   <h1 class="h2"><%= locals.title ? locals.title : 'Dashboard' %></h1>
 </div>
 
-<section class="new-product">
+<section class="new-product container">
   <form id="editProductForm" action="/admin/products/edit-product/<%- product._id %>?" method="POST" enctype="multipart/form-data" class="container row m-3 justify-content-evenly border">
     <legend class="h2 fw-bold text-center m-3">
       Edit Product - <%- product.product_name %>

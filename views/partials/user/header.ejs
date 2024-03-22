@@ -139,13 +139,13 @@
                   <!-- cart item-->
                   <div class="navbar-cart-product">
                     <div class="d-flex align-items-center">
-                      <a href="/shop/product/<%- item.prod_details._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.prod_details.primary_image.name %>" alt="..." /></a>
+                      <a href="/shop/product/<%- item.product_id._id %>"><img class="img-fluid navbar-cart-product-image" src="/uploads/product-images/<%= item.product_id.primary_image.name %>" alt="..." /></a>
                       <div class="w-100">
-                        <button onclick="removeFromCart('<%- item.prod_details._id %>','<%- item.cart.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
+                        <button onclick="removeFromCart('<%- item.product_id._id %>','<%- item.variant %>')" class="btn btn-light navbar-cart-product-close"><i class="text-danger bi bi-x-lg">
                           </i>
                         </button>
                         <div class="ps-3">
-                          <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.prod_details.product_name %></a><small class="d-block text-muted">Quantity: <%- item.cart.quantity %>
+                          <a class="navbar-cart-product-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"><%- item.product_id.product_name %></a><small class="d-block text-muted">Quantity: <%- item.quantity %>
                           </small><strong class="d-block text-sm">$<%- item.price %></strong>
                         </div>
                       </div>
@@ -200,7 +200,7 @@
       <div class="close-btn">
         <i class="bi bi-x-circle h3"></i>
       </div>
-      <form class="search-area-form" action="/search/">
+      <form id="search-bar" class="search-area-form" action="/shop/" method="GET">
         <div class="mb-4 position-relative">
           <input class="search-area-input" type="search" name="search" id="search" placeholder="What are you looking for?" />
           <button class="search-area-button" type="submit">
