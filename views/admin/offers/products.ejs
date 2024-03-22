@@ -1,0 +1,265 @@
+<section class="breadcrumb-option">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="breadcrumb-item active" aria-current="page">
+          Product Offers
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"><%= locals.title ? locals.title : 'Product Offers' %></h1>
+
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <a href="/admin/stocks">
+      <button type="button" class="btn btn-sm btn-outline-info">
+        Manage Stocks
+      </button>
+    </a>
+    <a href="/admin/products/add-product">
+      <button type="button" class="btn btn-sm btn-outline-primary">
+        Add Product
+      </button>
+    </a>
+  </div>
+</div>
+
+
+<div class="container text-capitalize">
+  <div class="table-responsive container">
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr class="text-center">
+          <th>#</th>
+          <th>Product Name</th>
+          <th>Image</th>
+          <th>Offer Status</th>
+          <th>Price</th>
+          <th>Discount (%)</th>
+          <th>Offer Price</th>
+          <th>Activate/Deactivate</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (products !== 'undefined' && products.length > 0) { %>
+        <% products.forEach((item, index) => { %>
+        <tr class="align-middle text-center">
+          <td><%- index+1 %></td>
+          <td><%- item.product_name %></td>
+          <td>
+            <img src="/uploads/product-images/<%- item.primary_image.name %>" alt="<%- item.product_name %>" class="img-fluid img-thumbnail" width="90rem">
+          </td>
+          <td>
+            <% if (item.onOffer) { %>
+            <span class="badge bg-success">Active</span>
+            <% } else { %>
+            <span class="badge bg-danger">Not Active</span>
+            <% } %>
+          </td>
+          <td>$<%- item.sellingPrice %></td>
+          <td>-<%- item.offerDiscountRate %>%</td>
+          <td>
+            <% if (item.onOffer) { %>
+            $<%- item.offerDiscountPrice %>
+            <% } else { %>
+            $<%- item.sellingPrice %>
+            <% } %>
+          </td>
+          <td>
+            <% if (!item.onOffer) { %>
+            <button onclick="toggleActive('<%- item._id %>','<%- item.product_name %>', 'true')" class="btn btn-outline-success btn-sm">Activate</button>
+            <% } else { %>
+            <button onclick="toggleActive('<%- item._id %>','<%- item.product_name %>', 'false')" class="btn btn-outline-danger btn-sm">Deactivate</button>
+            <% } %>
+          </td>
+          <td>
+            <button type="button" data-bs-toggle="modal" data-product-id="<%- item._id %>" data-bs-target="#offerModal" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Add / Edit </button>
+
+          </td>
+
+        </tr>
+        <% }) %>
+        <% } else { %>
+        <tr>
+          <td colspan="9" class="text-danger"> No products found</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+<!-- Add or Edit Offer Modal -->
+
+<div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <form id="offerForm" class="card-body" method="POST">
+            <div class="row">
+              <fieldset class="col card mx-2">
+                <legend id="product_name">Product : </legend>
+                <div class="mb-3">
+                  <label for="offerDiscountRate" class="form-label">Offer Discount (%)</label>
+                  <input name="offerDiscountRate" type="number" min="0" class="form-control" id="offerDiscountRate">
+                </div>
+              </fieldset>
+            </div>
+            <!-- Add more form fields as needed -->
+            <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script defer>
+  const offerModal = document.getElementById('offerModal')
+  const offerForm = document.getElementById('offerForm');
+
+  offerModal.addEventListener('show.bs.modal', async (e) => {
+    const offerBtn = e.relatedTarget;
+
+    const productId = offerBtn.getAttribute('data-product-id');
+    try {
+      const response = await fetch(`/admin/product-details/${productId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch product');
+      }
+      const data = await response.json();
+      const product = data.product;
+
+      if (data.success) {
+        document.getElementById('product_name').innerText += product.product_name;
+        document.getElementById('offerDiscountRate').value = product.offerDiscountRate;
+
+        offerForm.action = `/admin/product-offer/${product._id}?_method=PATCH`;
+      }
+
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message
+      });
+    }
+  });
+
+
+
+  offerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(offerForm);
+    const body = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch(offerForm.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      console.log(data);
+      if (data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: data.message
+        }).then(() => {
+          location.reload()
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.message
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message
+      });
+    }
+  });
+
+
+  const toggleActive = async (productId, productName, onOffer) => {
+    try {
+      const confirmed = await Swal.fire({
+        title: 'Are you sure?',
+        text: onOffer === 'true' ? `You want to activate the offer for ${productName}` : `You want to deactivate the offer for ${productName}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: onOffer === 'true' ? 'Yes, activate!' : 'Yes, deactivate!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+      })
+
+      if (confirmed.isConfirmed) {
+        const response = await fetch(`/admin/toggle-active-product/${productId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (response.ok) {
+          const title = onOffer ? 'Success!' : 'Error!';
+          const text = onOffer ? `Offer for ${productName} is activated` : `Offer for ${productName} is deactivated`;
+          const icon = 'success';
+          Swal.fire({
+            title,
+            text,
+            icon,
+            timer: 1500
+          }).then((result) => {
+            location.reload();
+          });
+        } else {
+          throw new Error(data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      await Swal.fire({
+        title: 'Error!',
+        text: error.message,
+        icon: 'error',
+        timer: 1500
+      });
+    }
+  }
+</script>

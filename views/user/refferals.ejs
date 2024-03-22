@@ -1,0 +1,61 @@
+<section>
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb justify-content-center">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/user/profile">Account</a></li>
+      <li class="breadcrumb-item active">Refferals</li>
+    </ol>
+    <!-- Hero Content-->
+    <div class="hero-content pb-5 text-center">
+      <h1 class="hero-heading">Your Refferals</h1>
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+
+  <div class="row">
+    <%- include('../partials/user/sidebar.ejs') %>
+    <!-- Content  -->
+    <section class="col-lg-8">
+
+      <div class="container row justify-content-between">
+        <div class="col">
+          <p class="lead bg-success-light fw-semibold text-uppercase p-2">Your Refferal Code: <%- refferalCode %></p>
+          <p class="lead bg-success-light fw-semibold text-uppercase p-2">Refferal Rewards: <%- user.refferalRewards ? user.refferalRewards : 0 %></p>
+          <p class="lead bg-success-light fw-semibold text-uppercase p-2">Successful Refferals: <%- user.successfulRefferals ? user.successfulRefferals.length : 0 %> </p>
+        </div>
+        <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#addMoneyModal" class="btn btn-outline-success">Add Money +</button> -->
+      </div>
+
+      <div class="container table-responsive py-5 text-capitalize">
+        <table class="table table-striped table-hover">
+          <thead class="bg-dark-light">
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Username</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (successfullRefferals && successfullRefferals.length !== 0 ) { %>
+              <% successfullRefferals.forEach((element) => { %>
+                <tr class="align-middle">
+                  <td><%= element.date.toDateString() %></td>
+                  <td><%- element.username %></td>
+                </tr>
+              <% }) %>
+
+            <% } else { %>
+              <tr>
+                <td colspan="4" class="text-center">No refferals yet</td>
+              </tr>
+            <% } %> 
+            
+          </tbody>
+          </table>
+          
+    </section>
+  </div>
+</div>

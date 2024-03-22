@@ -56,6 +56,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: Number,
+    },
     email: {
       type: String,
       required: true,
@@ -76,9 +79,30 @@ const userSchema = new mongoose.Schema(
       default: Date.now,
       immutable: true,
     },
+    referralCode: {
+      type: String,
+      unique: true,
+    },
     referralToken: {
       type: String,
       unique: true,
+    },
+    successfullRefferals: [{
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+      username: {
+        type: String,
+      },
+      status: {
+        type: String,
+      }
+    }],
+    refferalRewards: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
     isBlocked: {
       type: Boolean,
