@@ -31,109 +31,111 @@
 
 <!-- Atribute List -->
 
-<section id="attributeSection" class="text-capitalize">
-  <div class="container row">
-    <div class="col">
-      <div class="container table-responsive">
-        <table class="table table-hover table-sm table-striped">
-          <legend>Color Attribute</legend>
-          <thead>
-            <tr class="text-center align-middle">
-              <th>Color</th>
-              <th>Hex</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% colors.forEach((color,index) => { %>
-            <tr class="text-center align-middle">
-              <td><%- color.name %></td>
-              <td>
-                <%- color.hex %>
-              </td>
-              <td class="<%- color.isDeleted ? 'text-danger' : 'text-success' %>"><%- color.isDeleted ? 'Unlisted' : 'Listed' %></td>
-              <td>
-                <div class="btn-group">
-                  <button data-color-id="<%- color._id %>" data-bs-target="#editColorModal" data-bs-toggle="modal" type="button" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                  <% if (color.isDeleted) { %>
-                  <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
-                  <% } else { %>
-                  <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
-                  <% } %>
-                  <button type="button" onclick="deleteAttribute('<%- color._id%>','color','<%- color.name%>')" class="btn btn-sm btn-danger" data-color-id="<%- color._id %>"><i class="bi bi-trash"></i></button>
-                </div>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+<section id="attributeSection" class="text-capitalize container">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="container table-responsive">
+          <table class="table table-hover table-sm table-striped">
+            <legend>Color Attribute</legend>
+            <thead>
+              <tr class="text-center align-middle">
+                <th>Color</th>
+                <th>Hex</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% colors.forEach((color,index) => { %>
+              <tr class="text-center align-middle">
+                <td><%- color.name %></td>
+                <td>
+                  <%- color.hex %>
+                </td>
+                <td class="<%- color.isDeleted ? 'text-danger' : 'text-success' %>"><%- color.isDeleted ? 'Unlisted' : 'Listed' %></td>
+                <td>
+                  <div class="btn-group">
+                    <button data-color-id="<%- color._id %>" data-bs-target="#editColorModal" data-bs-toggle="modal" type="button" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+                    <% if (color.isDeleted) { %>
+                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <% } else { %>
+                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <% } %>
+                    <button type="button" onclick="deleteAttribute('<%- color._id%>','color','<%- color.name%>')" class="btn btn-sm btn-danger" data-color-id="<%- color._id %>"><i class="bi bi-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="container table-responsive">
-        <table class="table table-hover table-sm table-striped">
-          <legend>Size Attribute</legend>
-          <thead>
-            <tr class="text-center align-middle">
-              <th>Size</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% sizes.forEach((size,index) => { %>
-            <tr class="text-center align-middle">
-              <td><%- size.value %></td>
-              <td class="<%- size.isDeleted ? 'text-danger' : 'text-success' %>"><%- size.isDeleted ? 'Unlisted' : 'Listed' %></td>
-              <td>
-                <div class="btn-group">
-                  <button id="editSizeButton" type="button" class="btn btn-sm btn-warning" data-size-id="<%- size._id %>" data-bs-toggle="modal" data-bs-target="#editSizeModal"><i class="bi bi-pencil"></i></button>
-                  <% if (size.isDeleted) { %>
-                  <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
-                  <% } else { %>
-                  <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
-                  <% } %>
-                  <button type="button" onclick="deleteAttribute('<%- size._id%>','size','<%- size.value%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </div>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+      <div class="col">
+        <div class="container table-responsive">
+          <table class="table table-hover table-sm table-striped">
+            <legend>Size Attribute</legend>
+            <thead>
+              <tr class="text-center align-middle">
+                <th>Size</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% sizes.forEach((size,index) => { %>
+              <tr class="text-center align-middle">
+                <td><%- size.value %></td>
+                <td class="<%- size.isDeleted ? 'text-danger' : 'text-success' %>"><%- size.isDeleted ? 'Unlisted' : 'Listed' %></td>
+                <td>
+                  <div class="btn-group">
+                    <button id="editSizeButton" type="button" class="btn btn-sm btn-warning" data-size-id="<%- size._id %>" data-bs-toggle="modal" data-bs-target="#editSizeModal"><i class="bi bi-pencil"></i></button>
+                    <% if (size.isDeleted) { %>
+                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <% } else { %>
+                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <% } %>
+                    <button type="button" onclick="deleteAttribute('<%- size._id%>','size','<%- size.value%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="container table-responsive">
-        <table class="table table-hover table-sm table-striped">
-          <legend>Brands</legend>
-          <thead>
-            <tr class="text-center align-middle">
-              <th>Brand</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% brands?.forEach((brand,index) => { %>
-            <tr class="text-center align-middle">
-              <td><%- brand.name %></td>
-              <td class="<%- brand.isActive ? 'text-danger' : 'text-success' %>"><%- brand.isActive ? 'Unlisted' : 'Listed' %></td>
-              <td>
-                <div class="btn-group">
-                  <button id="editBrandButton" type="button" class="btn btn-sm btn-warning" data-brand-id="<%- brand._id %>" data-bs-toggle="modal" data-bs-target="#editBrandModal"><i class="bi bi-pencil"></i></button>
-                  <% if (brand.isActive) { %>
-                  <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
-                  <% } else { %>
-                  <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
-                  <% } %>
-                  <button type="button" onclick="deleteAttribute('<%- brand._id%>','brand','<%- brand.name%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </div>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
+      <div class="col">
+        <div class="container table-responsive">
+          <table class="table table-hover table-sm table-striped">
+            <legend>Brands</legend>
+            <thead>
+              <tr class="text-center align-middle">
+                <th>Brand</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% brands?.forEach((brand,index) => { %>
+              <tr class="text-center align-middle">
+                <td><%- brand.name %></td>
+                <td class="<%- brand.isActive ? 'text-danger' : 'text-success' %>"><%- brand.isActive ? 'Unlisted' : 'Listed' %></td>
+                <td>
+                  <div class="btn-group">
+                    <button id="editBrandButton" type="button" class="btn btn-sm btn-warning" data-brand-id="<%- brand._id %>" data-bs-toggle="modal" data-bs-target="#editBrandModal"><i class="bi bi-pencil"></i></button>
+                    <% if (brand.isActive) { %>
+                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <% } else { %>
+                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <% } %>
+                    <button type="button" onclick="deleteAttribute('<%- brand._id%>','brand','<%- brand.name%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
