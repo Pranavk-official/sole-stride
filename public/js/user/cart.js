@@ -53,6 +53,7 @@ const increaseCartQuantity = async (productID, variantId) => {
     productID,
     variantId
   );
+  console.log(data);
   if (data && data.success) {
     const cart = data.cart;
     console.log(cart.price);

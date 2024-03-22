@@ -202,33 +202,43 @@ $('#edit-category').validate({
 
 // deleting category
 const deleteCategory = (id, imageName) => {
-  Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-  }).then(async (result) => {
-      if (result.isConfirmed) {
-          try {
-              await fetch(`/admin/category/delete-category?id=${id}&image=${imageName}`)
-                  .then(responses => responses.json())
-                  .then(data => {
-                      if (data.success) {
-                          Swal.fire(
-                              'Deleted!',
-                              'Your file has been deleted.',
-                              'success'
-                          ).then(() => {
-                              location.assign('/admin/category');
-                          })
-                      }
-                  })
-          } catch (err) {
-              console.log(err)
-          }
-      }
-  })
-}
+    Swal.fire({
+       title: 'Are you sure?',
+       text: "You won't be able to revert this!",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+       if (result.isConfirmed) {
+         try {
+           const response = await fetch(`/admin/category/delete-category?id=${id}&image=${imageName}`);
+           const data = await response.json();
+           if (data.success) {
+             Swal.fire(
+               'Deleted!',
+               'Your file has been deleted.',
+               'success'
+             ).then(() => {
+               location.assign('/admin/category');
+             });
+           } else {
+             Swal.fire(
+               'Error!',
+               data.message,
+               'error'
+             );
+           }
+         } catch (err) {
+           console.error(err);
+           Swal.fire(
+             'Error!',
+             err.message,
+             'error'
+           );
+         }
+       }
+    });
+   }
+   

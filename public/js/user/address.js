@@ -53,25 +53,32 @@ editAddress.addEventListener("show.bs.modal", async (e) => {
   }
 });
 
-const deleteAddress = document.querySelector("#deleteAddress");
-
-deleteAddress.addEventListener("submit", function (e) {
-  e.preventDefault();
-  let form = e.target;
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      form.submit();
-    }
-  });
-});
+const deleteAddress = async (id) => {
+  try {
+     // Show a confirmation dialog
+     const result = await Swal.fire({
+       title: 'Are you sure?',
+       text: "You won't be able to revert this!",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!'
+     });
+ 
+     // Check if the user confirmed the action
+     if (result.isConfirmed) {
+      const response = await fetch(`/user/address/delete-adddress/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+     }
+  } catch (error) {
+     console.error('Error deleting address:', error);
+  }
+ };
 
 const form = document.querySelector("#add-address");
 
@@ -264,6 +271,8 @@ const showSuccess = (input) => {
     error.textContent = "";
   }
 };
+
+
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();

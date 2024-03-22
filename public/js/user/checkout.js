@@ -4,7 +4,6 @@ const editAddress = document.querySelector("#edit-address-modal");
 
 const editAddressForm = document.querySelector("#edit-address-form");
 
-
 editAddress.addEventListener("show.bs.modal", async (e) => {
   try {
     const editButton = e.relatedTarget;
@@ -49,6 +48,7 @@ editAddress.addEventListener("show.bs.modal", async (e) => {
     editAddressForm.action = `/checkout/edit-address/${addressId}`;
     return;
   } catch (error) {
+    console.log(error);
     // Use SweetAlert to display the error message
     Swal.fire({
       icon: "error",
@@ -76,7 +76,7 @@ async function deleteAddress(addressId) {
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `/checkout/edit-address/${addressId}?_method=DELETE`,
+          `/user/address/delete-address/${addressId}`,
           {
             method: "DELETE",
           }
@@ -331,7 +331,7 @@ form.addEventListener("submit", function (e) {
 document.addEventListener("DOMContentLoaded", function () {
   const submitOrder = document.getElementById("submitOrder");
   if (submitOrder) {
-    submitOrder.addEventListener("click", function (e) {
+    submitOrder.addEventListener("click", async function (e) {
       e.preventDefault();
       const addressRadioButtons = document.querySelectorAll(
         'input[name="address"]'
@@ -353,31 +353,133 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Existing code to handle form submission
-      let form = document.getElementById("orderForm");
-      if (form) {
-        let formData = new FormData(form);
-        const body = Object.fromEntries(formData);
-        console.log(body);
-        fetch("/user/place-order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              location.assign("/shop/order-success");
+      // SweetAlert confirmation dialog
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, place the order!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // Existing code to handle form submission
+          let form = document.getElementById("orderForm");
+          if (form) {
+            let formData = new FormData(form);
+            const body = Object.fromEntries(formData);
+            const paymentMethod = body.paymentMethod;
+            console.log(body);
+            try {
+              const response = await fetch("/user/place-order", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+              });
+              console.log(response);
+              const data = await response.json();
+              console.log(data);
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              if (data.status) {
+                showRazorpay(data.order, data.user);
+              }
+              if (data.success) {
+                Swal.fire({
+                  icon: "success",
+                  title: "Order Successfull",
+                  text: data.message,
+                }).then(() => {
+                  location.assign("/shop/order-success");
+                });
+              }
+            } catch (error) {
+              console.error("Fetch error:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
             }
-          });
-      } else {
-        console.error("Form element not found");
-      }
+          } else {
+            console.error("Form element not found");
+          }
+        }
+      });
     });
   }
 });
+
+//payment interface function
+const showRazorpay = (order, user) => {
+  console.log(order, user);
+  var options = {
+    key: "rzp_test_EL8MknNoOtmLva", 
+    amount: order.amount, 
+    currency: "INR",
+    name: "SoleStride",
+    description: "Test Transaction",
+    order_id: order.id, 
+    handler: async function (response) {
+      console.log(response);
+      // const res = await fetch('/user/verify-payment', {
+      //   method: 'POST',
+      //   headers: {
+      //     "Content-Type": 'application/json'
+      //   },
+      //   body: JSON.stringify({response})
+      // })
+
+      // console.log(res);
+      await verifyPayment(response)
+    },
+    prefill: {
+      name: user.username,
+      email: user.email,
+      contact: user.phone,
+    },
+    notes: {
+      address: "Razorpay Corporate Office",
+    },
+    theme: {
+      color: "#2ade99",
+    },
+  };
+
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+  rzp1.on("payment.failed", function (response) {
+    swal.fire("Failed!", response.error.description, "error").then(() => {
+      location.assign("/");
+    });
+  });
+};
+const verifyPayment = async (response) => {
+
+  const res = await fetch("/checkout/verify-payment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({response}),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        location.assign("/shop/order-success");
+      }
+    });
+
+  const data = await res.json()
+
+  console.log(data);
+  if (data.success) {
+    location.assign("/shop/order-success");
+  }
+};
 
 const debounce = (fn, delay = 50) => {
   let timeoutId;
