@@ -63,9 +63,10 @@ module.exports = {
     }
   },
   editBanner: async (req, res) => {
-    const { name, reference, status, imageName } = req.body;
+    const { name,description, reference, status, imageName } = req.body;
     let edit_banner = {
       name: name,
+      description: description,
       reference: reference,
       isActive: status === "true" ? true : false,
     };
