@@ -9,6 +9,7 @@ module.exports = {
     if (req.isAuthenticated() && !req.user.isAdmin) {
       next();
     } else {
+      req.flash("error", "Please Login First");
       res.redirect("/login");
     }
   },
