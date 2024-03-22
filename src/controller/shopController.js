@@ -4,35 +4,14 @@ const Category = require("../model/categorySchema");
 const Brand = require("../model/attributes/brandSchema");
 const Product = require("../model/productSchema");
 const Address = require("../model/addressSchema");
+const Order = require("../model/orderSchema");
 const User = require("../model/userSchema");
-
-// Function to check if a product exists and is active
-const checkProductExistence = async (cartItem) => {
-  const product = await Product.findById(cartItem.product_id);
-  if (!product || !product.isActive) {
-    throw new Error(`${product.product_name}`);
-  }
-  return product;
-};
-
-// Function to check if the stock is sufficient for a product
-const checkStockAvailability = async (cartItem) => {
-  const product = await Product.findById(cartItem.product_id);
-  const variant = product.variants.find(
-    (variant) => variant._id.toString() === cartItem.variant.toString()
-  );
-  if (variant.stock < cartItem.quantity) {
-    throw new Error(`${product.product_name}`);
-  }
-  return product;
-};
 
 module.exports = {
   getHome: async (req, res) => {
     const locals = {
       title: "SoleStride - Home",
     };
-
     let perPage = 9;
     let page = req.query.page || 1;
 
@@ -84,30 +63,32 @@ module.exports = {
         }
       }
 
-      let filterQuery = {};
+      let filterQuery = {
+        isActive: true,
+      };
 
       if (search) {
         filterQuery.product_name = { $regex: search, $options: "i" };
       }
 
-      if (categoryID) {
+      if (categoryID && typeof categoryID !== undefined) {
         filterQuery.category = categoryID;
       }
-      
+
       if (brandID) {
         filterQuery.brand = brandID;
       }
-
       const products = await Product.find(filterQuery)
         .sort(sortQuery)
-        .populate("variants.$.color variants.$.size")
+        .populate("variants.color variants.size")
         .skip((page - 1) * limit)
         .limit(limit * 1)
         .exec();
 
+      // console.log(products[0].variants);
       const count = await Product.find(filterQuery).countDocuments();
 
-      const categories = await Category.find({isActive: true});
+      const categories = await Category.find({ isActive: true });
       const brands = await Brand.find({});
       return res.render("shop/search.ejs", {
         sortBy,
@@ -180,6 +161,9 @@ module.exports = {
             actualPrice: 1,
             sellingPrice: 1,
             onSale: 1,
+            onOffer: 1,
+            offerDiscountPrice: 1,
+            offerDiscountRate: 1,
             isActive: 1,
             primary_image: 1,
             secondary_images: 1,
@@ -235,13 +219,32 @@ module.exports = {
       //     });
       // })
 
+      const relatedProducts = await Product.find({
+        category: productData[0].category._id,
+        isActive: true,
+      })
+        .populate("brand category")
+        .limit(4);
+
+      console.log(relatedProducts);
+
       // Check if product data was found
       if (!productData || productData.length === 0) {
         return res.status(404).json({ message: "Product not found" });
       }
-      let wishlistCount;
+
+      // check if any of the variant is out of stock add a new boolean field outOfStock to the variant to be true
+      productData[0].variants.forEach((variant) => {
+        variant.outOfStock = variant.stock === 0;
+      });
+
+      // console.log(productData[0]);
+
       // Send the response with the populated product data
-      res.render("shop/productDetail", { product: productData[0] });
+      res.render("shop/productDetail", {
+        product: productData[0],
+        related: relatedProducts,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
@@ -285,117 +288,7 @@ module.exports = {
       nextPage: hasNextPage ? nextPage : null,
     });
   },
-  getCheckout: async (req, res) => {
-    if (!req.isAuthenticated()) {
-      return res.redirect("/login");
-    }
 
-    if (req.user.cart.length < 1) {
-      return res.redirect("/user/cart");
-    }
-
-    let user = await User.findById(req.user.id);
-
-    // Correctly use map with async functions
-    const productExistencePromises = user.cart.map(checkProductExistence);
-    const productExistenceResults = await Promise.allSettled(
-      productExistencePromises
-    );
-
-    // Filter out the rejected promises to identify which items are not valid
-    const invalidCartItems = productExistenceResults
-      .filter((result) => result.status === "rejected")
-      .map((result) => result.reason);
-
-    if (invalidCartItems.length > 0) {
-      console.log(invalidCartItems);
-      req.flash(
-        "error",
-        `The following items are not available: ${invalidCartItems
-          .join(", ")
-          .replaceAll("Error:", "")}`
-      );
-
-      return res.redirect("/user/cart");
-
-      //  return res.status(400).json({
-      //    message: `The following items are not available: ${invalidCartItems.join(
-      //      ", "
-      //    )}`,
-      //  });
-    }
-
-    // Correctly use map with async functions
-    const stockAvailabilityPromises = user.cart.map(checkStockAvailability);
-    const stockAvailabilityResults = await Promise.allSettled(
-      stockAvailabilityPromises
-    );
-
-    // Filter out the rejected promises to identify which items have insufficient stock
-    const insufficientStockItems = stockAvailabilityResults
-      .filter((result) => result.status === "rejected")
-      .map((result) => result.reason);
-
-    if (insufficientStockItems.length > 0) {
-      console.log(insufficientStockItems);
-      req.flash(
-        "error",
-        `Insufficient stock for the following items: ${insufficientStockItems
-          .join(", ")
-          .replaceAll("Error: ", "")}`
-      );
-
-      return res.redirect("/user/cart");
-      //  return res.status(400).json({
-      //    message: `Insufficient stock for the following items: ${insufficientStockItems.join(
-      //      ", "
-      //    )}`,
-      //  });
-    }
-
-    const address = await Address.find({
-      customer_id: req.user.id,
-      delete: false,
-    });
-
-    console.log(address);
-
-    let cartList = await User.aggregate([
-      { $match: { _id: user._id } },
-      { $project: { cart: 1, _id: 0 } },
-      { $unwind: { path: "$cart" } },
-      {
-        $lookup: {
-          from: "products",
-          localField: "cart.product_id",
-          foreignField: "_id",
-          as: "prod_details",
-        },
-      },
-      { $unwind: { path: "$prod_details" } },
-    ]);
-
-    let totalPrice = 0;
-    for (let prod of cartList) {
-      prod.price = prod.prod_details.sellingPrice * prod.cart.quantity;
-      totalPrice += prod.price; // Calculate total price
-    }
-
-    let cartCount = req.user.cart.length; // Update cartCount
-
-    const locals = {
-      title: "SoleStride - Checkout",
-    };
-    res.render("shop/checkout", {
-      locals,
-      user,
-      address,
-      cartList,
-      cartCount,
-      totalPrice,
-      checkout: true,
-    });
-  },
   getContact: async (req, res) => {
     const locals = {
       title: "SoleStride - Contact Us",
@@ -440,16 +333,32 @@ module.exports = {
   deleteAddress: async (req, res) => {
     let id = req.params.id;
     try {
-      const result = await Address.deleteOne({ _id: id });
-      if (result.deletedCount === 1) {
-        // If the document was successfully deleted, send a success response
-        res.status(200).json({ message: "Address deleted successfully" });
+      // Check if the address is in use by any orders
+      const order = await Order.findOne({ "address._id": id });
+      if (order) {
+        // If the address is in use, perform a soft delete by setting the delete boolean to true
+        const result = await Address.findByIdAndUpdate(
+          id,
+          { delete: true },
+          { new: true }
+        );
+        if (result) {
+          res
+            .status(200)
+            .json({ message: "Address marked as deleted successfully" });
+        } else {
+          res.status(404).json({ message: "Address not found" });
+        }
       } else {
-        // If no document was found to delete, send an appropriate response
-        res.status(404).json({ message: "Address not found" });
+        // If the address is not in use, proceed with the deletion
+        const result = await Address.deleteOne({ _id: id });
+        if (result.deletedCount === 1) {
+          res.status(200).json({ message: "Address deleted successfully" });
+        } else {
+          res.status(404).json({ message: "Address not found" });
+        }
       }
     } catch (error) {
-      // Handle any errors that occurred during the database operation
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
