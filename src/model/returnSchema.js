@@ -15,6 +15,7 @@ const returnRequestSchema = new Schema({
     },
     product_id: {
         type: ObjectId,
+        ref: 'Product'
     },
     variant: {
         type: ObjectId,

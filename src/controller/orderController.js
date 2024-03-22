@@ -170,7 +170,10 @@ module.exports = {
         }
       }
 
+      console.log(orderDetails);
+
       const isInReturn = await Return.findOne({ order_id: order_id });
+      console.log(isInReturn);
       if (isInReturn) {
         for (const order of orderDetails) {
           const orderProductId = (await order.items.product_id).toString();
