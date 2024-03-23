@@ -100,9 +100,8 @@
     const copyCodeText = document.getElementById("refferalCode");
     const link = `${window.location.origin}/register/?ref=${copyCodeText.innerText}`;
 
-    
-
     navigator.clipboard.writeText(link);
+
 
     Swal.fire({
       icon: "success",

@@ -16,18 +16,18 @@ router.use(isLoggedIn, async (req, res, next) => {
     return res.redirect("/admin");
   }
 
-  if (req.user) {
-    res.locals.user = req.user;
+  // if (req.user) {
+  //   res.locals.user = req.user;
 
-    const cart = await Cart.find({ userId: req.user.id });
-    res.locals.cartCount = cart && cart.items ? cart.items.length : 0;
+  //   const cart = await Cart.find({ userId: req.user.id });
+  //   res.locals.cartCount = cart && cart.items ? cart.items.length : 0;
     
-    const userWishlist = await WishList.findOne({ userId: req.user.id });
-    const userOrder = await Order.find({ customer_id: req.user.id }).countDocuments();
+  //   const userWishlist = await WishList.findOne({ userId: req.user.id });
+  //   const userOrder = await Order.find({ customer_id: req.user.id }).countDocuments();
 
-    res.locals.orderCount = userOrder;
-    res.locals.wishlistCount = userWishlist ? userWishlist.products.length : 0;
-  }
+  //   res.locals.orderCount = userOrder;
+  //   res.locals.wishlistCount = userWishlist ? userWishlist.products.length : 0;
+  // }
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
   next();

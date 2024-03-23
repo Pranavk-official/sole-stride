@@ -128,12 +128,13 @@ module.exports = {
 
   addToWishlist: async (req, res) => {
     console.log(req.body);
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({
-        success: false,
-        message: "Please log in to add product to wishlist",
-      });
-    }
+    // if (!req.isAuthenticated()) {
+    //   req.flash("error", "Please log in to add product to wishlist");
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: "Please log in to add product to wishlist",
+    //   });
+    // }
 
     const { productId } = req.body;
     let product,
