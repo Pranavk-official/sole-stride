@@ -379,17 +379,13 @@ module.exports = {
 
     const userWallet = await Wallet.findOne({ userId: req.user.id });
 
-    let transactions = userWallet.transactions.reverse();
+    userWallet.transactions.reverse();
 
-    if (!userWallet) {
-      transactions = []; 
-    }
 
     console.log(userWallet);
     res.render("user/wallet", {
       locals,
       userWallet,
-      transactions,
     });
   },
   addToWallet: async (req, res) => {
@@ -489,7 +485,7 @@ module.exports = {
       await user.save();
     }
 
-    console.log(user.successfullRefferals);
+    console.log(user);
 
     successfullRefferals = user.successfullRefferals.reverse();
 

@@ -2,6 +2,8 @@ const { validationResult } = require("express-validator");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 
+const Wallet = require("../model/walletSchema");
+
 /**
  * Models
  */
@@ -137,13 +139,14 @@ module.exports = {
       delete req.session.verifyToken
     }
 
-    if(req.query.refferalCode){
-      res.locals.refferalCode = req.query.refferalCode
-    }
-    
     const locals = {
       title: "SoleStride - Register",
     };
+
+    if(req.query.ref){
+      locals.refferalCode = req.query.ref
+    }
+    
 
     res.render("auth/user/register", {
       locals,
@@ -161,7 +164,10 @@ module.exports = {
       return res.redirect("/register");
     }
 
-    const { username, firstName, lastName, email, password, confirmPassword, refferal } =
+
+    console.log(req.body);
+
+    const { username, firstName, lastName, email, password, confirmPassword, referral } =
       req.body;
 
     // const existingUser = await User.findOne({ email });
@@ -186,9 +192,11 @@ module.exports = {
     });
 
     
-    if(refferal){
-      const refferal = await User.findOne({refferalCode:refferal})
+    if(referral){
+      const refferal = await User.findOne({referralCode: referral})
 
+      console.log({refferal: refferal, referralCode: referral});
+      
       user.referralToken = refferal._id
 
     }
@@ -323,9 +331,11 @@ module.exports = {
           if (updateUser) {
 
             const user = await User.findOne({ _id: req.session.verifyToken });
+            
+            console.log(`user ${user.referralToken}`);
 
             if(user.referralToken){
-              const referrer = await User.findOne({_id:user.referralToken});
+              const referrer = await User.findOne({_id: user.referralToken});
 
               if(referrer){
                 referrer.refferalRewards += 100;

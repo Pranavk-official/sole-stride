@@ -36,8 +36,8 @@
             </tr>
           </thead>
           <tbody>
-            <% if (transactions.length !== 0) { %>
-              <% transactions.forEach((element) => { %>
+            <% if (userWallet.transactions.length !== 0) { %>
+              <% userWallet.transactions.forEach((element) => { %>
                 <tr class="align-middle <%- element.type === 'Credit' ? 'bg-success-light' : 'bg-danger-light' %>">
                   <td><%= element.date.toDateString() %></td>
                   <td><%- element.amount %></td>

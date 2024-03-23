@@ -30,9 +30,9 @@
           <div class="collapse show" id="refferalCollapse" role="tabpanel" aria-labelledby="refferalDetails" data-parent="#accordion">
             <div class="block-body row">
               <div class="d-flex">
-                <p class="lead bg-success-light fw-semibold text-muted text-uppercase p-2">Your Refferal Code: <span class="text-dark fw-bold" id="refferalCode"><%- refferalCode %></span></p>
+                <p class="lead bg-success-light fw-semibold text-muted  p-2">Your Refferal Code: <span class="text-dark fw-bold" id="refferalCode"><%- refferalCode %></span></p>
                 <p class="lead bg-success-light fw-semibold text-muted text-uppercase p-2">Refferal Rewards: <%- user.refferalRewards ? user.refferalRewards : 0 %></p>
-                <p class="lead bg-success-light fw-semibold text-muted text-uppercase p-2">Successful Refferals: <%- user.successfulRefferals ? user.successfulRefferals.length : 0 %> </p>
+                <p class="lead bg-success-light fw-semibold text-muted text-uppercase p-2">Successful Refferals: <%- successfullRefferals ? successfullRefferals.length : 0 %> </p>
               </div>
               <div class="">
                 <button type="button" data-clipboard-text="<%- refferalCode %>" id="copyCode" class="btn btn-outline-dark">Copy Code</button>
@@ -56,9 +56,10 @@
           <tbody>
             <% if (successfullRefferals && successfullRefferals.length !== 0 ) { %>
             <% successfullRefferals.forEach((element) => { %>
-            <tr class="align-middle">
+            <tr class="align-middle table-success">
               <td><%= element.date.toDateString() %></td>
               <td><%- element.username %></td>
+              <td><%- element.status %></td>
             </tr>
             <% }) %>
 
