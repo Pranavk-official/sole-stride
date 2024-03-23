@@ -16,7 +16,15 @@ module.exports = {
     
     const usersCount = await User.find().countDocuments();
     const productsCount = await Product.find().countDocuments();
-    const ordersCount = await Orders.find().countDocuments()
+
+    const confirmedOrders = await Orders.aggregate([
+      { $match: { status: "Confirmed" } },
+      { $group: { _id: null, count: { $sum: 1 }, totalRevenue: { $sum: "$totalPrice" } } },
+    ]).exec();
+
+    console.log(confirmedOrders);
+
+    const ordersCount = await Orders.find({status: 'Confirmed'}).countDocuments()
 
     res.render("admin/dashboard", {
       locals,
@@ -25,6 +33,7 @@ module.exports = {
       usersCount,
       ordersCount,
       productsCount,
+      totalRevenue: confirmedOrders[0] ? confirmedOrders[0].totalRevenue : 0,
       admin: req.user,
       layout: adminLayout,
     });
