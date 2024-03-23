@@ -116,10 +116,23 @@
             </a>
           </div>
           <% } %>
+          <div class="nav-item navbar-icon-link m-0">
+            <a href="/user/cart" class="navbar-icon-link">
+              <i class="bi bi-cart3 text-warning"></i>
+              <% if (typeof cartCount !== 'undefined') { %>
+                <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount ? cartCount : '0' %></div>
+                <% } %>
+              <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View
+                Cart
+              </span>
+
+            </a>
+          </div>
           <!-- Cart Dropdown-->
-          <div class="nav-item dropdown">
+          <div class="nav-item dropdown d-none">
             <a class="navbar-icon-link d-lg-none" href="/user/cart">
               <i class="bi bi-cart3"></i>
+              
               <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
                 View cart
               </span>
