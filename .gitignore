@@ -138,5 +138,9 @@ public/uploads/product-images/*
 public/uploads/profile-images/*
 
 
+public/files/salesReport/*
+public/files/invoice/*
+
+
 cut-files.txt
 test.json
