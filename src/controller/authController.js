@@ -198,7 +198,6 @@ module.exports = {
       console.log({refferal: refferal, referralCode: referral});
       
       user.referralToken = refferal._id
-
     }
 
     let savedUser = await user.save();

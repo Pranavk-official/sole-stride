@@ -378,10 +378,18 @@ module.exports = {
 
     // TODO : pagination with 14 results per page
 
-    const userWallet = await Wallet.findOne({ userId: req.user.id });
+    let userWallet = await Wallet.findOne({ userId: req.user.id });
 
-    userWallet.transactions.reverse();
+    if (userWallet) {
+      userWallet.transactions.reverse();
+    }
 
+    if(!userWallet){
+      userWallet = {
+        balance: 0,
+        transactions: [],
+      }
+    }
 
     console.log(userWallet);
     res.render("user/wallet", {

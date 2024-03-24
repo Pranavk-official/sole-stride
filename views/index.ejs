@@ -48,6 +48,9 @@
         <div class="item d-flex align-items-center justify-content-center">
           <a href="/shop?category=<%- category._id %>">
           <div class="w-8rem">
+            <% if (category.onOffer) { %>
+              <div class="ribbon ribbon-info">On offer <%- category.offerDiscountRate %>%</div>
+            <% } %>
             <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
               <p class="text-muted text-capitalize"><%- category.name %></p>
             </div>
@@ -95,7 +98,11 @@
               <h3 class="h6 text-uppercase mb-1">
                 <a class="text-dark" href="/shop/product/<%- element._id %>"><%- element.product_name %></a>
               </h3>
-              <span class="text-muted">$<%- element.sellingPrice %> </span>
+              <% if (element.onOffer) { %>
+                <span class="text-muted">$<%- element.offerDiscountRate %> </span>
+                <% } else { %>
+                  <span class="text-muted">$<%- element.sellingPrice %> </span>
+              <% } %>
               <span class="text-bold">Size: <%- element.size %></span>
               <!-- <span class="text-muted">Color: <%- element.size %></span> -->
             </div>

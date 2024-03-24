@@ -29,6 +29,45 @@ module.exports = {
       .limit(perPage)
       .exec();
 
+    for (const order of orderDetails) {
+      const allCancelled = order.items.every(
+        (item) => item.status === "Cancelled"
+      );
+      const allReturned = order.items.every(
+        (item) => item.status === "Returned"
+      );
+      const allDelivered = order.items.every(
+        (item) => item.status === "Delivered"
+      );
+      const allShipped = order.items.every(
+        (item) => item.status === "Shipped"
+      );
+      const allPending = order.items.every(
+        (item) => item.status === "Pending"
+      );
+
+      let status;
+
+      if (allCancelled) {
+        status = "Cancelled";
+      } else if (allReturned) {
+        status = "Returned";
+      } else if (allDelivered) {
+        status = "Delivered";
+      } else if (allShipped) {
+        status = "Shipped";
+      } else if (allPending) {
+        status = "Failed";
+      }
+
+      if (status) {
+        await Order.updateOne(
+          { _id: order._id },
+          { $set: { status: status } }
+        );
+      }
+    }
+
     // orderDetails = orderDetails.reverse();
     console.log(orderDetails[0]);
 
@@ -50,6 +89,7 @@ module.exports = {
 
     try {
       let order_id = new mongoose.Types.ObjectId(orderId);
+
       let orderDetails = await Order.aggregate([
         {
           $match: {
@@ -163,6 +203,28 @@ module.exports = {
             order.items.inReturn = false;
             order.items.needHelp = true;
             break;
+          case "In-Return":
+            order.items.track = 0;
+            order.items.ordered = false;
+            order.items.cancelled = true;
+            order.items.delivered = false;
+            order.items.shipped = false;
+            order.items.outdelivery = false;
+            order.items.return = false;
+            order.items.inReturn = false;
+            order.items.needHelp = true;
+            break;
+          case "Returned":
+            order.items.track = 0;
+            order.items.ordered = false;
+            order.items.cancelled = true;
+            order.items.delivered = false;
+            order.items.shipped = false;
+            order.items.outdelivery = false;
+            order.items.return = false;
+            order.items.inReturn = false;
+            order.items.needHelp = true;
+            break;
           default:
             order.items.track = 0;
             order.items.pending = true;
@@ -178,14 +240,43 @@ module.exports = {
         for (const order of orderDetails) {
           const orderProductId = (await order.items.product_id).toString();
           const orderItemId = (await order.items.orderID).toString();
-          const returnProductId = (isInReturn.product_id).toString();
-          const returnItemId = (isInReturn.item_id).toString();
+          const returnProductId = isInReturn.product_id.toString();
+          const returnItemId = isInReturn.item_id.toString();
 
-          if (orderProductId === returnProductId && orderItemId === returnItemId) {
+          if (
+            orderProductId === returnProductId &&
+            orderItemId === returnItemId
+          ) {
+            order.items.inReturn = false;
+            order.items.return = false;
+            order.items.needHelp = false;
+            // order.items.status = 'Return Requested';
+            order.items.track = 10;
+          }
+
+
+          if (
+            orderProductId === returnProductId &&
+            orderItemId === returnItemId &&
+            isInReturn.status === "approved"
+          ) {
             order.items.inReturn = true;
             order.items.return = false;
             order.items.needHelp = false;
-            order.items.status = isInReturn.status;
+            // order.items.status = isInReturn.status;
+            order.items.track = 60;
+          }
+
+          if (
+            orderProductId === returnProductId &&
+            orderItemId === returnItemId &&
+            order.items.status === "Returned"
+          ) {
+            order.items.track = 100;
+            order.items.inReturn = true;
+            order.items.return = false;
+            order.items.needHelp = false;
+            order.items.status = "Returned";
           }
         }
       }
@@ -198,6 +289,41 @@ module.exports = {
       console.log(error);
     }
   },
+
+  // Get Invoice
+  getInvoice: async (req, res) => {
+    const { id, itemId } = req.params;
+
+    console.log(id, itemId);
+    
+    const order = await Order.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+          "items.orderID": itemId
+        }
+      },
+      {
+        $unwind: "$items"
+      },
+      {
+        $project: {
+          _id: 1,
+          items: 1
+        }
+      }
+    ]);
+
+    console.log(order[0].items);
+
+    res.json(order);
+
+    // res.render("shop/invoice", {
+    //   order,
+    //   layout: './layouts/invoice.ejs'
+    // });
+  },
+
   // Cancel and Return
   cancelOrder: async (req, res) => {
     try {
@@ -232,48 +358,48 @@ module.exports = {
 
       // If payment is done using wallet or online add the amount back to the user's wallet
 
-
-      if (order.paymentMethod === "Wallet" || order.paymentMethod === "Online") {
+      if (
+        order.paymentMethod === "Wallet" ||
+        order.paymentMethod === "Online"
+      ) {
         let price = await Order.aggregate([
           {
             $match: {
               _id: new mongoose.Types.ObjectId(id),
               "items.orderID": itemId,
-            }
+            },
           },
           {
-            $unwind: "$items"
+            $unwind: "$items",
           },
           {
             $match: {
-              "items.orderID": itemId
+              "items.orderID": itemId,
             },
-
           },
           {
             $project: {
               _id: 0,
-              itemTotal: "$items.itemTotal"
-            }
-          }
-        ])
-
+              itemTotal: "$items.itemTotal",
+            },
+          },
+        ]);
 
         console.log(price);
 
         const wallet = await Wallet.findOne({ userId: req.user.id });
 
-        wallet.balance = parseInt(wallet.balance) + parseInt(price[0].itemTotal);
+        wallet.balance =
+          parseInt(wallet.balance) + parseInt(price[0].itemTotal);
 
         wallet.transactions.push({
           date: new Date(),
           amount: parseInt(price[0].itemTotal),
           message: "Order cancelled successfully",
           type: "Credit",
-        })
+        });
 
         await wallet.save();
-
       }
 
       const updateOrder = await Order.findOne({
@@ -332,8 +458,6 @@ module.exports = {
       );
 
       if (updatedOrder) {
-
-
         const updateOrder = await Order.findOne({ _id: orderId });
         for (const item of updateOrder.items) {
           const product = await Product.findById(item.product_id);
@@ -632,6 +756,15 @@ module.exports = {
           .json({ success: false, message: "Order not found." });
       }
 
+      // Find the item in the order
+      const currentItem = order.items.find(
+        (item) =>
+          item.product_id.toString() === productId &&
+          item.variant.toString() === variant
+      );
+
+      console.log("currentItem: " + currentItem);
+
       // Check if the new status is valid
       if (
         ![
@@ -641,6 +774,8 @@ module.exports = {
           "Shipped",
           "Out for Delivery",
           "Delivered",
+          "In-Return",
+          "Returned",
         ].includes(status)
       ) {
         return res
@@ -656,6 +791,60 @@ module.exports = {
         update.out_for_delivery = new Date();
       } else if (status === "Delivered") {
         update.delivered_on = new Date();
+      } else if (status === "Returned") {
+        update.returned_on = new Date();
+
+        // Update the current product variant stock
+        const product = await Product.findById(currentItem.product_id);
+        if (product) {
+          const variantIndex = product.variants.findIndex(
+            (variant) =>
+              variant._id.toString() === currentItem.variant.toString()
+          );
+
+          if (variantIndex === -1) {
+            return res.status(404).json({ error: "Variant not found" });
+          }
+
+          console.log(product.variants[variantIndex]);
+
+          product.variants[variantIndex].stock += currentItem.quantity;
+
+          // product.stock += item.quantity; // Increment the quantity of the product
+          await product.save(); // Save the updated product
+
+          // Update the user wallet to refund the item price
+          const userWallet = await Wallet.findOne({
+            userId: order.customer_id,
+          });
+
+          if (userWallet) {
+            userWallet.balance += currentItem.itemTotal;
+
+            userWallet.transactions.push({
+              type: "Credit",
+              amount: currentItem.itemTotal ,
+              date: new Date(),
+              message: "Order Return Refund",
+            });
+
+            await userWallet.save();
+          } else {
+            const newWallet = new Wallet({
+              userId: order.customer_id,
+              balance: currentItem.itemTotal,
+              transactions: [
+                {
+                  type: "Credit",
+                  amount: currentItem.itemTotal,
+                  date: new Date(),
+                  message: "Order Return Refund",
+                },
+              ],
+            });
+            await newWallet.save();
+          }
+        }
       }
 
       // Update the order status
@@ -682,4 +871,6 @@ module.exports = {
       res.status(500).json({ success: false, message: "Server error." });
     }
   },
+
+
 };

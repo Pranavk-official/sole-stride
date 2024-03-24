@@ -64,6 +64,9 @@ const orderSchema = new Schema(
         cancelled_on: {
           type: Date,
         },
+        returned_on: {
+          type: Date,
+        },
       },
     ],
     shippingAddress: {

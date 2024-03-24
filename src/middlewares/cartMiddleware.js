@@ -1,5 +1,7 @@
 const User = require("../model/userSchema");
 const Cart = require("../model/cartSchema");
+const Wishlist = require("../model/wishlistSchema");
+const Order = require("../model/orderSchema");
 
 module.exports = {
   cartList: async (req, res, next) => {
@@ -15,6 +17,14 @@ module.exports = {
         totalPrice += prod.price; // Calculate total price
         // console.log(prod.price);
       }
+
+
+      
+      const userWishlist = await Wishlist.findOne({ userId: req.user.id });
+      const userOrder = await Order.find({ customer_id: req.user.id }).countDocuments();
+  
+      res.locals.orderCount = userOrder ? userOrder : 0;
+      res.locals.wishlistCount = userWishlist ? userWishlist.products.length : 0;
 
       // console.log(cartEntries);
       res.locals.cartCount = userCart.items.length

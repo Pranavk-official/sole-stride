@@ -62,15 +62,9 @@ app.use(nocache());
 
 // Custom middleware 
 app.use(checkBlockedUser,cartList,(req, res, next) => {
-
-  // console.log(req.params);
   if (req.user && req.isAuthenticated()) {
     res.locals.user = req.user;
-      // console.log(req.session);
-      // console.log(req.session);
-  }
-  // res.locals.success = req.flash("success");
-  // res.locals.error = req.flash("error");
+   }
   next();
 });
 

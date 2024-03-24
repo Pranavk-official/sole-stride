@@ -64,12 +64,18 @@
                     <% if (orderDetails.items.status === 'Delivered') { %>
                     <option value="Delivered">Delivered</option>
                     <% } %>
+                    <% if (orderDetails.items.status === 'In-Return') { %>
+                    <option value="Returned">Returned</option>
+                    <% } %>
+                    <% if (orderDetails.items.status === 'Returned') { %>
+                    <option value="Returned">Returned</option>
+                    <% } %>
                 </select>
               </div>
               <div class="col-md-6">
-                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending') { %>
+                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending' ) { %>
 
-                  <a href="/admin/orders"><input type="none" value="back to orders" class="form-control mt-2 btn add-btn"readonly></a>
+                  <a href="/admin/orders"><input type="none" value="Back To Orders" class="form-control btn"readonly></a>
 
                 <% } else { %>
                   <button type="submit" class="btn <% if (orderDetails.items.status === 'Delivered') { %>

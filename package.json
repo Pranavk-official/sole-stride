@@ -15,6 +15,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.4.1",
     "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.0",
@@ -28,7 +29,10 @@
     "nodemailer": "^6.9.9",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "razorpay": "^2.9.2"
+    "puppeteer": "^22.6.0",
+    "razorpay": "^2.9.2",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

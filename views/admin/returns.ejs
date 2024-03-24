@@ -43,37 +43,227 @@
 
 
 <section class="container my-5">
-    <div class="container table-responsive text-capitalize">
-        <table class="table table-striped table-hover ">
-            <thead>
-                <tr class="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Reason</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Manage</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% returns.forEach((element, index) => { %>
-                    <tr class="text-center align-middle">
-                        <td><%= index + 1 %></td>
-                        <td><%= element.user_id.username %></td>
-                        <td><img src="/uploads/product-images/<%= element.product_id.primary_image.name %>" class="img-fluid" alt="Product" width="50" height="50"></td>
-                        <td><%= element.product_id.product_name %></td>
-                        <td><%= element.reason %></td>
-                        <td><%= element.status %></td>
-                        <td>
-                            <div class="">
-                                <button type="button" class="btn btn-success">Approve</button>
-                                <button type="button" class="btn btn-danger">Reject</button>
-                            </div>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    </div>
+  <div class="container table-responsive text-capitalize">
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr class="text-center">
+          <th scope="col">#</th>
+          <th scope="col">Order Id</th>
+          <th scope="col">User</th>
+          <th scope="col">Image</th>
+          <th scope="col" class="text-start">Product</th>
+          <th scope="col">Reason</th>
+          <th scope="col">Status</th>
+          <th scope="col">Manage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% returns.forEach((element, index) => { %>
+        <tr class="text-center align-middle">
+          <td><%= index + 1 %></td>
+          <td class="fw-bold">#<%= element.item_id %></td>
+          <td><%= element.user_id.username %></td>
+          <td><img src="/uploads/product-images/<%= element.product_id.primary_image.name %>" class="img-fluid" alt="Product" width="60" height="60"></td>
+          <td>
+            <span class="d-flex flex-column justify-content-around align-items-start">
+              <span class="fw-bold"><%= element.product_id.product_name %></span>
+              <span class="text-muted fw-bold">Color: <%= element.productDetail.color %></span>
+              <span class="text-muted fw-bold">Size: <%= element.productDetail.size %></span>
+            </span>
+          </td>
+          <td><%= element.reason %></td>
+          <td>
+            <span class="badge <%- element.status === 'approved' ? 'bg-success' : 'bg-danger' %> p-2 "><%= element.status %></span>
+          </td>
+          <td>
+            <div class="d-flex justify-content-around">
+              <% if (element.status === 'pending') { %>
+              <button type="button" class="btn btn-success" onclick="approveReturn( '<%= element.order_id._id %>' ,'<%= element.variant %>', '<%= element.item_id %>', '<%= element._id %>')">Approve</button>
+              <button type="button" class="btn btn-danger">Reject</button>
+
+              <% } else { %>
+              <button class="btn btn-dark text-uppercase" disabled><%- element.status %></button>
+              <% } %>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination-->
+  <% if (returns.length > 0 && nextPage || current == pages) { %>
+  <nav aria-label="Product Pagination">
+    <ul class="pagination justify-content-center mt-5">
+      <% if (current == 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">First</a>
+      </li>
+
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/returns/?page=1" class="page-link">First</a>
+      </li>
+      <% } %>
+
+      <% var i = (Number(current)> 5 ? Number(current) - 4 : 1) %>
+      <% if (i !== 1) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %>
+
+      <% for( ; i < Number(current) + 4 && i <= pages ; i++ ) { %>
+      <% if (i == current) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link"><%= i %> </a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/returns?page=<%= i %>" class="page-link text-primary fw-bold"><%= i %></a>
+      </li>
+
+      <% } %>
+      <% if (i == Number(current)+ 4 && i < pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">...</a>
+      </li>
+      <% } %>
+
+      <% } %>
+      <% if (current == pages) { %>
+      <li class="page-item disabled">
+        <a href="#" class="page-link">Last</a>
+      </li>
+      <% } else { %>
+      <li class="page-item">
+        <a href="/admin/returns?page=<%= pages %>" class="page-link">Last</a>
+      </li>
+
+      <% } %>
+
+    </ul>
+  </nav>
+  <% } %>
 </section>
+
+
+<script defer>
+  const approveReturn = (order_id, variant, item_id, id) => {
+    console.log(order_id, variant, item_id, id);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to approve this return!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, approve it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+
+        try {
+          const response = await fetch('/admin/returns/approve-return', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              order_id,
+              variant,
+              item_id,
+              id
+            })
+          })
+          const data = await response.json()
+
+          console.log(data);
+
+          if (data.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message
+            }).then(() => {
+              location.reload()
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message
+            }).then(() => {
+              location.reload()
+            })
+          }
+        } catch (error) {
+          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+          })
+        }
+
+      }
+    })
+  }
+
+
+  const declineReturn = (id) => {
+    console.log(id);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to decline this return!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, decline it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+
+        try {
+          const response = await fetch('/admin/returns/decline-return', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id
+            })
+          })
+          const data = await response.json()
+          console.log(data);
+          if (data.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message
+            }).then(() => {
+              location.reload()
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message
+            }).then(() => {
+              location.reload()
+            })
+          }
+        } catch (error) {
+          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+          })
+        }
+      }
+    })
+  }
+</script>

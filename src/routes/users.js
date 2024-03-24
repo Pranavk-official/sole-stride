@@ -15,19 +15,6 @@ router.use(isLoggedIn, async (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     return res.redirect("/admin");
   }
-
-  // if (req.user) {
-  //   res.locals.user = req.user;
-
-  //   const cart = await Cart.find({ userId: req.user.id });
-  //   res.locals.cartCount = cart && cart.items ? cart.items.length : 0;
-    
-  //   const userWishlist = await WishList.findOne({ userId: req.user.id });
-  //   const userOrder = await Order.find({ customer_id: req.user.id }).countDocuments();
-
-  //   res.locals.orderCount = userOrder;
-  //   res.locals.wishlistCount = userWishlist ? userWishlist.products.length : 0;
-  // }
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
   next();
@@ -73,6 +60,10 @@ router.get("/order/:orderId", orderController.getSingleOrder);
 router.post("/cancel-order/:id/:itemId/:variant", orderController.cancelOrder);
 router.post("/return-order/", orderController.returnOrder);
 router.post("/cancel-all-order/:id/", orderController.cancelAllOrders);
+
+
+// invoice
+router.get("/invoice/:id/:itemId", orderController.getInvoice);
 
 /**
  * User Wishlist

@@ -279,7 +279,7 @@ module.exports = {
       if (!userCart) {
         return res.status(404).json({ error: "User's cart not found" });
       }
-      const status = paymentMethod == "COD" ? "Confirmed" : "Pending";
+      const status = paymentMethod == "COD" || paymentMethod == "Wallet" ? "Confirmed" : "Pending";
 
       console.log(userCart.items);
 

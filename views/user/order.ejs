@@ -58,18 +58,26 @@
               <div class="col-md-12 card mb-3">
 
                 <div class="row align-items-center">
-                  <div class="col-md-4">
+                  
+                  <div class="col-md-3">
                     <img src="/uploads/product-images/<%- order.products.primary_image.name %>" class="img-fluid rounded-start" alt="<%- order.products.product_name %>">
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-7">
                     <div class="card-body">
                       <h5 class="card-title fw-bold text-muted">#<%- order.items.orderID %></h5>
                       <h5 class="card-title h4"><%- order.products.product_name %></h5>
-                      <p class="card-text pt-2 d-flex justify-content-between"><span>Price: $<%- order.items.price %></span><br><span>Quantity: <%- order.items.quantity %></span></p>
+                      <p class="card-text pt-2 d-flex justify-content-evenly lead"><span class="col">Price: $<%- order.items.price %></span><span class="col">Quantity: <%- order.items.quantity %></span></p>
                       <p class="card-text"><small class="text-body-secondary">Color: <%- order.variant.name %><br> Size: <%- order.variant.value %></small></p>
                     </div>
                   </div>
+
+                  <% if (['Delivered', 'In-Return', 'Returned' ].includes(order.items.status) ) { %>
+                    <div class="ratings col-md-2">
+                      Rate this product:
+                    </div>
+                    <% } %>
                 </div>
+
                 <div class="card-body px-3 m-2 border">
                   <div class="row justify-content-center gap-3 mx-2">
                     <% if (order.items.ordered) { %>
@@ -85,7 +93,7 @@
                     <% } %>
                     <% if (order.items.delivered) { %>
                     <!-- Return Status -->
-                    <button type="button" class="btn col btn-outline-primary">Download Invoice</button>
+                    <button id="invoice" data-order-id="<%- order._id %>" data-item-id="<%- order.items.orderID %>" data-variant="<%- order.items.variant %>" data-product-id="<%- order.items.product_id._id %>" data-bs-toggle="modal" data-bs-target="#invoiceModal" type="button" class="btn col btn-outline-primary">Download Invoice</button>
                     <% } %>
                     <!-- <button type="button" class="w-100 btn col btn-outline-success"></button> -->
                   </div>
@@ -96,6 +104,11 @@
                   <p class="bg-light text-center fw-bold text-danger">Cancelled on <%= order.items.cancelled_on %></p>
                 </div>
                 <% } %>
+                <% if (order.items.returned_on) { %>
+                <div class="card-body p-3 m-3 border">
+                  <p class="bg-light text-center fw-bold text-danger">Returned on <%= order.items.returned_on %></p>
+                </div>
+                <% } %>
 
                 <% if (order.items.pending) { %>
                 <div class="card-body p-3 m-3 border">
@@ -103,35 +116,48 @@
                 </div>
                 <% } %>
                 <div class="card-body p-3 m-3 border">
-                  <div class="d-flex  mb-1">
+                  <div class="d-flex mb-1 justify-content-center">
                     <div>
-                      <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.updatedAt.toLocaleString() %></p>
+                      <p class="text-primary-light mt-1 mb-0 small "><%= order.updatedAt.toLocaleString() %></p>
                     </div>
                     <div>
                       <% if (order.items.shipped) { %>
-                      <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.shipped_on %></p>
+                      <p class="text-info mt-1 mb-0 small ms-xl-5"><%= order.items.shipped_on %></p>
                       <% } %>
                     </div>
                     <div>
                       <% if (order.items.outdelivery) { %>
-                      <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.out_for_delivery %></p>
+                      <p class="text-primary mt-1 mb-0 small ms-xl-5"><%= order.items.out_for_delivery %></p>
                       <% } %>
                     </div>
                     <div>
                       <% if (order.items.delivered) { %>
-                      <p class="text-muted mt-1 mb-0 small ms-xl-5"><%= order.items.delivered_on %></p>
+                      <p class="text-success mt-1 mb-0 small ms-xl-5"><%= order.items.delivered_on %></p>
                       <% } %>
                     </div>
                   </div>
-                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
-                  </div>
-                  <div class="d-flex justify-content-around mb-1">
-                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Ordered</p>
-                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
-                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivery</p>
-                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
-                  </div>
+                  <% if (order.items.status !== 'Returned' && order.items.status !== 'In-Return' && order.items.status !== 'Cancelled' && order.items.status !== 'Return Requested') { %>
+                    <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
+                    </div>
+                    <div class="d-flex justify-content-around mb-1">
+                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Ordered</p>
+                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
+                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivery</p>
+                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
+                    </div>
+                    <% } %>
+                    <% if (['Returned', 'In-Return', 'Return Requested'].includes(order.items.status)) { %>
+                      <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="<%= order.items.track %>" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped badge-warning progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
+                      </div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return Requested</p>
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">In Return</p>
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return</p>
+                      </div>
+                   
+                  <% } %>
                 </div>
 
               </div>
@@ -409,5 +435,16 @@
         })
     }
 
+  })
+
+
+
+  const invoice = document.getElementById('invoice')
+
+  invoice.addEventListener('click', async (e) => {
+    const orderId = e.currentTarget.getAttribute('data-order-id')
+    const itemId = e.currentTarget.getAttribute('data-item-id')
+    console.log(orderId, itemId);
+    location.assign(`/user/invoice/${orderId}/${itemId}/`)
   })
 </script>

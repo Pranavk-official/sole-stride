@@ -320,7 +320,7 @@
     });
 
     // Clear search input
-    searchProduct.value = '';
+    // searchProduct.value = '';
 
     // Optionally, reset the sort select to its default value if applicable
     // This step depends on your UI and how the sort select is implemented
@@ -328,7 +328,11 @@
     // sortSelect.value = 'defaultSortOptionValue';
 
     // Redirect to the shop page without any filters applied
-    window.location.href = '/shop/';
+    if (searchProduct.value === '') {
+      window.location.href = `/shop/`;
+    } else {
+      window.location.href = `/shop?search=${searchProduct.value}`;
+    }
   }
 
   // Attach the clearAllFilters function to a button or any other UI element

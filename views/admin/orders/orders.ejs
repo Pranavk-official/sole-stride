@@ -46,6 +46,7 @@
             <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
+                    <th scope="col">Order Id</th>
                     <th scope="col">Date</th>
                     <th scope="col">Image</th>
                     <th scope="col">Product</th>
@@ -62,6 +63,7 @@
                 <% orders?.forEach((order,index) => { %>
                     <tr class="align-middle text-center">
                         <td><%- index+1 %></td>
+                        <td>#<%- order.items.orderID %></td>
                         <td><%- order.createdAt.toLocaleDateString('en-GB') %></td>
                         <td><img src="/uploads/product-images/<%- order.productDetails.primary_image.name %>" alt="<%- order.productDetails.product_name %>" class="img-fluid img-thumbnail" width="90rem" ></td>
                         <td class="mx-0"><%- order.productDetails.product_name %> <br> <span class="text-muted"><span class="fw-bold">Color :</span> <%- order.productDetails.name %><br> <span class="text-muted"><span class="fw-bold">Size :</span> <%- order.productDetails.value %></span> </td>
