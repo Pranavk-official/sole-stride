@@ -21,6 +21,7 @@ const attributeController = require("../controller/attributeController");
 const couponController = require("../controller/couponController");
 const returnController = require("../controller/returnController");
 const offerController = require("../controller/offerController");
+const reportsController = require("../controller/reportsController");
 
 /* Common Midleware for admin routes*/
 router.use(isAdmin, (req, res, next) => {
@@ -209,7 +210,7 @@ router
 
 router.get('/returns', returnController.getReturnRequests)
 
-
+router.post('/returns/approve-return', returnController.approveReturn)
 
 
 
@@ -232,5 +233,17 @@ router.get('/product-offers', offerController.getProductOffers)
 router.get('/product-details/:id', productController.getProdDetails)
 router.patch('/product-offer/:id', offerController.addProdOffer)
 router.patch('/toggle-active-product/:id', offerController.toggleActiveProdOffer)
+
+
+
+
+
+
+/**
+ * Sales Report
+ */
+
+router.get('/sales-report', reportsController.getSalesReport)
+router.get('/sales-report/excel', reportsController.salesReportExcel)
 
 module.exports = router;
