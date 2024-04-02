@@ -119,81 +119,86 @@ module.exports = {
 
     try {
       const userId = req.user.id;
-      const cart = await Cart.findOne({ userId }).populate(
+      let cart = await Cart.findOne({ userId }).populate(
         "items.product_id items.color items.size"
       );
-
-      console.log(cart);
-
-      if (!cart) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Cart not found" });
-      }
-
-      let totalPrice = 0;
-      let totalPriceBeforeOffer = 0;
-      for (const prod of cart.items) {
-        prod.price = prod.product_id.onOffer
-          ? prod.product_id.offerDiscountPrice
-          : prod.product_id.sellingPrice;
-
-        const itemTotal = prod.price * prod.quantity;
-        prod.itemTotal = itemTotal;
-        totalPrice += itemTotal;
-        totalPriceBeforeOffer += prod.price;
-      }
-
-      cart.totalPrice = totalPrice;
-      cart.payable = totalPrice;
-
-      // if category offer is active or product offer is active
-
+      
+      // console.log(cart);
+      
       let errors = [];
-      for (const item of cart.items) {
-        const product = await Product.findOne({
-          _id: item.product_id,
-        }).populate("variants.color variants.size");
+      let totalPrice = 0;
+      if (!cart) {
+        cart = new Cart({
+          userId,
+          items: [],
+        });
+        totalPrice = 0;
+      }else {
 
-        if (!product) {
-          console.log(`The Product ${item.product_id} is not found!!`);
-          errors.push(`The Product ${item.product_id} is not found!!`);
-          continue;
+        let totalPriceBeforeOffer = 0;
+        for (const prod of cart.items) {
+          prod.price = prod.product_id.onOffer
+            ? prod.product_id.offerDiscountPrice
+            : prod.product_id.sellingPrice;
+  
+          const itemTotal = prod.price * prod.quantity;
+          prod.itemTotal = itemTotal;
+          totalPrice += itemTotal;
+          totalPriceBeforeOffer += prod.price;
         }
+  
+        cart.totalPrice = totalPrice;
+        cart.payable = totalPrice;
+  
+        // if category offer is active or product offer is active
+  
 
-        if (!product.isActive) {
-          console.log(`The Product ${product.product_name} is not available!!`);
-          errors.push(`The Product ${product.product_name} is not available!!`);
-          continue;
+        for (const item of cart.items) {
+          const product = await Product.findOne({
+            _id: item.product_id,
+          }).populate("variants.color variants.size");
+  
+          if (!product) {
+            console.log(`The Product ${item.product_id} is not found!!`);
+            errors.push(`The Product ${item.product_id} is not found!!`);
+            continue;
+          }
+  
+          if (!product.isActive) {
+            console.log(`The Product ${product.product_name} is not available!!`);
+            errors.push(`The Product ${product.product_name} is not available!!`);
+            continue;
+          }
+  
+          const variant = product.variants.find(
+            (v) => v._id.toString() === item.variant.toString()
+          );
+  
+          if (!variant) {
+            console.log(
+              `The Variant of Product ${product.product_name} is not found!!`
+            );
+            errors.push(
+              `The Variant of Product ${product.product_name} is not found!!`
+            );
+            continue;
+          }
+  
+          const stock = variant.stock;
+          if (item.quantity > stock) {
+            item.outOfStock = true;
+            console.log(
+              `The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`
+            );
+            errors.push(
+              `The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`
+            );
+          }
         }
-
-        const variant = product.variants.find(
-          (v) => v._id.toString() === item.variant.toString()
-        );
-
-        if (!variant) {
-          console.log(
-            `The Variant of Product ${product.product_name} is not found!!`
-          );
-          errors.push(
-            `The Variant of Product ${product.product_name} is not found!!`
-          );
-          continue;
-        }
-
-        const stock = variant.stock;
-        if (item.quantity > stock) {
-          item.outOfStock = true;
-          console.log(
-            `The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`
-          );
-          errors.push(
-            `The Product ${product.product_name}, Color: ${variant.color.name}, Size: ${variant.size.value} is out of stock!!`
-          );
-        }
+        await cart.save();
+        // Assuming totalPrice is needed for the response
       }
-      await cart.save();
-      // Assuming totalPrice is needed for the response
+
       res.render("shop/cart", {
         cartList: cart.items,
         cartCount: cart.items.length,
@@ -284,7 +289,8 @@ module.exports = {
         color,
         size,
         quantity: 1,
-        price: product.price,
+        price: product.sellingPrice,
+        itemTotal: product.sellingPrice,
       });
 
       await cart.save();

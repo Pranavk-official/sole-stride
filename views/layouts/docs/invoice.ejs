@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="description" content="Male_Fashion ">
+  <meta name="keywords" content="Male_Fashion, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Male-Fashion </title>
+
+
+
+
+</head>
+
+<body style="margin: 2rem">
+
+
+  <section class=" spad p-0 mb-5" style="min-height: 800px;">
+    <div class="">
+
+
+
+
+      <div class="row ">
+
+
+
+        <div class="col-lg-12 col-md-12 h-auto">
+
+
+
+          <div class="checkout__order m-5">
+
+
+            <div class="d-flex justify-content-between align-items-start" style="border-bottom: 1px solid grey; padding-bottom: .8rem;">
+              <div class="col-lg-3 col-md-3">
+                <div class="">
+                  <img src="/img/logo.png" alt="">
+                </div>
+              </div>
+
+              <div class="text-right" style="margin-top: 2rem; margin-bottom: 1rem;">
+                <div class="font-weight-bold" style="font-size: 1.2rem; ">
+                  Zylker Thread & Weave
+                </div>
+
+                <div>14B, Northern Street </div>
+
+                <div> Greater South Avenue Dalkin </div>
+
+                <div> New York 10001
+                </div>
+
+                <div>U.S.A</div>
+              </div>
+            </div>
+
+
+
+
+
+            <div style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  font-size: 1.3rem ; margin-top: 3rem;">
+              <div>Billing Address:
+              </div>
+            </div>
+
+
+
+            <div class="mt-2  " style=" 
+                            background-color: #ffffff; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; margin-bottom: 4rem;">
+
+
+              <P class=" mb-0 ">
+                <%=address.fullName%>
+              </P>
+
+
+
+
+
+              <p class=" mb-0">
+                <%=address.addressLine%>
+              </p>
+              <p class=" mb-0">
+                <%=address.locality%>,
+                <%=address.city%>
+              </p>
+              <p class=" mb-0">
+
+              </p>
+              <p class=" mb-0">
+                <%=address.state%>, <%=address.country%>
+              </p>
+              <p class=" mb-0">
+
+              </p>
+              <p class=" mb-0">
+                PIN:
+                <%=address.pinCode%>
+              </p>
+              <p class=" mb-0">
+                phone:
+                <%=address.phone%>
+              </p>
+
+
+
+
+
+            </div>
+
+
+            <div class="mt-4" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  font-size: 1.3rem ; ">
+              <div>Shipping Address:
+              </div>
+            </div>
+
+
+
+            <div class="mt-2  " style=" 
+                        background-color: #ffffff; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom: 4rem;">
+
+
+
+              <p class=" mb-0">
+                <%=address.addressLine%>
+              </p>
+              <p class=" mb-0">
+                <%=address.locality%>,
+                <%=address.city%>
+              </p>
+              <p class=" mb-0">
+
+              </p>
+              <p class=" mb-0">
+                <%=address.state%>, <%=address.country%>
+              </p>
+              <p class=" mb-0">
+
+              </p>
+              <p class=" mb-0">
+                PIN:
+                <%=address.pinCode%>
+              </p>
+              <p class=" mb-0">
+                phone:
+                <%=address.phone%>
+              </p>
+
+
+
+
+
+            </div>
+
+
+            <div class="mt-4">
+
+              <table class="table " style="width: 100%; border :2px solid black ;padding:1rem">
+                <thead style="width: 100%; ">
+                  <tr class="text-center" style="border-bottom: 2px solid black;">
+                    <th style="width: 20%;">S.No</th>
+                    <th style="width: 20%;">PRODUCT NAME</th>
+                    <th style="width: 20%;">QUANTITY</th>
+                    <th style="width: 20%;">RATE</th>
+                    <th style="width: 20%;">TOTAL</th>
+
+
+                  </tr>
+                </thead>
+                <tbody style="border-color: black;padding-bottom: 1.4rem; width: 100%;">
+
+                  <% if(productsData && productsData.length> 0) {%>
+
+
+
+
+                  <% for(let i=0; i < productsData.length ; i++){ %>
+
+
+                  <tr class="text-center " style="width: 100%;">
+
+                    <td style="background-color: #ffffff; width:20% ; text-align: center; ">
+
+                      <%=(i+1)%>
+
+                    </td>
+
+                    <td style="background-color: #ffffff; width:20% ; text-align: center; ">
+
+
+                      <%= productsData[i].productInfo.name %>
+
+                    </td>
+
+                    <td style="background-color: #ffffff; width:20% ; text-align: center; ">
+                      <%=productsData[i].quantity%>
+
+                    </td>
+
+                    <td style="background-color: #ffffff; width:20% ; text-align: center; ">
+                      <%=productsData[i].productInfo.price%>
+
+                    </td>
+
+                    <td style="background-color: #ffffff; width:20% ; text-align: center; ">
+                      <%=productsData[i].totalPrice%>
+                    </td>
+
+
+
+
+
+                  </tr><!-- END TR-->
+                  <%}%>
+
+                                                <%}%>
+
+
+
+                </tbody>
+              </table>
+
+              <DIV class="checkout__total__all px-5 mb-2" style="font-size: 1rem; font-weight: bold; margin-top: 2rem;">
+
+                <p>GROSS TOTAL <span>Rs.<%=orderData.grossTotal %>
+                  </span></p>
+                <p>COUPON DISCOUNT <span>
+                    Rs.<%=orderData.discountAmount %>
+                  </span></p>
+
+                <% if(orderData.categoryDiscount> 0){%>
+                <p>FLAT CATEGORY DISCOUNT <span> Rs.<%=orderData.categoryDiscount %></span></p>
+                <%}%>
+
+
+
+                            </DIV>
+
+
+                            <DIV class=" checkout__total__all border-0 px-5"
+                                style="font-size: 1rem; font-weight: bold;">
+
+                                <p class="font-weight-bold">FINAL PRICE <span style="color: rgb(0, 0, 0);">Rs.
+                                        <%=orderData.finalPrice %>
+                </span></p>
+
+
+              </DIV>
+
+            </div>
+
+
+
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+    </div>
+
+  </section>
+  <!-- Checkout Section End -->
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/jquery.nicescroll.min.js"></script>
+  <script src="/js/jquery.magnific-popup.min.js"></script>
+  <script src="/js/jquery.countdown.min.js"></script>
+  <script src="/js/jquery.slicknav.js"></script>
+  <script src="/js/mixitup.min.js"></script>
+  <script src="/js/owl.carousel.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+
+</html>

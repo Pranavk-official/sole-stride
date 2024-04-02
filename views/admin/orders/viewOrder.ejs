@@ -1,21 +1,21 @@
 <section class="container-fluid mt-5">
 
   <div class="header d-flex justify-content-between">
-      <h3 class="h3 text-second fw-bold mb-3 text-capitalize">Order Details </h3>
+    <h3 class="h3 text-second fw-bold mb-3 text-capitalize">Order Details </h3>
   </div>
 
 
-  <form action="/admin/orders/manage-order/changeStatus/<%- orderDetails._id %>" method="POST" class="card py-3 my-3 text-capitalize">
+  <form id="editOrderForm" action="/admin/orders/manage-order/changeStatus/<%- orderDetails._id %>" method="POST" class="card py-3 my-3 text-capitalize">
     <div class="card-header d-flex flex-column">
       <div class="row">
         <div class="col d-flex flex-column">
-          <span class="h4 fw-bold" >Customer: <span class="text-muted"><%- orderDetails.user.username %></span></span>
-          <span class="h4 fw-bold" >Order Id: <span class="text-muted"><%- orderDetails.items.orderID %></span></span>
-          <span class="h4 fw-bold" >Order placed at: <span class="text-muted"><%- orderDetails.createdAt.toLocaleDateString() %></span></span>
+          <span class="h4 fw-bold">Customer: <span class="text-muted"><%- orderDetails.user.username %></span></span>
+          <span class="h4 fw-bold">Order Id: <span class="text-muted"><%- orderDetails.items.orderID %></span></span>
+          <span class="h4 fw-bold">Order placed at: <span class="text-muted"><%- orderDetails.createdAt.toLocaleDateString() %></span></span>
         </div>
         <div class="col">
           <span class="h4 fw-bold">
-            Address: <span class="text-muted"><%- orderDetails.address.name.toLowerCase() + ', ' + orderDetails.address.house_name + ', ' + orderDetails.address.town + ', ' + orderDetails.address.state + ', PIN: ' + orderDetails.address.zipcode + ', PH:' + orderDetails.address.phone %></span>
+            Address: <span class="text-muted"><%- orderDetails.shippingAddress %></span>
           </span>
         </div>
       </div>
@@ -37,7 +37,7 @@
             <legend class="card-title h3 text-decoration-underline">Payment Detail</legend>
             <p class="card-text h5 mb-0 fw-bold"><span>Price: <span class="text-muted"><%- orderDetails.items.price %></span></span></p>
             <p class="card-text h5 mb-0 fw-bold"><span>Quantity: <span class="text-muted"><%- orderDetails.items.quantity %></span></span></p>
-            
+
             <p class="card-text h5 fw-bold">Payment Status: <small class="text-body-secondary text-uppercase"><%- orderDetails.paymentStatus %></small></p>
           </fieldset>
           <fieldset class="card p-3 my-3">
@@ -48,43 +48,46 @@
               <div class="col-md-6">
                 <select name="status" id="item-status" class="form-select <% if (orderDetails.items.status === 'Delivered') { %>
                   bg-success text-white
+                <% } else if (orderDetails.items.status === 'Cancelled') { %>
+                  bg-danger text-white
                 <% } %>">
                   <% if (orderDetails.items.status === 'Pending') { %>
-                    <option value="Confirmed">Confirmed</option>
-                    <% } %>
+                  <option value="Confirmed">Confirmed</option>
+                  <% } %>
                   <% if (orderDetails.items.status === 'Confirmed') { %>
-                    <option value="Shipped">Shipped</option>
-                    <% } %>
-                    <% if (orderDetails.items.status === 'Shipped') { %>
-                    <option value="Out for Delivery">Out for Delivery</option>
-                    <% } %>
-                    <% if (orderDetails.items.status === 'Out for Delivery') { %>
-                    <option value="Delivered">Delivered</option>
-                    <% } %>
-                    <% if (orderDetails.items.status === 'Delivered') { %>
-                    <option value="Delivered">Delivered</option>
-                    <% } %>
-                    <% if (orderDetails.items.status === 'In-Return') { %>
-                    <option value="Returned">Returned</option>
-                    <% } %>
-                    <% if (orderDetails.items.status === 'Returned') { %>
-                    <option value="Returned">Returned</option>
-                    <% } %>
+                  <option value="Shipped">Shipped</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'Shipped') { %>
+                  <option value="Out for Delivery">Out for Delivery</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'Out for Delivery') { %>
+                  <option value="Delivered">Delivered</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'Delivered') { %>
+                  <option value="Delivered">Delivered</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'In-Return') { %>
+                  <option value="Returned">Returned</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'Returned') { %>
+                  <option value="Returned">Returned</option>
+                  <% } %>
+                  <% if (orderDetails.items.status === 'Cancelled') { %>
+                  <option value="Returned">Cancelled</option>
+                  <% } %>
                 </select>
               </div>
               <div class="col-md-6">
-                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending' ) { %>
+                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending' || orderDetails.items.status === 'Delivered' ) { %>
 
-                  <a href="/admin/orders"><input type="none" value="Back To Orders" class="form-control btn"readonly></a>
+                <a href="/admin/orders"><input type="none" value="Back To Orders" class="form-control btn" readonly></a>
 
                 <% } else { %>
-                  <button type="submit" class="btn <% if (orderDetails.items.status === 'Delivered') { %>
+                <button type="submit" class="btn <% if (orderDetails.items.status === 'Delivered') { %>
                     btn-dark
                     <% } else { %>
                       btn-outline-warning
-                   <% } %>" <% if (orderDetails.items.status === 'Delivered') { %>
-                   disabled
-                  <% } %> >Change Status</button>
+                   <% } %>" <% if (orderDetails.items.status === 'Delivered') { %> disabled <% } %>>Change Status</button>
                 <% } %>
               </div>
             </div>
@@ -95,3 +98,70 @@
 
   </form>
 </section>
+
+
+<script defer>
+  const editOrderForm = document.querySelector('#editOrderForm');
+
+  editOrderForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(editOrderForm);
+    const data = Object.fromEntries(formData.entries());
+
+    Swal.fire({
+      title: 'Are you sure? You want to update this order',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, update it!'
+    }).then(async () => {
+
+      try {
+        const response = await fetch(editOrderForm.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+
+        if (!response.ok) {
+          throw new Error('Something went wrong');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          Swal.fire({
+            title: 'Success!',
+            text: result.message,
+            icon: 'success',
+            timer: 1500
+          }).then(() => {
+            location.reload();
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: result.message,
+            icon: 'error',
+            timer: 1500
+          })
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: 'Error!',
+          text: error.message || 'Something went wrong',
+          icon: 'error',
+          timer: 1500
+        })
+      }
+
+    })
+
+  })
+</script>

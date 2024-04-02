@@ -53,32 +53,44 @@ editAddress.addEventListener("show.bs.modal", async (e) => {
   }
 });
 
-const deleteAddress = async (id) => {
-  try {
-     // Show a confirmation dialog
-     const result = await Swal.fire({
-       title: 'Are you sure?',
-       text: "You won't be able to revert this!",
-       icon: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#3085d6',
-       cancelButtonColor: '#d33',
-       confirmButtonText: 'Yes, delete it!'
-     });
- 
-     // Check if the user confirmed the action
-     if (result.isConfirmed) {
-      const response = await fetch(`/user/address/delete-adddress/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+async function deleteAddress(addressId) {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `/user/address/delete-address/${addressId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-      });
-     }
-  } catch (error) {
-     console.error('Error deleting address:', error);
-  }
- };
+
+        Swal.fire("Deleted!", "Your address has been deleted.", "success").then(
+          () => location.assign("/checkout")
+        );
+        // Optionally, refresh the page or remove the address from the DOM here
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!" + error,
+        });
+      }
+    }
+  });
+}
+
 
 const form = document.querySelector("#add-address");
 

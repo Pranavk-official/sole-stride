@@ -46,36 +46,42 @@
         </tr>
       </thead>
       <tbody>
-        <% banners.forEach(function(banner,index) { %>
-        <tr class="align-middle text-center">
-          <td>
-            <%= index+1 %>
-          </td>
-          <td><img class="mx-auto d-block img-fluid img-thumbnail" width="290rem" src="/uploads/banners/<%= banner.image.filename %>" alt=""></td>
-          <td><%= banner.name %></td>
-          <td><a href="<%= banner.reference %>">Check Reference</a></td>
-          <% if (banner.isActive) { %>
-          <td class="text-success">Listed</td>
-          <% } else { %>
-          <td class="text-danger">Unlisted</td>
-          <% } %>
-          <td>
-
-            <div class="btn-group mx-2" role="group" aria-label="Delete/Edit Button">
-              <div class="d-flex align-items-center">
-                <a href="/admin/banners/edit-banner/<%= banner._id %>" class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil"></i>
-                  <!-- Edit -->
-                </a>
-                <button type="button" onclick="deleteBanner('<%= banner._id %>','<%= banner.image.filename %>')" class="btn btn-sm btn-danger">
-                  <i class="bi bi-trash"></i>
-                  <!-- Delete -->
-                </button>
+        <% if (banners !== 'undefined' && banners.length > 0) { %>
+          <% banners.forEach(function(banner,index) { %>
+          <tr class="align-middle text-center">
+            <td>
+              <%= index+1 %>
+            </td>
+            <td><img class="mx-auto d-block img-fluid img-thumbnail" width="290rem" src="/uploads/banners/<%= banner.image.filename %>" alt=""></td>
+            <td><%= banner.name %></td>
+            <td><a href="<%= banner.reference %>">Check Reference</a></td>
+            <% if (banner.isActive) { %>
+            <td class="text-success">Listed</td>
+            <% } else { %>
+            <td class="text-danger">Unlisted</td>
+            <% } %>
+            <td>
+  
+              <div class="btn-group mx-2" role="group" aria-label="Delete/Edit Button">
+                <div class="d-flex align-items-center">
+                  <a href="/admin/banners/edit-banner/<%= banner._id %>" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i>
+                    <!-- Edit -->
+                  </a>
+                  <button type="button" onclick="deleteBanner('<%= banner._id %>','<%= banner.image.filename %>')" class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash"></i>
+                    <!-- Delete -->
+                  </button>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-        <% }); %>
+            </td>
+          </tr>
+          <% }); %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="text-center text-danger table-danger">No banners found</td>
+          </tr>
+        <% } %>
       </tbody>
     </table>
   </div>

@@ -1,63 +1,43 @@
 <main class="main my-5">
   <div class="d-column d-lg-flex justify-content-center m-0">
-    <div
-      class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3"
-    >
-      <div
-        id="usersList"
-        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
-        style="
+    <div class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3">
+      <div id="usersList" class="col-sm-5 d-flex flex-column justify-content-center align-items-center" style="
           border-radius: 5px;
           height: 160px;
           background-color: rgba(62, 15, 180, 0.377);
-        "
-      >
+        ">
         <div style="font-size: 2rem; color: rgb(0, 0, 0)"><%- usersCount %></div>
 
         <div class="text-center mt-3 font-weight-bold h4">Total Users</div>
       </div>
 
-      <div
-        id="productsList"
-        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
-        style="
+      <div id="productsList" class="col-sm-5 d-flex flex-column justify-content-center align-items-center" style="
           border-radius: 5px;
           height: 160px;
           background-color: rgba(251, 144, 5, 0.377);
-        "
-      >
+        ">
         <div style="font-size: 2rem; color: rgb(0, 0, 0)"><%- productsCount %></div>
 
         <div class="text-center mt-3 font-weight-bold h4">Total Products</div>
       </div>
     </div>
 
-    <div
-      class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3"
-    >
-      <div
-        id="ordersList"
-        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
-        style="
+    <div class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3">
+      <div id="ordersList" class="col-sm-5 d-flex flex-column justify-content-center align-items-center" style="
           border-radius: 5px;
           height: 160px;
           background-color: rgba(15, 180, 89, 0.377);
-        "
-      >
+        ">
         <div style="font-size: 2rem; color: rgb(0, 0, 0)"><%- ordersCount %></div>
 
         <div class="text-center mt-3 font-weight-bold h4">Total Orders</div>
       </div>
 
-      <div
-        id="salesList"
-        class="col-sm-5 d-flex flex-column justify-content-center align-items-center"
-        style="
+      <div id="salesList" class="col-sm-5 d-flex flex-column justify-content-center align-items-center" style="
           border-radius: 5px;
           height: 160px;
           background-color: rgba(14, 125, 244, 0.377);
-        "
-      >
+        ">
         <div style="font-size: 2rem">$<%- totalRevenue %></div>
 
         <div class="text-center mt-3 font-weight-bold h4">
@@ -67,123 +47,486 @@
     </div>
   </div>
 
-  <!-- <div
-    class="d-flex flex-column align-items-center justify-content-center m-lg-5"
-  >
-    <h2 class="text-center m-5">Total Sales Revenue Chart</h2>
 
-    <div class="col-lg-10">
-      <canvas class="w-100 h-auto" id="myChart"></canvas>
+  <div class="row">
+    <div class="d-flex col flex-column align-items-center justify-content-center m-lg-5">
+      <h2 class="text-center m-5">Total Sales Revenue Chart</h2>
+  
+      <div class="col-lg-10">
+        <canvas class="w-100 h-auto" id="myChart"></canvas>
+      </div>
+  
+      <div class="mt-5 d-flex">
+        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2" data="yearly">
+          Yearly
+        </button>
+        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2" data="weekly">
+          Weekly
+        </button>
+        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2" data="daily">
+          Daily
+        </button>
+      </div>
     </div>
-
-    <div class="mt-5 d-flex">
-      <button
-        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
-        data="yearly"
-      >
-        Yearly
-      </button>
-      <button
-        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
-        data="weekly"
-      >
-        Weekly
-      </button>
-      <button
-        class="salesChart ml-4 nav-link btn btn-outline-info py-1 px-2"
-        data="daily"
-      >
-        Daily
-      </button>
+  
+    <div class="d-flex col flex-column align-items-center justify-content-center m-lg-5">
+      <h2 class="text-center m-5">Total Orders Placed Chart</h2>
+  
+      <div class="col-lg-10">
+        <canvas class="w-100 h-auto" id="myChartOrders"></canvas>
+      </div>
+  
+      <div class="mt-5 d-flex">
+        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info" data="yearly">
+          Yearly
+        </button>
+        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info" data="weekly">
+          Weekly
+        </button>
+        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info" data="daily">
+          Daily
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="d-flex col flex-column align-items-center justify-content-center m-5">
+      <h2 class="text-center m-5">Types Of Orders Chart</h2>
+  
+      <div class="col-md-10">
+        <canvas class="w-100 h-auto" id="myChartOrderType"></canvas>
+      </div>
+  
+      <div class="mt-5 d-flex">
+        <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info" data="yearly">
+          Yearly
+        </button>
+        <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info" data="weekly">
+          Weekly
+        </button>
+        <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info" data="daily">
+          Daily
+        </button>
+      </div>
+    </div>
+  
+    <div class="d-flex col flex-column align-items-center justify-content-center m-5">
+      <h2 class="text-center m-5">Category Wise Sales</h2>
+  
+      <div class="col-md-10">
+        <canvas class="w-100 h-auto" id="myChartCategoryWiseSales"></canvas>
+      </div>
+  
+      <div class="mt-5 d-flex">
+        <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2" data="yearly">
+          Yearly
+        </button>
+        <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2" data="weekly">
+          Weekly
+        </button>
+        <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2" data="daily">
+          Daily
+        </button>
+      </div>
     </div>
   </div>
 
-  <div
-    class="d-flex flex-column align-items-center justify-content-center m-lg-5"
-  >
-    <h2 class="text-center m-5">Total Orders Placed Chart</h2>
-
-    <div class="col-lg-10">
-      <canvas class="w-100 h-auto" id="myChartOrders"></canvas>
-    </div>
-
-    <div class="mt-5 d-flex">
-      <button
-        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="yearly"
-      >
-        Yearly
-      </button>
-      <button
-        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="weekly"
-      >
-        Weekly
-      </button>
-      <button
-        class="ordersChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="daily"
-      >
-        Daily
-      </button>
-    </div>
-  </div>
-
-  <div class="d-flex flex-column align-items-center justify-content-center m-5">
-    <h2 class="text-center m-5">Types Of Orders Chart</h2>
-
-    <div class="col-md-7 col-lg-6">
-      <canvas class="w-100 h-auto" id="myChartOrderType"></canvas>
-    </div>
-
-    <div class="mt-5 d-flex">
-      <button
-        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="yearly"
-      >
-        Yearly
-      </button>
-      <button
-        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="weekly"
-      >
-        Weekly
-      </button>
-      <button
-        class="orderTypeChart ml-4 nav-link py-1 px-2 btn btn-outline-info"
-        data="daily"
-      >
-        Daily
-      </button>
-    </div>
-  </div>
-
-  <div class="d-flex flex-column align-items-center justify-content-center m-5">
-    <h2 class="text-center m-5">Category Wise Sales</h2>
-
-    <div class="col-md-7 col-lg-6">
-      <canvas class="w-100 h-auto" id="myChartCategoryWiseSales"></canvas>
-    </div>
-
-    <div class="mt-5 d-flex">
-      <button
-        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
-        data="yearly"
-      >
-        Yearly
-      </button>
-      <button
-        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
-        data="weekly"
-      >
-        Weekly
-      </button>
-      <button
-        class="categoryChart btn btn-outline-info ml-4 nav-link py-1 px-2"
-        data="daily"
-      >
-        Daily
-      </button>
-    </div>
-  </div> -->
 </main>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script defer>
+  const ctx = document.getElementById('myChart');
+  const ctxOrder = document.getElementById('myChartOrders');
+  const ctxOrderType = document.getElementById('myChartOrderType');
+  const ctxCategoryWise = document.getElementById('myChartCategoryWiseSales');
+
+  let salesTimeBase = 'yearly';
+  let orderChartTimeBase = 'yearly';
+  let orderTypeChartTimeBase = 'yearly';
+  let CategoryChartTimeBase = 'yearly';
+
+  let salesButtons = document.querySelectorAll('.salesChart');
+
+  salesButtons.forEach((btn) => {
+
+    btn.addEventListener('click', (e) => {
+
+      let val = btn.getAttribute('data');
+
+      salesTimeBase = val;
+
+      updateData();
+    })
+  })
+
+  let orderButtons = document.querySelectorAll('.ordersChart');
+
+  orderButtons.forEach((btn) => {
+
+    btn.addEventListener('click', (e) => {
+
+      let val = btn.getAttribute('data');
+
+      orderChartTimeBase = val;
+
+      updateData();
+    })
+  })
+
+
+  let orderTypeButtons = document.querySelectorAll('.orderTypeChart');
+
+  orderTypeButtons.forEach((btn) => {
+
+    btn.addEventListener('click', (e) => {
+
+      let val = btn.getAttribute('data');
+
+      orderTypeChartTimeBase = val;
+
+      updateData();
+    })
+  })
+
+  let categoryButtons = document.querySelectorAll('.categoryChart');
+
+  categoryButtons.forEach((btn) => {
+
+    btn.addEventListener('click', (e) => {
+
+      let val = btn.getAttribute('data');
+
+      CategoryChartTimeBase = val;
+
+      updateData();
+    })
+  })
+
+
+
+
+  let salesChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['loading'],
+      datasets: [{
+          label: 'Sales (rs)',
+          data: [0],
+          backgroundColor: 'rgba(14, 125, 244, 0.377)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        },
+
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          min: 0,
+
+        }
+      }
+    }
+  });
+
+
+
+  let OrderChart = new Chart(ctxOrder, {
+    type: 'bar',
+    data: {
+      labels: ['loading'],
+      datasets: [{
+        label: 'Orders (no)',
+        data: [0],
+        backgroundColor: 'rgba(192, 75, 75, 0.2)',
+        borderColor: 'rgba(192, 75, 75, 1)',
+        borderWidth: 1,
+      }, ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+  let orderTypeChart = new Chart(ctxOrderType, {
+    type: 'doughnut',
+    data: {
+      labels: ['loading'],
+      datasets: [
+
+        {
+          label: 'Orders (no)',
+          data: [0],
+          backgroundColor: ['rgba(192, 75, 75)', 'rgba(14, 125, 244)'],
+          borderColor: ['rgba(192, 75, 75, 1)'],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+
+  let categoryChart = new Chart(ctxCategoryWise, {
+    type: 'doughnut',
+    data: {
+      labels: ['loading'],
+      datasets: [
+
+        {
+          label: 'Orders (no)',
+          data: [0],
+          backgroundColor: ['rgba(15, 180, 89)', 'rgba(14, 125, 244)'],
+          borderColor: ['rgba(15, 180, 89)', 'rgba(14, 125, 244)'],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+
+
+  function updateData() {
+
+    const currentURL = window.location.origin;
+
+    fetch(currentURL + `/admin/chart?salesChart=${salesTimeBase}&orderChart=${orderChartTimeBase}&orderType=${orderTypeChartTimeBase}&categoryChart=${CategoryChartTimeBase}`, {
+
+        method: 'GET',
+
+      })
+      .then(response => response.json())
+      .then((Data) => {
+
+        let {
+          saleChartInfo,
+          orderTypeChartInfo,
+          categoryChartInfo,
+          orderQuantityChartInfo
+        } = Data;
+
+
+
+        console.log('sales \n \n', saleChartInfo, '\n\n\n')
+
+        console.log('orderType \n \n', orderTypeChartInfo, '\n\n\n')
+
+        console.log('categoryBased \n \n', categoryChartInfo, '\n\n\n')
+
+
+        let salesChartLabel;
+
+        let totalSalesValData;
+
+
+        if (saleChartInfo.timeBasis === 'yearly') {
+
+
+          let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+          salesChartLabel = saleChartInfo.data.map((data) => {
+            return months[data._id.month - 1]
+          });
+
+
+          totalSalesValData = saleChartInfo.data.map((data) => {
+            return data.totalSales
+          })
+
+
+        } else if (saleChartInfo.timeBasis === 'weekly') {
+
+          salesChartLabel = saleChartInfo.data.map((data) => {
+            return data._id
+          });
+
+          totalSalesValData = saleChartInfo.data.map((data) => {
+            return data.totalSales
+          })
+
+        } else if (saleChartInfo.timeBasis === 'daily') {
+
+
+          salesChartLabel = saleChartInfo.data.map((data) => {
+
+            const hr = data._id;
+
+            return `${hr}:00 - ${hr + 1}:00 UTC`
+          });
+
+          totalSalesValData = saleChartInfo.data.map((data) => {
+            return data.totalSales
+          })
+        }
+
+        console.log(salesChartLabel);
+        console.log(totalSalesValData)
+
+        salesChart.data.labels = salesChartLabel;
+        salesChart.data.datasets[0].data = totalSalesValData;
+
+        // Call the update method to refresh the chart
+        salesChart.update();
+
+
+
+
+        let OrderQuantityChartLabels;
+
+        let OrderQuantityChartData;
+
+
+        if (orderQuantityChartInfo.timeBasis === 'yearly') {
+
+
+          let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+          OrderQuantityChartLabels = orderQuantityChartInfo.data.map((data) => {
+            return months[data._id.month - 1]
+          });
+
+
+          OrderQuantityChartData = orderQuantityChartInfo.data.map((data) => {
+            return data.totalOrder
+          })
+
+
+        } else if (orderQuantityChartInfo.timeBasis === 'weekly') {
+
+          OrderQuantityChartLabels = orderQuantityChartInfo.data.map((data) => {
+            return data._id
+          });
+
+          OrderQuantityChartData = orderQuantityChartInfo.data.map((data) => {
+            return data.totalOrder
+          })
+
+        } else if (orderQuantityChartInfo.timeBasis === 'daily') {
+
+
+          OrderQuantityChartLabels = orderQuantityChartInfo.data.map((data) => {
+
+            const hr = data._id;
+
+            return `${hr}:00 - ${hr + 1}:00 UTC`
+          });
+
+          OrderQuantityChartData = orderQuantityChartInfo.data.map((data) => {
+            return data.totalOrder
+          })
+        }
+
+        console.log(OrderQuantityChartLabels);
+        console.log(OrderQuantityChartData);
+
+
+        OrderChart.data.labels = OrderQuantityChartLabels;
+        OrderChart.data.datasets[0].data = OrderQuantityChartData;
+
+        // Call the update method to refresh the chart
+        OrderChart.update();
+
+
+
+
+        let orderTypeLabel = orderTypeChartInfo.data.map((type) => type._id);
+
+        let orderTypeValues = orderTypeChartInfo.data
+          .map((type) => type.totalOrder);
+
+
+        orderTypeChart.data.labels = orderTypeLabel;
+        orderTypeChart.data.datasets[0].data = orderTypeValues;
+
+        // Call the update method to refresh the chart
+        orderTypeChart.update();
+
+
+
+
+        let categoryWiseLabel = categoryChartInfo.data.map((type) => type._id);
+
+        let categoryWiseValues = categoryChartInfo.data.map((type) => type.count);
+
+
+        categoryChart.data.labels = categoryWiseLabel;
+        categoryChart.data.datasets[0].data = categoryWiseValues;
+
+        // Call the update method to refresh the chart
+        categoryChart.update();
+
+
+        salesButtons.forEach((btn) => {
+
+          if (btn.getAttribute('data') === salesTimeBase) {
+
+            btn.style.color = 'rgb(138, 240, 240)';
+          } else {
+            btn.style.color = 'white'
+          }
+        })
+
+
+        orderButtons.forEach((btn) => {
+
+          if (btn.getAttribute('data') === orderChartTimeBase) {
+
+            btn.style.color = 'rgb(138, 240, 240)';
+          } else {
+            btn.style.color = 'white'
+          }
+        })
+
+      })
+
+    orderTypeButtons.forEach((btn) => {
+
+      if (btn.getAttribute('data') === orderTypeChartTimeBase) {
+
+        btn.style.color = 'rgb(138, 240, 240)';
+      } else {
+        btn.style.color = 'white'
+      }
+    })
+
+    categoryButtons.forEach((btn) => {
+
+      if (btn.getAttribute('data') === CategoryChartTimeBase) {
+
+        btn.style.color = 'rgb(138, 240, 240)';
+      } else {
+        btn.style.color = 'white'
+      }
+    })
+
+  }
+
+
+  window.onload = updateData()
+</script>

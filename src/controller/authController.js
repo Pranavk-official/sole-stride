@@ -11,17 +11,17 @@ const User = require("../model/userSchema");
 const OTP = require("../model/otpSchema");
 const { sendOtpEmail } = require("../helpers/userVerificationHelper");
 
-
 function generateRefferalCode(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let referralCode = '';
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let referralCode = "";
   for (let i = 0; i < length; i++) {
-      referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    referralCode += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
   }
   return referralCode;
 }
-
-
 
 const adminLayout = "./layouts/adminLayout";
 
@@ -36,7 +36,7 @@ module.exports = {
 
     res.render("auth/admin/login", {
       locals,
-      layout: adminLayout,
+      layout: "./layouts/authLayout",
     });
   },
   getAdminRegister: async (req, res) => {
@@ -46,7 +46,7 @@ module.exports = {
 
     res.render("auth/admin/register", {
       locals,
-      layout: adminLayout,
+      layout: "./layouts/authLayout",
     });
   },
   adminRegister: async (req, res) => {
@@ -84,6 +84,7 @@ module.exports = {
       email,
       password,
       isAdmin: true,
+      isVerified: true,
     });
 
     let savedUser = await user.save();
@@ -122,8 +123,8 @@ module.exports = {
    * User Registration and Authentication
    */
   getLogin: async (req, res) => {
-    if(req.session.verifyToken){
-      delete req.session.verifyToken
+    if (req.session.verifyToken) {
+      delete req.session.verifyToken;
     }
     console.log(req.session);
     const locals = {
@@ -135,18 +136,17 @@ module.exports = {
     });
   },
   getRegister: async (req, res) => {
-    if(req.session.verifyToken){
-      delete req.session.verifyToken
+    if (req.session.verifyToken) {
+      delete req.session.verifyToken;
     }
 
     const locals = {
       title: "SoleStride - Register",
     };
 
-    if(req.query.ref){
-      locals.refferalCode = req.query.ref
+    if (req.query.ref) {
+      locals.referralCode = req.query.ref;
     }
-    
 
     res.render("auth/user/register", {
       locals,
@@ -164,11 +164,17 @@ module.exports = {
       return res.redirect("/register");
     }
 
-
     console.log(req.body);
 
-    const { username, firstName, lastName, email, password, confirmPassword, referral } =
-      req.body;
+    const {
+      username,
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      referral,
+    } = req.body;
 
     // const existingUser = await User.findOne({ email });
 
@@ -181,47 +187,54 @@ module.exports = {
       req.flash("error", "Passwords do not match");
       return res.redirect("/register");
     }
-    const refferalCode = generateRefferalCode(8);
+    let referralCode = generateRefferalCode(8);
+    console.log("referralCode: " + referralCode);
     const user = new User({
       username,
       firstName,
       lastName,
       email,
       password,
-      refferalCode
+      referralCode,
     });
 
-    
-    if(referral){
-      const refferal = await User.findOne({referralCode: referral})
+    if (referral) {
+      console.log("Stuck Here");
+      const refferer = await User.findOne({ referralCode: referral });
 
-      console.log({refferal: refferal, referralCode: referral});
-      
-      user.referralToken = refferal._id
+      console.log({ refferal: refferer, referralCode: referral });
+
+      user.referralToken = refferer._id;
     }
 
     let savedUser = await user.save();
 
-    if (!savedUser) {
+    try {
+      if (!savedUser) {
+        req.flash("error", "User Registration Unsuccessfull");
+        return res.redirect("/register");
+      } else {
+        req.session.verifyToken = savedUser._id;
+
+        const isOtpSent = sendOtpEmail(savedUser, res);
+
+        if (isOtpSent) {
+          req.flash(
+            "success",
+            "User Registered Successfully, Please verify your email!!!!!"
+          );
+          return res.redirect("/verify-otp");
+        } else {
+          req.flash("error", "User verification falied try again by loggin in");
+          res.redirect("/login");
+        }
+
+        // return res.redirect("/login");
+      }
+    } catch (err) {
+      console.log(err);
       req.flash("error", "User Registration Unsuccessfull");
       return res.redirect("/register");
-    } else {
-      req.session.verifyToken = savedUser._id;
-
-      const isOtpSent = sendOtpEmail(savedUser, res);
-
-      if (isOtpSent) {
-        req.flash(
-          "success",
-          "User Registered Successfully, Please verify your email!!!!!"
-        );
-        return res.redirect("/verify-otp");
-      } else {
-        req.flash("error", "User verification falied try again by loggin in");
-        res.redirect("/login");
-      }
-
-      // return res.redirect("/login");
     }
   },
   userLogin: async (req, res, next) => {
@@ -236,40 +249,40 @@ module.exports = {
       // return res.status(422).json({ errors: errors.array() });
       return res.redirect("/login");
     }
-    
-    const user = await User.findOne({ email: req.body.email, isAdmin: false});
-    
+
+    const user = await User.findOne({ email: req.body.email, isAdmin: false });
+
     if (user) {
       if (user.isBlocked) {
         req.flash("error", "You are blocked by the admin!!!!!!");
         return res.redirect("/login");
       }
-      
+
       if (!user.isVerified) {
         if (!req.session.verifyToken) {
           req.session.verifyToken = user._id;
         }
         const isOtpSent = sendOtpEmail(user, res);
-        
+
         if (isOtpSent) {
           req.flash(
             "success",
             "OTP send to email, Please verify your email!!!!!"
-            );
-            return res.redirect("/verify-otp");
-          } else {
-            req.flash("error", "User verification falied try again by loggin in");
-            return res.redirect("/login");
-          }
+          );
+          return res.redirect("/verify-otp");
         } else {
-          passport.authenticate("user-local", (err, user, info) => {
-            if (err) {
-              console.log(err);
-              return next(err);
-            }
-            if (!user) {
-              console.log(info);
-              req.flash("error", "Invalid Credentials");
+          req.flash("error", "User verification falied try again by loggin in");
+          return res.redirect("/login");
+        }
+      } else {
+        passport.authenticate("user-local", (err, user, info) => {
+          if (err) {
+            console.log(err);
+            return next(err);
+          }
+          if (!user) {
+            console.log(info);
+            req.flash("error", "Invalid Credentials");
             return res.redirect("/login");
           }
           req.logIn(user, (err) => {
@@ -278,7 +291,7 @@ module.exports = {
               return next(err);
             }
             req.flash("success", "Admin Logged In");
-            req.flash('success','User Successfully Logged In');
+            req.flash("success", "User Successfully Logged In");
             return res.redirect("/");
           });
         })(req, res, next);
@@ -297,18 +310,17 @@ module.exports = {
     };
 
     // console.log(req.session);
- 
-    if ( !req.session.verifyToken ) {
+
+    if (!req.session.verifyToken) {
       return res.redirect("/");
-    }  
+    }
 
     res.render("auth/user/verifyOtp", {
       locals,
     });
   },
-  
-  verifyOtp: async (req, res) => {
 
+  verifyOtp: async (req, res) => {
     const { val1, val2, val3, val4, val5, val6 } = req.body;
     const otp = val1 + val2 + val3 + val4 + val5 + val6;
 
@@ -319,85 +331,81 @@ module.exports = {
 
       if (otpVerifyData) {
         if (await bcrypt.compare(otp, otpVerifyData.otp)) {
-
           const updateUser = await User.updateOne(
             { _id: req.session.verifyToken },
             {
-              $set: { isVerified: true, },
+              $set: { isVerified: true },
             }
           );
 
           if (updateUser) {
-
             const user = await User.findOne({ _id: req.session.verifyToken });
-            
+
             console.log(`user ${user.referralToken}`);
 
-            if(user.referralToken){
-              const referrer = await User.findOne({_id: user.referralToken});
+            if (user.referralToken) {
+              const referrer = await User.findOne({ _id: user.referralToken });
 
-              if(referrer){
+              if (referrer) {
                 referrer.refferalRewards += 100;
                 user.refferalRewards += 100;
 
-                const referrerWallet = await Wallet.findOne({userId:referrer._id});
-                const userWallet = await Wallet.findOne({userId:user._id});
+                const referrerWallet = await Wallet.findOne({
+                  userId: referrer._id,
+                });
+                const userWallet = await Wallet.findOne({ userId: user._id });
 
-                if(!referrerWallet){
+                if (!referrerWallet) {
                   const referrerWallet = new Wallet({
-                    userId:referrer._id,
+                    userId: referrer._id,
                     balance: 100,
-                    transactions:[
+                    transactions: [
                       {
-                        date:Date.now(),
-                        amount:100,
-                        message:"Refferal Reward",
-                        type:"Credit"
-                      }
-                    ]
+                        date: Date.now(),
+                        amount: 100,
+                        message: "Refferal Reward",
+                        type: "Credit",
+                      },
+                    ],
                   });
                   await referrerWallet.save();
-
-                } else{
+                } else {
                   referrerWallet.balance += 100;
                   referrerWallet.transactions.push({
-                    date:Date.now(),
-                    amount:100,
-                    message:"Refferal Reward",
-                    type:"Credit"
+                    date: Date.now(),
+                    amount: 100,
+                    message: "Refferal Reward",
+                    type: "Credit",
                   });
                   await referrerWallet.save();
                 }
 
-
-                if(!userWallet){
+                if (!userWallet) {
                   const userWallet = new Wallet({
-                    userId:user._id,
+                    userId: user._id,
                     balance: 100,
-                    transactions:[
+                    transactions: [
                       {
-                        date:Date.now(),
-                        amount:100,
-                        message:"Refferal Reward",
-                        type:"Credit"
-                      }
-                    ]
+                        date: Date.now(),
+                        amount: 100,
+                        message: "Refferal Reward",
+                        type: "Credit",
+                      },
+                    ],
                   });
                   await userWallet.save();
-                } 
+                }
 
                 referrer.successfullRefferals.push({
-                  date:Date.now(),
-                  username:user.username,
-                  status: 'Successful Refferal'
+                  date: Date.now(),
+                  username: user.username,
+                  status: "Successful Refferal",
                 });
 
                 await referrer.save();
                 await user.save();
               }
             }
-
-
 
             req.flash("success", "User verificaion successfull, Please Login");
             console.log("success");
@@ -450,15 +458,14 @@ module.exports = {
    */
   resendOTP: async (req, res) => {
     try {
-
       let userId = req.session.passwordResetToken
         ? req.session.passwordResetToken
         : req.session.verifyToken;
 
-      if(req.session.forgotPassToken){
-        userId = req.session.forgotPassToken
+      if (req.session.forgotPassToken) {
+        userId = req.session.forgotPassToken;
       }
-      
+
       const user = await User.findOne({
         _id: userId,
         isAdmin: false,
@@ -504,14 +511,14 @@ module.exports = {
     const { email } = req.body;
 
     const user = await User.findOne({ email });
-    const userId = user._id
+    const userId = user._id;
     if (user) {
       const otpSend = sendOtpEmail(user, res);
-      
-      req.session.forgotPass = true
+
+      req.session.forgotPass = true;
       if (otpSend) {
         req.flash("success", "OTP send to mail");
-        req.session.forgotPass = true
+        req.session.forgotPass = true;
         req.session.forgotPassToken = userId;
         return res.redirect("/forgot-password/verify-otp");
       }
@@ -526,10 +533,9 @@ module.exports = {
 
     console.log(req.session);
 
-    if ( !req.session.forgotPass) {
+    if (!req.session.forgotPass) {
       return res.redirect("/");
-    }  
-    
+    }
 
     res.render("auth/user/verifyOtp", {
       locals,
@@ -568,7 +574,7 @@ module.exports = {
       }
 
       const user = await User.findById(userId);
-      const hashPwd = await bcrypt.hash(password, 10)
+      const hashPwd = await bcrypt.hash(password, 10);
       if (user) {
         const updatedUser = await User.updateOne(
           { _id: user._id },

@@ -24,34 +24,16 @@
 </style>
 
 <!--================Login Box Area =================-->
-<section class="admin-login_box_area section-margin my-5">
+<section class="admin-login_box_area section-margin" style="margin-top: 0%;">
   <div class="container">
     <div class="row">
-      <div class="row">
-        <% if (error && error.length > 0) { %>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <% error.forEach(element => { %>
-          <span><%- element %></span>
-          <% }) %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <% } %>
-        <% if (success && success.length > 0) { %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <% success.forEach(element => { %>
-          <span><%- element %></span>
-          <% }) %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <% } %>
-      </div>
       <div class="col-lg-6">
         <div class="admin-login_box_img">
           <div class="hover">
-            <h4>New to our website?</h4>
-            <p>There are advances being made in science and technology everyday, and a good example of
-              this is the</p>
-            <a class="btn btn-outline-light" href="/admin/register">Create an Account</a>
+            <h4>Admin Login</h4>
+            <!-- <button class="btn btn-outline-light" disabled>
+              <a class="nav-link" href="/admin/register">Create an Account</a>
+            </button> -->
           </div>
         </div>
       </div>

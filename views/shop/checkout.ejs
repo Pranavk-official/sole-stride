@@ -25,14 +25,16 @@
         <ul class="list-group mb-3 text-capitalize">
           <% cartList.forEach(item => { %>
           <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
+            <div class="fs-5">
               <h6 class="my-0"><%- item.product_id.product_name %></h6>
               <small class="text-body-secondary">Size: <%- item.size.value %></small> <br>
               <small class="text-body-secondary">Color: <%- item.color.name %></small> <br>
               <small class="text-body-secondary">Quantity: <%- item.quantity %></small>
             </div>
-            <span class="text-body-secondary">Price $<%- item.itemTotal %></span> <br>
-            <!-- <span class="text-body-secondary fw-semibold">Item Total: $<%- item.itemTotal %></span> -->
+            <div class="d-flex flex-column align-items-end lead fs-6">
+              <span class="fw-semibold text-body-secondary">Price per item: <span class="text-muted">₹<%- item.price %></span></span>
+              <span class="text-body-secondary fw-semibold">Total: $<%- item.itemTotal %></span>
+            </div>
           </li>
           <% }) %>
           <li class="list-group-item d-flex justify-content-between bg-body-tertiary d-none" id="appliedCoupon">
@@ -40,7 +42,7 @@
               <h6 class="my-0">Coupon code</h6>
               <small class="text-uppercase" id="coupon"></small>
             </div>
-            <span class="text-success" id="discountAmount">−$</span>
+            <span class="text-success" id="discountAmount">−₹</span>
           </li>
           <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon) { %>
           <li class="list-group-item d-flex justify-content-between bg-body-tertiary" id="appliedCoupon">
@@ -48,13 +50,13 @@
               <h6 class="my-0">Coupon code</h6>
               <small class="text-uppercase" id="coupon"><%- userCart.coupon.code %></small>
             </div>
-            <span class="text-success" id="discountAmount">−$<%- userCart.couponDiscount %></span>
+            <span class="text-success" id="discountAmount">−₹<%- userCart.couponDiscount %></span>
           </li>
           <% } %>
 
           <li class="list-group-item d-flex justify-content-between">
-            <span>Total (INR)</span>
-            <strong>$<span id="grandTotal"><%- totalPrice %></span></strong>
+            <span>Grand Total (INR)</span>
+            <strong>₹<span id="grandTotal"><%- totalPrice %></span></strong>
           </li>
         </ul>
 
@@ -70,7 +72,7 @@
         </form>
 
         <div id="couponsAccordion" class="text-capitalize accordion mt-4">
-          <h6 class="mb-3">Available Coupons</h6>
+          <h6 class="mb-3 fs-5">Available Coupons</h6>
           <% if (typeof coupons !== 'undefined' && coupons.length > 0) { %>
             <% coupons.forEach(function(coupon, index) { %>
               <div class="accordion-item">
@@ -124,26 +126,28 @@
               <% if (address.length > 0) { %>
               <!-- Toolbar-->
               <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-3">
-                <h6 class="fs-base  mb-0">Select Billing Address:</h6>
+                <h6 class="fs-base fs-5  mb-0">Select Billing Address:</h6>
               </div>
 
               <!-- Addresses list-->
               <div class="table table-responsive table-striped mt-0">
                 <table class="table table-hover mb-0">
                   <thead>
-                    <tr>
+                    <tr class="align-middle fs-5">
                       <th>Address</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% address.forEach((item,index) => { %>
-                    <tr>
+                    <tr class="align-middle fs-5">
 
                       <td class="py-3 align-middle text-capitalize">
                         <div class="d-flex align-items-center">
-                          <input autocomplete="false" required class="mx-2" type="radio" id="address-<%= index %>" name="address" value="<%= item._id %>">
-                          <label class="fw-semibold" for="address-<%= index %>">
+                          <input autocomplete="false" required class="mx-2" type="radio" <% if (index === 0) { %>
+                           checked
+                          <% } %> id="address-<%= index %>" name="address" value="<%= item._id %>">
+                          <label class="" for="address-<%= index %>">
                             <%- item.name.toLowerCase() + ', ' + item.house_name + ', ' + item.town + ', ' + item.state + ', PIN: ' + item.zipcode + ', PH:' + item.phone %>
                           </label>
                         </div>
@@ -209,20 +213,31 @@
                 <div class="block-header" id="headingThree" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Pay on delivery</a></strong></div>
                 <div class="collapse show" id="collapseThree" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                   <div class="block-body py-5 d-flex align-items-center">
-                    <input type="radio" name="paymentMethod" id="payment-method-1" value="COD" checked>
-                    <label class="ms-3" for="payment-method-1"><strong class="d-block text-uppercase mb-2"> Pay on delivery</strong><span class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit.    </span></label>
+                    <input type="radio" name="paymentMethod" id="payment-method-1" value="COD" <% if (isCOD) { %>
+                     checked
+                    <% } else { %>
+                     disabled
+                    <% } %>>
+                    <label class="ms-3" for="payment-method-1">
+                      <strong class="d-block text-uppercase mb-2"> Pay on delivery</strong>
+                      <!-- <span class="text-muted text-sm">Pay on delivery is available for orders above ₹1000 only.    </span>
+                      <br> -->
+                      <% if (!isCOD) { %>
+                        <span class="text-muted text-danger text-sm">Pay on delivery is not available for orders above ₹1000.</span>
+                      <% } %>
+                    </label>
                   </div>
                 </div>
               </div>
               <div class="block mb-3">
                 <div class="block-header" id="headingOne" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Wallet     <% if (!wallet.isInsufficient) { %>
-                  <span class="text-muted">Balance: <span class="text-success fw-semibold">$<%- wallet.balance %></span></span> 
+                  <span class="text-muted">Balance: <span class="text-success fw-semibold">₹<%- wallet.balance %></span></span> 
                 <% } %></a></strong></div>
-                <div class="collapse" id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="collapse show" id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                   <div class="block-body py-5 d-flex align-items-center">
                     <input <%- wallet.isInsufficient ? 'disabled' : '' %> type="radio" name="paymentMethod" id="payment-method-2" value="Wallet" >
                     <label class="ms-3" for="payment-method-2"><strong class="d-block text-uppercase mb-2"> Pay using Wallet</strong>
-                      <span class="text-muted fw-semibold text-sm">Your Wallet Balance: </span><span class="text-muted text-success fw-semibold text-sm">$<%- wallet.balance %> </span>
+                      <span class="text-muted fw-semibold text-sm">Your Wallet Balance: </span><span class="text-muted text-success fw-semibold text-sm">₹<%- wallet.balance %> </span>
                       <br> 
                       <% if (wallet.isInsufficient) { %>
                         <span class="text-muted text-danger text-sm">Your wallet has insufficient balance.</span>
@@ -233,10 +248,15 @@
               </div>
               <div class="block mb-3">
                 <div class="block-header" id="headingTwo" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Razorpay</a></strong></div>
-                <div class="collapse " id="collapseTwo" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="collapse show " id="collapseTwo" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                   <div class="block-body py-5 d-flex align-items-center">
                     <input type="radio" name="paymentMethod" id="payment-method-3" value="Online">
-                    <label class="ms-3" for="payment-method-3"><strong class="d-block text-uppercase mb-2"> Pay with Razorpay</strong><span class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit.                                          </span></label>
+                    <label class="ms-3" for="payment-method-3">
+                      <strong class="d-block text-uppercase mb-2"> Pay with Razorpay</strong>
+                      <span class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+                      <br>
+                      <span class="text-muted text-warning text-sm">Will reduce your wallet balance.</span>
+                    </label>
                   </div>
                 </div>
               </div>

@@ -10,6 +10,7 @@ const userController = require("../controller/userController");
 const orderController = require("../controller/orderController");
 const reviewController = require("../controller/reviewController");
 const checkoutController = require("../controller/checkoutController");
+const cartController = require("../controller/cartController");
 
 router.use(isLoggedIn, async (req, res, next) => {
   if (req.user && req.user.isAdmin) {
@@ -35,14 +36,13 @@ router.route("/reset-password").post(userController.resetPass);
  * User Address
  */
 
-router.route("/address").get(userController.getAddress);
-router.route("/address/add-address").post(userController.addAddress);
+router.get("/address", userController.getAddress);
+router.post("/address/add-address", userController.addAddress);
 
 router
   .route("/address/edit-address/:id")
   .get(userController.getEditAddress)
   .post(userController.editAddress)
-  .delete(userController.deleteAddress);
 
 router
   .route("/address/delete-address/:id")
@@ -64,6 +64,32 @@ router.post("/cancel-all-order/:id/", orderController.cancelAllOrders);
 
 // invoice
 router.get("/invoice/:id/:itemId", orderController.getInvoice);
+router.get("/invoice/download/:id/:itemId", orderController.downloadInvoice);
+
+
+
+/**
+ * User Cart
+ */
+
+
+router.get("/cart", cartController.getCart);
+router.post("/add-to-cart/", cartController.addToCart);
+
+router.get(
+  "/cart/remove-from-cart/:id/:variant",
+  cartController.removeCartItem
+);
+router.get(
+  "/cart/increase-quantity/:id/:variant",
+  cartController.incrementCartItem
+);
+router.get(
+  "/cart/decrease-quantity/:id/:variant",
+  cartController.decrementCartItem
+);
+
+
 
 /**
  * User Wishlist

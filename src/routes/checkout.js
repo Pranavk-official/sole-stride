@@ -12,7 +12,7 @@ const couponController = require("../controller/couponController");
 router.use(isLoggedIn,(req, res, next) => {
   if (req.isAuthenticated()) {
     res.locals.user = req.user;
-    res.locals.cartCount = req.user.cart.length;
+    // res.locals.cartCount = req.user.cart.length;
   }
   // res.locals.success = req.flash("success");
   // res.locals.error = req.flash("error");
@@ -36,5 +36,6 @@ router
 
 router.post('/verify-payment', checkoutController.verifyPayment)
 
+// router.get("/order-success", cartController.getOrderSuccess);
 
 module.exports = router;

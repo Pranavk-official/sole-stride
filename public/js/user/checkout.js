@@ -353,6 +353,19 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      // check if payment method is selected
+      const paymentMethod = document.querySelector(
+        'input[name="paymentMethod"]:checked'
+      );
+      if (!paymentMethod) {
+        Swal.fire({
+          icon: "warning",
+          title: "Oops...",
+          text: "Please select a payment method before placing the order!",
+        });
+        return;
+      }
+
       // SweetAlert confirmation dialog
       Swal.fire({
         title: "Are you sure?",

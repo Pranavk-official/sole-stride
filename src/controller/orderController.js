@@ -1,3 +1,8 @@
+const easyinvoice = require("easyinvoice");
+
+const fs = require("fs");
+const path = require("path");
+
 const Order = require("../model/orderSchema");
 const User = require("../model/userSchema");
 const Product = require("../model/productSchema");
@@ -39,12 +44,8 @@ module.exports = {
       const allDelivered = order.items.every(
         (item) => item.status === "Delivered"
       );
-      const allShipped = order.items.every(
-        (item) => item.status === "Shipped"
-      );
-      const allPending = order.items.every(
-        (item) => item.status === "Pending"
-      );
+      const allShipped = order.items.every((item) => item.status === "Shipped");
+      const allPending = order.items.every((item) => item.status === "Pending");
 
       let status;
 
@@ -61,10 +62,7 @@ module.exports = {
       }
 
       if (status) {
-        await Order.updateOne(
-          { _id: order._id },
-          { $set: { status: status } }
-        );
+        await Order.updateOne({ _id: order._id }, { $set: { status: status } });
       }
     }
 
@@ -145,8 +143,19 @@ module.exports = {
         },
       ]);
 
+      // find if user already added a review
+
       // Loop through the array and format the dates
       for (const order of orderDetails) {
+        const product = await Product.findById(order.items.product_id);
+
+        product.reviews.forEach((review) => {
+          if (review.user.user_id.toString() === req.user.id.toString()) {
+            order.items.review = true;
+            order.items.review_details = review;
+          }
+        });
+
         switch (order.items.status) {
           case "Confirmed":
             order.items.track = 15;
@@ -232,7 +241,7 @@ module.exports = {
         }
       }
 
-      console.log(orderDetails);
+      // console.log(orderDetails);
 
       const isInReturn = await Return.findOne({ order_id: order_id });
       console.log(isInReturn);
@@ -253,7 +262,6 @@ module.exports = {
             // order.items.status = 'Return Requested';
             order.items.track = 10;
           }
-
 
           if (
             orderProductId === returnProductId &&
@@ -295,33 +303,267 @@ module.exports = {
     const { id, itemId } = req.params;
 
     console.log(id, itemId);
-    
-    const order = await Order.aggregate([
+
+    let order = await Order.aggregate([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(id),
-          "items.orderID": itemId
-        }
+          "items.orderID": itemId,
+        },
       },
       {
-        $unwind: "$items"
+        $unwind: "$items",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product_id",
+          foreignField: "_id",
+          as: "items.product",
+        },
+      },
+      {
+        // change product details to object
+        $set: {
+          "items.product": {
+            $arrayElemAt: ["$items.product", 0],
+          },
+        },
       },
       {
         $project: {
           _id: 1,
-          items: 1
-        }
-      }
+          items: 1,
+        },
+      },
     ]);
 
-    console.log(order[0].items);
+    // console.log(order[0].items);
 
-    res.json(order);
+    let data = {
+      apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
+      mode: "development", // Production or development, defaults to production
+      images: {
+        // The logo on top of your invoice
+        logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
+        // The invoice background
+        background: "https://public.budgetinvoice.com/img/watermark-draft.jpg",
+      },
+      // Your own data
+      sender: {
+        company: "SoloStride",
+        address: "Sample Street 123",
+        zip: "1234 AB",
+        city: "Sampletown",
+        country: "Samplecountry",
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+      },
+      // Your recipient
+      client: {
+        company: "Client Corp",
+        address: "Clientstreet 456",
+        zip: "4567 CD",
+        city: "Clientcity",
+        country: "Clientcountry",
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+      },
+      information: {
+        // Invoice number
+        number: "2021.0001",
+        // Invoice data
+        date: "12-12-2021",
+        // Invoice due date
+        dueDate: "31-12-2021",
+      },
+      // The products you would like to see on your invoice
+      // Total values are being calculated automatically
+      products: [
+        {
+          quantity: order[0].quantity,
+          description: order[0].items.product.product_name,
+          taxRate: 0,
+          price: order[0].items.itemTotal,
+        },
+      ],
+      // The message you would like to display on the bottom of your invoice
+      bottomNotice: "Kindly pay your invoice within 15 days.",
+      // Settings to customize your invoice
+      settings: {
+        currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
+        // marginTop: 25, // Defaults to '25'
+        // marginRight: 25, // Defaults to '25'
+        // marginLeft: 25, // Defaults to '25'
+        // marginBottom: 25, // Defaults to '25'
+        // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // height: "1000px", // allowed units: mm, cm, in, px
+        // width: "500px", // allowed units: mm, cm, in, px
+        // orientation: "landscape" // portrait or landscape, defaults to portrait
+      },
+      // Translate your invoice to your preferred language
+      translate: {
+        // invoice: "FACTUUR",  // Default to 'INVOICE'
+        // number: "Nummer", // Defaults to 'Number'
+        // date: "Datum", // Default to 'Date'
+        // dueDate: "Verloopdatum", // Defaults to 'Due Date'
+        // subtotal: "Subtotaal", // Defaults to 'Subtotal'
+        // products: "Producten", // Defaults to 'Products'
+        // quantity: "Aantal", // Default to 'Quantity'
+        // price: "Prijs", // Defaults to 'Price'
+        // productTotal: "Totaal", // Defaults to 'Total'
+        // total: "Totaal", // Defaults to 'Total'
+        // taxNotation: "btw" // Defaults to 'vat'
+      },
 
-    // res.render("shop/invoice", {
-    //   order,
-    //   layout: './layouts/invoice.ejs'
-    // });
+      // Customize enables you to provide your own templates
+      // Please review the documentation for instructions and examples
+      // "customize": {
+      //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
+      // }
+    };
+
+    try {
+      let result = await easyinvoice.createInvoice(data);
+      const pdfPath = path.join(
+        __dirname,
+        `../../public/files/invoice-${Date.now()}.pdf`
+      );
+      
+      await fs.writeFile(pdfPath, result.pdf, "base64");
+      
+      res.download(pdfPath);
+    } catch (error) {
+      console.log(error);
+    }
+    //Create your invoice! Easy!
+  },
+
+  downloadInvoice: async (req, res) => {
+    const { id, itemId } = req.params;
+
+    const order = await Order.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+          "items.orderID": itemId,
+        },
+      },
+      {
+        $unwind: "$items",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product_id",
+          foreignField: "_id",
+          as: "items.product",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          items: 1,
+        },
+      },
+    ]);
+
+    console.log(order);
+
+    var data = {
+      apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
+      mode: "development", // Production or development, defaults to production
+      images: {
+        // The logo on top of your invoice
+        logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
+        // The invoice background
+        background: "https://public.budgetinvoice.com/img/watermark-draft.jpg",
+      },
+      // Your own data
+      sender: {
+        company: "SoloStride",
+        address: "Sample Street 123",
+        zip: "1234 AB",
+        city: "Sampletown",
+        country: "Samplecountry",
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+      },
+      // Your recipient
+      client: {
+        company: "Client Corp",
+        address: "Clientstreet 456",
+        zip: "4567 CD",
+        city: "Clientcity",
+        country: "Clientcountry",
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+      },
+      information: {
+        // Invoice number
+        number: "2021.0001",
+        // Invoice data
+        date: "12-12-2021",
+        // Invoice due date
+        dueDate: "31-12-2021",
+      },
+      // The products you would like to see on your invoice
+      // Total values are being calculated automatically
+      products: [
+        {
+          quantity: order.quantity,
+          description: order.product[0].product_name,
+          taxRate: 0,
+          price: order.itemTotal,
+        },
+      ],
+      // The message you would like to display on the bottom of your invoice
+      bottomNotice: "Kindly pay your invoice within 15 days.",
+      // Settings to customize your invoice
+      settings: {
+        currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
+        // marginTop: 25, // Defaults to '25'
+        // marginRight: 25, // Defaults to '25'
+        // marginLeft: 25, // Defaults to '25'
+        // marginBottom: 25, // Defaults to '25'
+        // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // height: "1000px", // allowed units: mm, cm, in, px
+        // width: "500px", // allowed units: mm, cm, in, px
+        // orientation: "landscape" // portrait or landscape, defaults to portrait
+      },
+      // Translate your invoice to your preferred language
+      translate: {
+        // invoice: "FACTUUR",  // Default to 'INVOICE'
+        // number: "Nummer", // Defaults to 'Number'
+        // date: "Datum", // Default to 'Date'
+        // dueDate: "Verloopdatum", // Defaults to 'Due Date'
+        // subtotal: "Subtotaal", // Defaults to 'Subtotal'
+        // products: "Producten", // Defaults to 'Products'
+        // quantity: "Aantal", // Default to 'Quantity'
+        // price: "Prijs", // Defaults to 'Price'
+        // productTotal: "Totaal", // Defaults to 'Total'
+        // total: "Totaal", // Defaults to 'Total'
+        // taxNotation: "btw" // Defaults to 'vat'
+      },
+
+      // Customize enables you to provide your own templates
+      // Please review the documentation for instructions and examples
+      // "customize": {
+      //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
+      // }
+    };
+
+    //Create your invoice! Easy!
+    easyinvoice.createInvoice(data, function (result) {
+      //The response will contain a base64 encoded PDF file
+      console.log("PDF base64 string: ", result.pdf);
+    });
   },
 
   // Cancel and Return
@@ -389,17 +631,34 @@ module.exports = {
 
         const wallet = await Wallet.findOne({ userId: req.user.id });
 
-        wallet.balance =
-          parseInt(wallet.balance) + parseInt(price[0].itemTotal);
+        if (!wallet) {
+          const newWallet = new Wallet({
+            userId: req.user.id,
+            balance: parseInt(price[0].itemTotal),
+            transactions: [
+              {
+                date: new Date(),
+                amount: parseInt(price[0].itemTotal),
+                message: "Order cancelled successfully",
+                type: "Credit",
+              },
+            ],
+          });
 
-        wallet.transactions.push({
-          date: new Date(),
-          amount: parseInt(price[0].itemTotal),
-          message: "Order cancelled successfully",
-          type: "Credit",
-        });
+          await newWallet.save();
+        } else {
+          wallet.balance =
+            parseInt(wallet.balance) + parseInt(price[0].itemTotal);
 
-        await wallet.save();
+          wallet.transactions.push({
+            date: new Date(),
+            amount: parseInt(price[0].itemTotal),
+            message: "Order cancelled successfully",
+            type: "Credit",
+          });
+
+          await wallet.save();
+        }
       }
 
       const updateOrder = await Order.findOne({
@@ -531,7 +790,6 @@ module.exports = {
           categoryDiscount: 1,
           paymentStatus: 1,
           orderStatus: 1,
-          clientOrderProcessingCompleted: 1,
           createdAt: 1,
         },
       },
@@ -729,7 +987,7 @@ module.exports = {
         },
       ]);
 
-      // console.log(orderDetails);
+      console.log(orderDetails);
 
       // console.log(orderDetails.customer_id);
       res.render("admin/orders/viewOrder", {
@@ -823,7 +1081,7 @@ module.exports = {
 
             userWallet.transactions.push({
               type: "Credit",
-              amount: currentItem.itemTotal ,
+              amount: currentItem.itemTotal,
               date: new Date(),
               message: "Order Return Refund",
             });
@@ -861,16 +1119,21 @@ module.exports = {
       // Check if the order was successfully updated
       if (updateOrder.modifiedCount > 0) {
         req.flash("success", "Product Order Status Updated Successfully");
-        res.redirect("/admin/orders");
+        // res.redirect("/admin/orders");
+
+        res.json({
+          success: true,
+          message: "Order status updated successfully.",
+        });
       } else {
         req.flash("error", "No changes were made.");
-        res.redirect("/admin/orders");
+        // res.redirect("/admin/orders");
+
+        res.json({ success: false, message: "No changes were made." });
       }
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Server error." });
     }
   },
-
-
 };

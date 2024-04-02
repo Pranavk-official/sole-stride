@@ -1,45 +1,14 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const userSchema = new mongoose.Schema(
   {
+    // if profile image is providing
     profileImg: {
       type: String,
     },
-    cart: [
-      {
-        product_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        variant: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "product.variants",
-          required: true,
-        },
-        color: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Color",
-        },
-        size: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Size",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-          min: [1, `Quantity Can't be less than 1`],
-        },
-        itemTotal: {
-          type: Number,
-        },
-        price: {
-          type: Number,
-        },
-      },
-    ],
     wishlist: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "WishList",
@@ -81,11 +50,9 @@ const userSchema = new mongoose.Schema(
     },
     referralCode: {
       type: String,
-      unique: true,
     },
     referralToken: {
-      type: String,
-      unique: true,
+      type: ObjectId,
     },
     successfullRefferals: [{
       date: {

@@ -333,32 +333,18 @@ module.exports = {
   deleteAddress: async (req, res) => {
     let id = req.params.id;
     try {
-      // Check if the address is in use by any orders
-      const order = await Order.findOne({ "address._id": id });
-      if (order) {
-        console.log(order);
-        // If the address is in use, perform a soft delete by setting the delete boolean to true
-        const result = await Address.findByIdAndUpdate(
-          id,
-          { delete: true },
-          { new: true }
-        );
-        if (result) {
-          console.log(result);
-          res
-            .status(200)
-            .json({ message: "Address marked as deleted successfully" });
-        } else {
-          res.status(404).json({ message: "Address not found" });
-        }
+      const result = await Address.findByIdAndUpdate(
+        id,
+        { delete: true },
+        { new: true }
+      );
+      if (result) {
+        console.log(result);
+        res
+          .status(200)
+          .json({ message: "Address deleted successfully" });
       } else {
-        // If the address is not in use, proceed with the deletion
-        const result = await Address.deleteOne({ _id: id });
-        if (result.deletedCount === 1) {
-          res.status(200).json({ message: "Address deleted successfully" });
-        } else {
-          res.status(404).json({ message: "Address not found" });
-        }
+        res.status(404).json({ message: "Address not found" });
       }
     } catch (error) {
       console.error(error);

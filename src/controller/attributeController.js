@@ -63,11 +63,11 @@ module.exports = {
   addColor: async (req, res) => {
     console.log(req.body);
     try {
-      const { colorName, colorHex } = req.body;
+      const { color, colorHex } = req.body;
 
       // Check if color name or hex already exists in the database
       const existingColor = await Color.findOne({
-        $or: [{ name: colorName.toLowerCase() }, { hex: colorHex }],
+        $or: [{ name: color.toLowerCase() }, { hex: colorHex }],
       });
 
       if (existingColor) {
@@ -77,9 +77,9 @@ module.exports = {
           .json({ success: false , message: "Color name or hex already exists" });
       }
 
-      if (colorName && colorHex) {
+      if (color && colorHex) {
         const newColor = new Color({
-          name: colorName.toLowerCase(),
+          name: color.toLowerCase(),
           hex: colorHex,
         });
         await newColor.save();
@@ -88,6 +88,7 @@ module.exports = {
         res.status(400).json({ success: false , message: "Missing color name or hex" });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ success: false , message: "Failed to add color" });
     }
   },

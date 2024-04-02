@@ -31,21 +31,6 @@ router.get("/contact", shopController.getContact);
 
 router.get("/shop/order-success", isLoggedIn, cartController.getOrderSuccess);
 
-router.get("/user/cart", isLoggedIn, cartController.getCart);
-router.post("/user/add-to-cart/", cartController.addToCart);
-
-router.get(
-  "/cart/remove-from-cart/:id/:variant",
-  cartController.removeCartItem
-);
-router.get(
-  "/cart/increase-quantity/:id/:variant",
-  cartController.incrementCartItem
-);
-router.get(
-  "/cart/decrease-quantity/:id/:variant",
-  cartController.decrementCartItem
-);
 
 // router.get('/productTest', shopController.getProductTest);
 

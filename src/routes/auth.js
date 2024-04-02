@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
+const reportsController = require("../controller/reportsController");
 
 const {
   registerValidation,
@@ -66,5 +67,8 @@ router
 
 router.get("/logout", authController.userLogout);
 router.get("/admin/logout", authController.adminLogout);
+
+
+router.get('/admin/sales-report/pdf', reportsController.getSalesReportPdf)
 
 module.exports = router;

@@ -92,6 +92,7 @@ module.exports = {
     const locals = {
       title: "SoleStride - Checkout",
     };
+
     if (!req.isAuthenticated()) {
       return res.redirect("/login");
     }
@@ -230,6 +231,12 @@ module.exports = {
       }
     }
 
+    let isCOD = true;
+
+    if(totalPrice > 1000){
+      isCOD = false;
+    }
+
     if(totalPrice > userWallet.balance){
       userWallet.isInsufficient = true;
     }else{
@@ -241,6 +248,7 @@ module.exports = {
       user,
       address,
       userCart,
+      isCOD,
       cartList: userCart.items,
       cartCount,
       coupons,
@@ -256,10 +264,34 @@ module.exports = {
 
       console.log(req.body);
 
+      let shippingAddress = await Address.findOne({
+        _id: address
+      })
+
+      shippingAddress = {
+        name: shippingAddress.name,
+        house_name: shippingAddress.house_name,
+        locality: shippingAddress.locality, 
+        area_street: shippingAddress.area_street,
+        phone: shippingAddress.phone,
+        address: shippingAddress.address,
+        landmark: shippingAddress.landmark,
+        city: shippingAddress.city,
+        state: shippingAddress.state,
+        zipcode: shippingAddress.zipcode,
+        address: `${shippingAddress.name}, ${shippingAddress.house_name}(H),  ${shippingAddress.locality}, ${shippingAddress.town}, ${shippingAddress.state}, PIN: ${shippingAddress.zipcode}. PH: ${shippingAddress.phone}`
+      } 
+
+
       if (!req.body.address) {
         return res
           .status(400)
           .json({ status: false, message: "Please add the address" });
+      }
+      if (!req.body.paymentMethod) {
+        return res
+          .status(400)
+          .json({ status: false, message: "Please select a payment method" });
       }
 
       const user = await User.findById(req.user.id).catch((error) => {
@@ -294,8 +326,9 @@ module.exports = {
           couponDiscount: userCart.couponDiscount,
           payable: userCart.payable,
           paymentMethod,
+          paymentStatus: status,
           status,
-          shippingAddress: address,
+          shippingAddress,
         });
 
         order.items.forEach((item) => {
@@ -308,8 +341,9 @@ module.exports = {
           totalPrice: userCart.totalPrice,
           payable: userCart.payable,
           paymentMethod,
+          paymentStatus: status,
           status,
-          shippingAddress: address,
+          shippingAddress,
         });
       }
       order.items.forEach((item) => {
@@ -502,11 +536,6 @@ module.exports = {
           return res.status(400).json({ error: "Invalid payment method" });
       }
 
-      // console.log(order);
-
-      // return res
-      //   .status(200)
-      //   .json({ status: true, message: "Order placed successfully" });
     } catch (error) {
       console.error(error);
       res
@@ -591,7 +620,7 @@ module.exports = {
 
         const updateOrder = await Order.updateOne(
           { _id: order_id },
-          { $set: { "items.$[].status": "Confirmed", status: "Confirmed" } }
+          { $set: { "items.$[].status": "Confirmed", "items.$[].paymentStatus": "Paid" , status: "Confirmed", paymentStatus: "Paid" } }
         );
 
         let couponId = await Order.findOne({ _id: order_id }).populate(
@@ -619,6 +648,8 @@ module.exports = {
         res.json({
           success: true,
         });
+      } else {
+       
       }
     } catch (error) {
       console.log(error);

@@ -157,10 +157,12 @@ module.exports = {
             brand: 1,
             category: "$category", // Use the populated 'category' object
             description: 1,
+            details: 1,
             price: 1,
             actualPrice: 1,
             sellingPrice: 1,
             onSale: 1,
+            reviews: 1,
             onOffer: 1,
             offerDiscountPrice: 1,
             offerDiscountRate: 1,
@@ -202,7 +204,17 @@ module.exports = {
 
       // Execute the aggregation pipeline
       const productData = await Product.aggregate(pipeline);
-      // console.log(productData)
+
+      // check variant stock
+      productData.forEach((product) => {
+        product.variants.forEach((variant) => {
+          if (variant.stock <= 0) {
+            variant.isOutOfStock = true;
+          }
+        });
+      });
+
+      console.log(productData)
       // Assuming productData is an array with one or more objects
       // Assuming productData is an array with one or more objects
       // productData.forEach((product) => {
@@ -226,7 +238,7 @@ module.exports = {
         .populate("brand category")
         .limit(4);
 
-      console.log(relatedProducts);
+      // console.log(relatedProducts);
 
       // Check if product data was found
       if (!productData || productData.length === 0) {

@@ -58,9 +58,9 @@
               <div class="col-md-12 card mb-3">
 
                 <div class="row align-items-center">
-                  
+
                   <div class="col-md-3">
-                    <img src="/uploads/product-images/<%- order.products.primary_image.name %>" class="img-fluid rounded-start" alt="<%- order.products.product_name %>">
+                    <img id="product_image" data-image="/uploads/product-images/<%- order.products.primary_image.name %>" src="/uploads/product-images/<%- order.products.primary_image.name %>" class="img-fluid rounded-start" alt="<%- order.products.product_name %>">
                   </div>
                   <div class="col-md-7">
                     <div class="card-body">
@@ -71,11 +71,24 @@
                     </div>
                   </div>
 
-                  <% if (['Delivered', 'In-Return', 'Returned' ].includes(order.items.status) ) { %>
-                    <div class="ratings col-md-2">
-                      Rate this product:
-                    </div>
+                  <div class="card-body px-3 m-2 ">
+                    <% if (['Delivered', 'In-Return', 'Returned' ].includes(order.items.status) ) { %>
+                      <% if (!order.items.review) { %>
+                        <div style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#reviewModal" class="btn btn-outline-light d-flex justify-content-around hover" data-product-name="<%- order.products.product_name %>" data-product-id="<%- order.products._id %>" data-variant-color="<%- order.variant.name %>" data-variant-size="<%- order.variant.value %>">
+                          <div class="">
+                            <i class="bi-solid  text-warning bi-star-fill"></i>
+                            <i class="bi-solid text-warning bi-star-fill"></i>
+                            <i class="bi-regular text-warning bi-star icon-link-hover"></i>
+                            <i class="bi-regular text-warning bi-star"></i>
+                            <i class="bi-regular text-warning bi-star"></i>
+                            <a class="link text-decoration-none text-primary fw-semibold fs-6">
+                              Rate this?
+                            </a>
+                          </div>
+                        </div>
+                      <% } %>
                     <% } %>
+                  </div>
                 </div>
 
                 <div class="card-body px-3 m-2 border">
@@ -137,26 +150,26 @@
                     </div>
                   </div>
                   <% if (order.items.status !== 'Returned' && order.items.status !== 'In-Return' && order.items.status !== 'Cancelled' && order.items.status !== 'Return Requested') { %>
-                    <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
-                    </div>
-                    <div class="d-flex justify-content-around mb-1">
-                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Ordered</p>
-                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
-                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivery</p>
-                      <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
-                    </div>
-                    <% } %>
-                    <% if (['Returned', 'In-Return', 'Return Requested'].includes(order.items.status)) { %>
-                      <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="<%= order.items.track %>" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-striped badge-warning progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
-                      </div>
-                      <div class="d-flex justify-content-between mb-1">
-                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return Requested</p>
-                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">In Return</p>
-                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return</p>
-                      </div>
-                   
+                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
+                  </div>
+                  <div class="d-flex justify-content-around mb-1">
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Ordered</p>
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivery</p>
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
+                  </div>
+                  <% } %>
+                  <% if (['Returned', 'In-Return', 'Return Requested'].includes(order.items.status)) { %>
+                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="<%= order.items.track %>" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped badge-warning progress-bar-animated" style="width: <%- order.items.track %>%;"></div>
+                  </div>
+                  <div class="d-flex justify-content-between mb-1">
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return Requested</p>
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">In Return</p>
+                    <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Return</p>
+                  </div>
+
                   <% } %>
                 </div>
 
@@ -171,6 +184,7 @@
   </div>
 </section>
 
+<!-- Return Order -->
 <div class="modal fade" id="returnOrderModal" tabindex="-1" aria-labelledby="returnOrderLabel">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -208,6 +222,72 @@
               <input type="submit" class="btn btn-primary" value="Send Return Request">
               <input type="reset" class="btn btn-outline-warning" value="clear">
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews and Rating -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content modal-lg text-capitalize">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel">Review and Rating</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body modal-lg">
+        <div class="card">
+          <form id="review_form" action="/user/add-review" method="POST" class="card-body px-3 py-2 row">
+
+            <div class="row justify-content-around align-items-center">
+              <legend class="d-flex flex-column fs-5 col">
+                <span class="fw-bold">Product: <span class="text-muted " id="name"></span></span>
+                <span class="fw-bold">Color: <span class="text-muted " id="color"></span></span>
+                <span class="fw-bold">Size: <span class="text-muted " id="size"></span></span>
+              </legend>
+              <img class="img-fluid img-thumbnail col" src="" style="width: 12rem; height: 12rem" id="product-img">
+            </div>
+
+            <div class="row">
+              <input type="text" name="product_id" id="review_product_id" hidden>
+              <input type="text" name="color" id="color_variant" hidden>
+              <input type="text" name="size" id="size_variant" hidden>
+              <div class="col-sm-4">
+                <div class="mb-4">
+                  <label class="form-label" for="rating">Your rating *</label>
+                  <select class="custom-select focus-shadow-0" name="rating" id="rating">
+                    <option value="5">
+                      &#9733;&#9733;&#9733;&#9733;&#9733; (5/5)
+                    </option>
+                    <option value="4">
+                      &#9733;&#9733;&#9733;&#9733;&#9734; (4/5)
+                    </option>
+                    <option value="3">
+                      &#9733;&#9733;&#9733;&#9734;&#9734; (3/5)
+                    </option>
+                    <option value="2">
+                      &#9733;&#9733;&#9734;&#9734;&#9734; (2/5)
+                    </option>
+                    <option value="1">
+                      &#9733;&#9734;&#9734;&#9734;&#9734; (1/5)
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4 form-group">
+              <label class="form-label" for="review_title">Title </label>
+              <input class="form-control" type="text" name="review_title" id="review_title" placeholder="Enter your review title" required="required">
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="review">Comment </label>
+              <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
+            </div>
+            <button class="btn btn-outline-dark" type="submit">
+              Post review
+            </button>
           </form>
         </div>
       </div>
@@ -446,5 +526,94 @@
     const itemId = e.currentTarget.getAttribute('data-item-id')
     console.log(orderId, itemId);
     location.assign(`/user/invoice/${orderId}/${itemId}/`)
+  })
+
+
+  const reviewModal = document.getElementById('reviewModal')
+
+
+  reviewModal.addEventListener('show.bs.modal', async (e) => {
+    const reviewBtn = e.relatedTarget;
+
+    const product_name = reviewBtn.getAttribute('data-product-name')
+    const color = reviewBtn.getAttribute('data-variant-color')
+    const size = reviewBtn.getAttribute('data-variant-size')
+    const product_id = reviewBtn.getAttribute('data-product-id')
+
+    document.getElementById('name').innerText = product_name
+    document.getElementById('color').innerText = color
+    document.getElementById('size').innerText = size
+
+    // set hidden input values
+    const productId = document.getElementById('review_product_id').value = product_id
+    const colorId = document.getElementById('color_variant').value = color
+    const sizeId = document.getElementById('size_variant').value = size
+
+    const img = document.getElementById('product-img')
+    const product_image = document.getElementById('product_image')
+    img.src = product_image.getAttribute('data-image')
+
+  })
+
+  const reviewForm = document.getElementById('reviewForm')
+
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to submit this review?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, submit review!'
+    }).then(async () => {
+      const formData = new FormData(reviewForm)
+      const body = Object.fromEntries(formData)
+
+      console.log(body);
+
+      try {
+        const response = await fetch(reviewForm.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          Swal.fire({
+            title: "Success!",
+            text: data.message, // Use the message from the backend
+            icon: "success",
+            timer: 1500,
+          }).then(() => {
+            location.reload()
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: data.message, // Use the message from the backend
+            icon: "error",
+            timer: 1500,
+          })
+        }
+
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: "Error!",
+          text: error.message, // Use the message from the backend
+          icon: "error",
+          timer: 1500,
+        })
+      }
+
+    })
+
   })
 </script>

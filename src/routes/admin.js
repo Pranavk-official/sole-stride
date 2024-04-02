@@ -35,6 +35,9 @@ router.use(isAdmin, (req, res, next) => {
 
 router.get("/", adminController.getDashboard);
 
+router.get("/chart", adminController.getChartData);
+
+
 /**
  * Banner Management
  */
@@ -99,7 +102,7 @@ router
   .route("/products/add-product")
   .get(productController.getAddProduct)
   .post(
-    productUpload.fields([{ name: "images" }, { name: "primaryImage" }]),
+    productUpload.fields([{ name: "images", maxCount: 3 }, { name: "primaryImage" }]),
     productController.addProduct
   );
 
@@ -107,7 +110,12 @@ router
   .route("/products/edit-product/:id")
   .get(productController.getEditProduct)
   .post(
-    productUpload.fields([{ name: "images" }, { name: "primaryImage" }]),
+    productUpload.fields([
+      { name: "image2", maxCount: 1 }, 
+      { name: "image3", maxCount: 1 }, 
+      { name: "image4", maxCount: 1 }, 
+      { name: "primaryImage" }
+    ]),
     productController.editProduct
   );
 
@@ -245,5 +253,6 @@ router.patch('/toggle-active-product/:id', offerController.toggleActiveProdOffer
 
 router.get('/sales-report', reportsController.getSalesReport)
 router.get('/sales-report/excel', reportsController.salesReportExcel)
+router.get('/sales-report/pdf-download', reportsController.salesReportPdf)
 
 module.exports = router;

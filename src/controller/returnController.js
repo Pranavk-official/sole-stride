@@ -47,7 +47,7 @@ module.exports = {
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
 
-    console.log(returns[0].productDetail);
+    // console.log(returns[0].productDetail);
 
     res.render("admin/returns", {
       returns,

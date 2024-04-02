@@ -9,7 +9,7 @@ const removeFromCart = async (productId, variantId) => {
     confirmButtonText: "Yes, Remove it!",
   }).then(async (result) => {
     if (result.isConfirmed) {
-      await fetch(`/cart/remove-from-cart/${productId}/${variantId}`, {
+      await fetch(`/user/cart/remove-from-cart/${productId}/${variantId}`, {
         method: "GET",
       })
         .then((response) => response.json())
@@ -49,7 +49,7 @@ const updateCartQuantity = async (url, productID, variantId) => {
 // Increase quantity
 const increaseCartQuantity = async (productID, variantId) => {
   const data = await updateCartQuantity(
-    `/cart/increase-quantity/${productID}/${variantId}`,
+    `/user/cart/increase-quantity/${productID}/${variantId}`,
     productID,
     variantId
   );
@@ -100,7 +100,7 @@ const decreaseCartQuantity = async (productId, variantId) => {
   }
 
   const data = await updateCartQuantity(
-    `/cart/decrease-quantity/${productId}/${variantId}`,
+    `/user/cart/decrease-quantity/${productId}/${variantId}`,
     productId,
     variantId
   );
@@ -195,29 +195,3 @@ const addToWishlist = async (productId) => {
     }
   }
 };
-
-// const submitOrder = document.getElementById("submitOrder");
-// if (submitOrder) {
-//   submitOrder.addEventListener("click", async (e) => {
-//     e.preventDefault();
-//     let form = document.getElementById("orderForm");
-//     if (form) {
-//       let formData = new FormData(form);
-//       const body = Object.fromEntries(formData);
-//       console.log(body);
-//       await fetch("/user/place-order", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(body),
-//       })
-//         .then((response) => response.json())
-//         .then((data) => {
-//           if (data.success) {
-//             location.assign("/shop/order-success");
-//           }
-//         });
-//     } else {
-//       console.error("Form element not found");
-//     }
-//   });
-// }

@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 const { Schema, ObjectId } = mongoose;
+
+const marked = require('marked');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+
+const dompurify = createDOMPurify(new JSDOM().window);
+
+
 const productSchema = new Schema(
   {
     product_name: {
@@ -17,6 +26,18 @@ const productSchema = new Schema(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    markdown1: {
+      type: String,
+      required: true,
+    },
+    details: {
+      type: String,
+      required: true,
+    },
+    markdown2: {
       type: String,
       required: true,
     },
@@ -58,8 +79,46 @@ const productSchema = new Schema(
     ],
     reviews: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Review",
+        user: {
+          user_id: {
+            type: ObjectId,
+            ref: "User",
+          },
+          name: {
+            type: String,
+          },
+          email: {
+            type: String,
+          },
+        },
+
+        rating: {
+          type: Number,
+        },
+        comment: {
+          type: String,
+        },
+
+        product: {
+          id: {
+            type: ObjectId,
+            ref: "Product",
+          },
+          name: {
+            type: String,
+          },
+          color: {
+            type: String,
+          },
+          size: {
+            type: Number,
+          },
+        },
+
+        date: {
+          type: Date,
+          default: Date.now,
+        }
       },
     ],
     price: {
@@ -97,5 +156,21 @@ const productSchema = new Schema(
     strict: false,
   }
 );
+
+
+productSchema.pre("validate", async function (next) {
+  console.log("markdown1", this.markdown1);
+  if(this.markdown1) {
+    this.description = dompurify.sanitize(marked.parse(this.markdown1));
+  }
+
+  if(this.markdown2) {
+    this.details = dompurify.sanitize(marked.parse(this.markdown2));
+  }
+
+  next();
+});
+
+
 
 module.exports = mongoose.model("Product", productSchema);

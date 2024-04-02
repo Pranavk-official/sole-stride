@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const sharp = require("sharp");
+
 const layout = "./layouts/adminLayout.ejs";
 const Product = require("../model/productSchema");
 // const Variant = require("../model/productVariation");
@@ -8,6 +10,13 @@ const Category = require("../model/categorySchema");
 const Color = require("../model/attributes/colorSchema");
 const Size = require("../model/attributes/sizeSchema");
 const Brands = require("../model/attributes/brandSchema");
+const Order = require("../model/orderSchema");
+
+const marked = require("marked");
+const createDOMPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+
+const dompurify = createDOMPurify(new JSDOM().window);
 
 module.exports = {
   getAllProducts: async (req, res) => {
@@ -120,6 +129,17 @@ module.exports = {
         });
       });
 
+      seconaryImages.forEach(async (e) => {
+        await sharp(
+          path.join(__dirname, "../../public/uploads/product-images/") + e.name
+        )
+          .resize(500, 500)
+          .toFile(
+            path.join(__dirname, "../../public/uploads/product-images/crp/") +
+              e.name
+          );
+      });
+
       let PrimaryImage;
       req.files.primaryImage.forEach((e) => {
         PrimaryImage = {
@@ -128,10 +148,21 @@ module.exports = {
         };
       });
 
+      await sharp(
+        path.join(__dirname, "../../public/uploads/product-images/") +
+          PrimaryImage.name
+      )
+        .resize(500, 500)
+        .toFile(
+          path.join(__dirname, "../../public/uploads/product-images/crp/") +
+            PrimaryImage.name
+        );
+
       const product = new Product({
         product_name: req.body.product_name,
         brand: req.body.brand,
-        description: req.body.description,
+        markdown1: req.body.description,
+        markdown2: req.body.details,
         category: req.body.category,
         variants: variants,
         actualPrice: req.body.actualPrice,
@@ -165,82 +196,141 @@ module.exports = {
         return res.status(404).json({ message: "Product not found" });
       }
 
+      let primaryImage = product.primary_image;
+      let secondaryImages = product.secondary_images;
+
+      if (req.files) {
+        if (req.files.primaryImage) {
+          primaryImage = {
+            name: req.files.primaryImage[0].filename,
+            path: req.files.primaryImage[0].path,
+          };
+
+          await sharp(
+            path.join(__dirname, "../../public/uploads/product-images/") +
+              primaryImage.name
+          )
+            .resize(500, 500)
+            .toFile(
+              path.join(__dirname, "../../public/uploads/product-images/crp/") +
+                primaryImage.name
+            );
+        }
+
+        if (req.files.image2 || req.files.image3 || req.files.image4) {
+          if (req.files.image2) {
+            // if (product.secondary_images[0]) {
+            //   fs.unlinkSync(
+            //     path.join(
+            //       __dirname,
+            //       "../../public/uploads/product-images/crp/" +
+            //         product.secondary_images[0].name
+            //     )
+            //   );
+            // }
+            await sharp(
+              path.join(__dirname, "../../public/uploads/product-images/") +
+                req.files.image2[0].filename
+            )
+              .resize(500, 500)
+              .toFile(
+                path.join(
+                  __dirname,
+                  "../../public/uploads/product-images/crp/"
+                ) + req.files.image2[0].filename
+              );
+          }
+          if (req.files.image3) {
+            // fs.unlinkSync(
+            //   path.join(
+            //     __dirname,
+            //     "../../public/uploads/product-images/crp/" +
+            //       product.secondary_images[1].name
+            //   )
+            // );
+
+            await sharp(
+              path.join(__dirname, "../../public/uploads/product-images/") +
+                req.files.image3[0].filename
+            )
+              .resize(500, 500)
+              .toFile(
+                path.join(
+                  __dirname,
+                  "../../public/uploads/product-images/crp/"
+                ) + req.files.image3[0].filename
+              );
+          }
+          if (req.files.image4) {
+            // fs.unlinkSync(
+            //   path.join(
+            //     __dirname,
+            //     "../../public/uploads/product-images/crp/" +
+            //       product.secondary_images[2].name
+            //   )
+            // );
+
+            await sharp(
+              path.join(__dirname, "../../public/uploads/product-images/") +
+                req.files.image4[0].filename
+            )
+              .resize(500, 500)
+              .toFile(
+                path.join(
+                  __dirname,
+                  "../../public/uploads/product-images/crp/"
+                ) + req.files.image4[0].filename
+              );
+          }
+
+          secondaryImages = [
+            {
+              name: req.files.image2
+                ? req.files.image2[0].filename
+                : product.secondary_images[0].name,
+              path: req.files.image2
+                ? req.files.image2[0].path
+                : product.secondary_images[0].path,
+            },
+            {
+              name: req.files.image3
+                ? req.files.image3[0].filename
+                : product.secondary_images[1].name,
+              path: req.files.image3
+                ? req.files.image3[0].path
+                : product.secondary_images[1].path,
+            },
+            {
+              name: req.files.image4
+                ? req.files.image4[0].filename
+                : product.secondary_images[2].name,
+              path: req.files.image4
+                ? req.files.image4[0].path
+                : product.secondary_images[2].path,
+            },
+          ];
+        }
+      }
+
       // Prepare the update object
+      // console.log(req.body);
       const update = {
-        product_name: req.body.product_name,
-        brand: req.body.brand,
-        description: req.body.description,
+        product_name: req.body.product_name || product.product_name,
+        brand: req.body.brand || product.brand,
+        markdown1: req.body.description,
+        markdown2: req.body.details,
+        description: dompurify.sanitize(marked.parse(req.body.description)),
+        details: dompurify.sanitize(marked.parse(req.body.details)),
         category: req.body.category || product.category,
-        actualPrice: req.body.actualPrice,
-        sellingPrice: req.body.sellingPrice,
-        isActive: req.body.status,
+        actualPrice: req.body.actualPrice || product.actualPrice,
+        sellingPrice: req.body.sellingPrice || product.sellingPrice,
+        isActive: req.body.status || product.isActive,
+        primary_image: primaryImage,
+        secondary_images: secondaryImages || product.secondary_images,
       };
 
-      // Handle primary image
-      if (req.files.primaryImage) {
-        // Delete the old primary image if it exists
-        if (product.primary_image && product.primary_image.name) {
-          fs.unlink(
-            path.join(__dirname, "../../public/uploads/product-images/") +
-              product.primary_image.name,
-            (err) => {
-              if (err) console.error(err);
-            }
-          );
-        }
-
-        const primaryImage = req.files.primaryImage[0];
-        update.primary_image = {
-          name: primaryImage.filename,
-          path: primaryImage.path,
-        };
-      }
-
-      update.secondary_images = [...product.secondary_images];
-      // Handle secondary images
-      if (req.files.images) {
-        for (let i = 0; i < req.files.images.length; i++) {
-          if (
-            req.body.id_secondary_img[i] == product.secondary_images[i]?._id
-          ) {
-            update.secondary_images[i].name = req.files.images[i].filename;
-            update.secondary_images[i].path = req.files.images[i].path;
-
-            // Delete old secondary images if they exist
-            if (
-              product.secondary_images &&
-              product.secondary_images.length > 0
-            ) {
-              product.secondary_images.forEach((image) => {
-                fs.unlink(
-                  path.join(__dirname, "../../public/uploads/product-images/") +
-                    image.name,
-                  (err) => {
-                    if (err) console.error(err);
-                  }
-                );
-              });
-            }
-          }
-        }
-      }
-      // if (req.files.images) {
-      //   update.secondary_images = req.files.images.map((image) => ({
-      //     name: image.filename,
-      //     path: image.path,
-      //   }));
-      // }
-
       // Perform the update operation
-      const updatedProduct = await Product.updateOne(
-        { _id: productId },
-        update,
-        { new: true }
-      );
-
-      // if (!updatedProduct) {
-      //   return res.status(500).json({ message: "Failed to update product" });
-      // }
+      await Product.updateOne({ _id: productId }, update, { new: true });
 
       req.flash("success", "Product edited successfully");
       res.redirect("/admin/products");
@@ -257,17 +347,32 @@ module.exports = {
 
   getStocks: async (req, res) => {
     try {
+      let perPage = 9;
+      let page = req.query.page || 1;
+
       const products = await Product.find()
         .sort({ createdAt: -1 })
         .populate("brand")
         .populate("category")
         .populate("variants.color")
-        .populate("variants.size");
+        .populate("variants.size")
+        .skip(perPage * page - perPage)
+        .limit(perPage)
+        .exec();
+
+      const count = await Product.find().countDocuments();
+      const nextPage = parseInt(page) + 1;
+      const hasNextPage = nextPage <= Math.ceil(count / perPage);
+
       // console.log(products);
       console.log(products[0]);
       res.render("admin/products/stocks", {
         products,
         layout,
+        current: page,
+        pages: Math.ceil(count / perPage),
+        nextPage: hasNextPage ? nextPage : null,
+        currentRoute: "/admin/products/",
       });
     } catch (error) {
       console.error(error);
@@ -318,6 +423,13 @@ module.exports = {
       const product = await Product.findById(req.params.id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
+      }
+      // check if the product is already used in any order
+      const orders = await Order.find({ "items.product_id": req.params.id });
+      if (orders.length > 0) {
+        return res
+          .status(400)
+          .json({ message: "Cannot delete product as it is used in an order, you can only delete products which are not used in any order" });
       }
 
       // Delete primary image
@@ -422,22 +534,23 @@ module.exports = {
   },
 
   // get product details for Offer
-  getProdDetails: async (req,res) => {
-    
-    const productId = req.params.id
+  getProdDetails: async (req, res) => {
+    const productId = req.params.id;
     try {
-      const product = await Product.findOne({_id: productId})
-      
-      if(!product) {
-        return res.status(404).json({success: false, message: 'Product not found'})
+      const product = await Product.findOne({ _id: productId });
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Product not found" });
       }
-      
-      return res.status(200).json({success: true, product})
-      
+
+      return res.status(200).json({ success: true, product });
     } catch (error) {
       console.log(error);
-      return res.status(500).json({success: false, message: 'Internal Server Error'})
+      return res
+        .status(500)
+        .json({ success: false, message: "Internal Server Error" });
     }
-
-  }
+  },
 };

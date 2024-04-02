@@ -35,6 +35,23 @@ const orderSchema = new Schema(
           required: true,
           min: [1, `Quantity Can't be less than 1`],
         },
+        productDetail: {
+          name: {
+            type: String,
+          },
+          color: {
+            type: String,
+          },
+          size: {
+            type: Number,
+          },
+          quantity: {
+            type: Number,
+          },
+          price: {
+            type: Number,
+          },
+        },
         price: {
           type: Number,
           required: true,
@@ -47,6 +64,9 @@ const orderSchema = new Schema(
           unique: true,
         },
         status: {
+          type: String,
+        },
+        paymentStatus: {
           type: String,
         },
         returnReason: {
@@ -70,9 +90,36 @@ const orderSchema = new Schema(
       },
     ],
     shippingAddress: {
-      type: ObjectId,
-      ref: "Address",
-      required: true,
+      name: {
+        type: String,
+      },
+      house_name: {
+        type: String,
+      },
+      locality: {
+        type: String,
+      },
+      area_street: {
+        type: String,
+      },
+      phone: {
+        type: String,
+      },
+      zipcode: {
+        type: Number,
+      },
+      state: {
+        type: String,
+      },
+      landmark: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      address: {
+        type: String,
+      },
     },
     paymentMethod: {
       type: String,
@@ -100,7 +147,7 @@ const orderSchema = new Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["paid", "pending", "cod", "failed", "refunded", "cancelled"],
+      enum: ["Paid", "Pending", "COD", "Failed", "Refunded", "Cancelled"],
       // required: true,
     },
     status: {

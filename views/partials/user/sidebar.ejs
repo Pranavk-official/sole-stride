@@ -6,7 +6,7 @@
                     style="width: 6.375rem; height: 6.375rem;"><img class="img-fluid rounded-circle" src="/uploads/profile-image/avatar.png"
                         style="height: 100%; width: 100%;" alt="User"></div>
                 <div class="ps-md-3">
-                    <h3 class="fs-base mb-0 text-capitalize"><%- user.firstName + ' ' + user.lastName %></h3><span class="text-accent fs-sm"><%- user.email %></span>
+                    <h3 class="fs-base mb-0 text-capitalize h4"><%- user.username %></h3><span class="text-accent fs-sm"><%- user.email %></span>
                 </div>
             </div><a class="btn btn-primary d-lg-none mb-2 mt-3 mt-md-0" href="#account-menu" data-bs-toggle="collapse"
                 aria-expanded="false"><i class="ci-menu me-2"></i>Account menu</a>
@@ -22,7 +22,7 @@
                         href="/user/address"><i class="ci-location opacity-60 me-2"></i>Addresses</a></li>
             </ul>
             <div class="bg-body-secondary px-4 py-3">
-                <h3 class="fs-sm mb-0 text-muted">Wallet & Refferals</h3>
+                <h3 class="fs-sm mb-0 text-muted">Wallet, Refferals & Reviews</h3>
             </div>
             <ul class="list-unstyled mb-0">
                 <li class="border-bottom mb-0">
@@ -36,6 +36,12 @@
                     <a class="nav-link-style d-flex align-items-center px-4 py-3" href="/user/referrals">
                         <i class="ci-heart opacity-60 me-2"></i>
                         Refferals
+                    </a>
+                </li>
+                <li class="border-bottom mb-0">
+                    <a class="nav-link-style d-flex align-items-center px-4 py-3" href="/user/reviews">
+                        <i class="ci-heart opacity-60 me-2"></i>
+                        Reviews
                     </a>
                 </li>
             </ul>

@@ -5,9 +5,10 @@
   <div id="carouselExampleCaptions" class="carousel slide mt-2 mb-0" data-bs-ride="carousel">
     
     <div class="carousel-inner p-1">
-        <% banners.forEach((banner, index)=> { %>
+      <% if (banners !== 'undefined' && banners.length>0) { %>
+        <% banners?.forEach((banner, index)=> { %>
         <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-            <img src="/uploads/banners/<%= banner.image.filename %>" class="d-block w-100"  alt="<%= banner.name %>">
+            <img src="/uploads/banners/<%= banner?.image?.filename %>" class="d-block w-100"  alt="<%= banner.name %>">
             <div class="container">
               <div class="carousel-caption text-start">
                 <h2 ><%- banner.name %>.</h2>
@@ -20,6 +21,9 @@
             </div>
         </div>
         <% }); %>
+      <% } else { %>
+        <h3 class="text-center text-danger">No banners</h3>
+      <% } %>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
         data-bs-slide="prev">
@@ -40,26 +44,28 @@
 
 <section class="py-6 brands">
   <div class="container">
-    <h4 class="text-uppercase text-center mb-5">Categories</h4>
-    <!-- Brands Slider-->
-    <div class="owl-carousel owl-theme brands-slider">
-      <!-- item-->
-      <% categories?.forEach((category, index) => { %>
-        <div class="item d-flex align-items-center justify-content-center">
-          <a href="/shop?category=<%- category._id %>">
-          <div class="w-8rem">
-            <% if (category.onOffer) { %>
-              <div class="ribbon ribbon-info">On offer <%- category.offerDiscountRate %>%</div>
-            <% } %>
-            <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
-              <p class="text-muted text-capitalize"><%- category.name %></p>
+    <% if (categories !== 'undefined') { %>
+      <h4 class="text-uppercase text-center mb-5">Categories</h4>
+      <!-- Brands Slider-->
+      <div class="owl-carousel owl-theme brands-slider">
+        <!-- item-->
+        <% categories?.forEach((category, index) => { %>
+          <div class="item d-flex align-items-center justify-content-center">
+            <a href="/shop?category=<%- category._id %>">
+            <div class="w-8rem">
+              <% if (category.onOffer) { %>
+                <div class="ribbon ribbon-info">On offer <%- category.offerDiscountRate %>%</div>
+              <% } %>
+              <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
+                <p class="text-muted text-capitalize"><%- category.name %></p>
+              </div>
+            </a>
             </div>
-          </a>
-          </div>
-      <% }) %>
-      
-      
-    </div>
+        <% }) %>
+        
+        
+      </div>
+    <% } %>
   </div>
 </section>
 
@@ -142,16 +148,18 @@
 
 <!-- Banner Section-->
 <section class="py-6 position-relative light-overlay">
-  <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" />
-  <div class="container">
-    <div class="overlay-content text-center text-dark">
-      <p class="text-uppercase fw-bold mb-1 letter-spacing-5">
-        <%- banners[1].name %>
-      </p>
-      <h3 class="display-1 fw-bold text-serif mb-4">Summer Sales</h3>
-      <a class="btn btn-dark" href="/shop">Shop Now</a>
+  <% if (banners !== 'undefined' && banners.length > 0) { %>
+    <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" />
+    <div class="container">
+      <div class="overlay-content text-center text-dark">
+        <p class="text-uppercase fw-bold mb-1 letter-spacing-5">
+          <%- banners[1].name %>
+        </p>
+        <h3 class="display-1 fw-bold text-serif mb-4">Summer Sales</h3>
+        <a class="btn btn-dark" href="/shop">Shop Now</a>
+      </div>
     </div>
-  </div>
+  <% } %>
 </section>
 <!-- Brands Section-->
 <section class="py-6 brands">

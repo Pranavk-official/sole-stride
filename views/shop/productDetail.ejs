@@ -6,11 +6,11 @@
           <div class="d-none d-md-block col-md-2 pe-0">
             <div class="owl-thumbs" data-slider-id="1">
               <button class="owl-thumb-item detail-thumb-item mb-3">
-                <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="Modern Jacket 0" />
+                <img class="img-fluid" src="/uploads/product-images/crp/<%- product.primary_image.name %>" alt="Modern Jacket 0" />
               </button>
               <% product.secondary_images.forEach((element) => { %>
               <button class="owl-thumb-item detail-thumb-item mb-3">
-                <img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="Modern Jacket 0" element.secondary_images />
+                <img class="img-fluid" src="/uploads/product-images/crp/<%- element.name %>" alt="Modern Jacket 0" element.secondary_images />
               </button>
               <% }) %>
 
@@ -23,14 +23,14 @@
             <% } %>
             <!-- <div class="ribbon ribbon-primary">Sale</div> -->
             <div class="owl-carousel detail-slider owl-theme owl-dots-modern" data-slider-id="1">
-              <div class="item">
-                <a class="glightbox" href="/uploads/product-images/<%- product.primary_image.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery">
-                  <img class="img-fluid" src="/uploads/product-images/<%- product.primary_image.name %>" alt="<%- product.name %>" />
+              <div class="item" data-toggle="zoom" data-src="/uploads/product-images/crp/<%- product.primary_image.name %>">
+                <a class="glightbox"  href="/uploads/product-images/crp/<%- product.primary_image.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery">
+                  <img  class="img-fluid" src="/uploads/product-images/crp/<%- product.primary_image.name %>" alt="<%- product.name %>" />
                 </a>
               </div>
               <% product.secondary_images.forEach(element => { %>
               <div class="item">
-                <a class="glightbox" href="/uploads/product-images/<%- element.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery"><img class="img-fluid" src="/uploads/product-images/<%- element.name %>" alt="<%- product.product_name %>" /></a>
+                <a class="glightbox" href="/uploads/product-images/crp/<%- element.name %>" data-title="<%- product.product_name %>" data-gallery="product-gallery"><img class="img-fluid" src="/uploads/product-images/crp/<%- element.name %>" alt="<%- product.product_name %>" /></a>
               </div>
               <% }) %>
             </div>
@@ -68,22 +68,22 @@
           <div class="d-flex align-items-center">
             <ul class="list-inline me-2 mb-0">
               <li class="list-inline-item me-0">
-                <i class="fa fa-star text-primary"></i>
+                <i class="bi bi-star text-primary"></i>
               </li>
               <li class="list-inline-item me-0">
-                <i class="fa fa-star text-primary"></i>
+                <i class="bi bi-star text-primary"></i>
               </li>
               <li class="list-inline-item me-0">
-                <i class="fa fa-star text-primary"></i>
+                <i class="bi bi-star text-primary"></i>
               </li>
               <li class="list-inline-item me-0">
-                <i class="fa fa-star text-primary"></i>
+                <i class="bi bi-star text-primary"></i>
               </li>
               <li class="list-inline-item me-0">
-                <i class="fa fa-star text-gray-300"></i>
+                <i class="bi bi-star text-gray-300"></i>
               </li>
             </ul>
-            <span class="text-muted text-uppercase text-sm">25 reviews</span>
+            <span class="text-muted text-uppercase text-sm"><%= product.reviews.length %> reviews</span>
           </div>
         </div>
         <p class="mb-4 text-muted"><%- product.description %></p>
@@ -124,14 +124,14 @@
         </div>
         <ul class="list-inline">
           <li class="list-inline-item">
-            <button class="btn btn-dark btn-lg mb-1" onclick="addToCart('<%- product._id %>')">
+            <button class="btn btn-dark mb-1" onclick="addToCart('<%- product._id %>')">
               <i class="bi bi-cart me-2"></i>
               Add to Cart
             </button>
           </li>
           <li class="list-inline-item">
-            <button class="btn btn-outline-secondary mb-1" onclick="addToWishlist('<%- product._id %>')">
-              <i class="far fa-heart me-2"></i>
+            <button class="btn btn-outline-danger mb-1" onclick="addToWishlist('<%- product._id %>')">
+              <i class="bi bi-heart me-2"></i>
               Add to wishlist
             </button>
           </li>
@@ -155,12 +155,7 @@
     </ul>
     <div class="tab-content py-4">
       <div class="tab-pane active px-3" id="description" role="tabpanel">
-        <p class="text-muted"><%- product.description %>.</p>
-        <!-- <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. LOLUt enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat. LOLDuis aute irure dolor in reprehenderit
-          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
+        <%- product.details %>
       </div>
       <div class="tab-pane" id="additional-information" role="tabpanel">
         <div class="row">
@@ -215,126 +210,37 @@
       <div class="tab-pane" id="reviews" role="tabpanel">
         <div class="row mb-5">
           <div class="col-lg-10 col-xl-9">
-            <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5">
-                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-1.jpg" alt="Han Solo" /><span class="text-uppercase text-muted">Dec 2018</span>
-              </div>
-              <div>
-                <h5 class="mt-2 mb-1">Han Solo</h5>
-                <div class="mb-2">
-                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
-                </div>
-                <p class="text-muted">
-                  One morning, when Gregor Samsa woke from troubled dreams, he
-                  found himself transformed in his bed into a horrible vermin.
-                  He lay on his armour-like back, and if he lifted his head a
-                  little he could see his brown belly, slightly domed and
-                  divided by arches into stiff sections
-                </p>
-              </div>
-            </div>
-            <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5">
-                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-2.jpg" alt="Luke Skywalker" /><span class="text-uppercase text-muted">Dec 2018</span>
-              </div>
-              <div>
-                <h5 class="mt-2 mb-1">Luke Skywalker</h5>
-                <div class="mb-2">
-                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i>
-                </div>
-                <p class="text-muted">
-                  The bedding was hardly able to cover it and seemed ready to
-                  slide off any moment. His many legs, pitifully thin compared
-                  with the size of the rest of him, waved about helplessly as he
-                  looked. &quot;What's happened to me?&quot; he thought. It
-                  wasn't a dream.
-                </p>
-              </div>
-            </div>
-            <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5">
-                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-3.jpg" alt="Princess Leia" /><span class="text-uppercase text-muted">Dec 2018</span>
-              </div>
-              <div>
-                <h5 class="mt-2 mb-1">Princess Leia</h5>
-                <div class="mb-2">
-                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-gray-200"></i><i class="fa fa-xs fa-star text-gray-200"></i>
-                </div>
-                <p class="text-muted">
-                  His room, a proper human room although a little too small, lay
-                  peacefully between its four familiar walls. A collection of
-                  textile samples lay spread out on the table.
-                </p>
-              </div>
-            </div>
-            <div class="review d-flex">
-              <div class="flex-shrink-0 text-center me-4 me-xl-5">
-                <img class="review-image" src="https://d19m59y37dris4.cloudfront.net/sell/2-0-1/img/person-4.jpg" alt="Jabba Hut" /><span class="text-uppercase text-muted">Dec 2018</span>
-              </div>
-              <div>
-                <h5 class="mt-2 mb-1">Jabba Hut</h5>
-                <div class="mb-2">
-                  <i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i><i class="fa fa-xs fa-star text-warning"></i>
-                </div>
-                <p class="text-muted">
-                  Samsa was a travelling salesman - and above it there hung a
-                  picture that he had recently cut out of an illustrated
-                  magazine and housed in a nice, gilded frame.
-                </p>
-              </div>
-            </div>
-            <% if (typeof user !== 'undefined') { %>
-              <div class="py-5 px-3">
-                <h5 class="text-uppercase mb-4">Leave a review</h5>
-                <form class="form" id="contact-form" method="POST" action="/user/add-review">
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <div class="mb-4">
-                        <label class="form-label" for="name">Your username *</label>
-                        <input class="form-control readonly" type="text" name="username" id="username" placeholder="Enter your username" value="<%- user.username %>" disabled />
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="mb-4">
-                        <label class="form-label" for="name">Your name *</label>
-                        <input class="form-control disabled" type="text" name="name" id="name" placeholder="Enter your name" value="<%- user.firstName + ' ' + user.lastName %>" readonly disabled />
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="mb-4">
-                        <label class="form-label" for="rating">Your rating *</label>
-                        <select class="custom-select focus-shadow-0" name="rating" id="rating">
-                          <option value="5">
-                            &#9733;&#9733;&#9733;&#9733;&#9733; (5/5)
-                          </option>
-                          <option value="4">
-                            &#9733;&#9733;&#9733;&#9733;&#9734; (4/5)
-                          </option>
-                          <option value="3">
-                            &#9733;&#9733;&#9733;&#9734;&#9734; (3/5)
-                          </option>
-                          <option value="2">
-                            &#9733;&#9733;&#9734;&#9734;&#9734; (2/5)
-                          </option>
-                          <option value="1">
-                            &#9733;&#9734;&#9734;&#9734;&#9734; (1/5)
-                          </option>
-                        </select>
-                      </div>
-                    </div>
+            <% if (product.reviews && product.reviews.length > 0) { %>
+              <% product.reviews.forEach( review => { %>
+                <div class="review d-flex text-capitalize">
+                  <div class="flex-shrink-0 text-center me-4 me-xl-5">
+                    <img class="review-image" src="/uploads/profile-image/avatar.png" alt="" /><span class="text-uppercase text-muted"><%- review.date.toDateString() %></span>
                   </div>
-                  <div class="mb-4">
-                    <label class="form-label" for="email">Your email *</label>
-                    <input class="form-control" type="email" name="email" id="email" placeholder="Enter your  email" value="<%- user.email %>" readonly disabled/>
+                  <div>
+                    <h5 class="mt-2 mb-1"><%- review.user?.name %></h5>
+                    <div class="mb-2">
+                      <% for( let index = 0; index < review.rating; index++ ) { %>
+                        <i class="bi bi-star-fill text-warning"></i>
+                      <% } %>
+                      <% if (review.rating < 5) { %>
+                        <% for( let index = 0; index < 5 - review.rating; index++ ) { %>
+                          <i class="bi bi-star text-warning"></i>
+                        <% } %>
+                      <% } %>
+                    </div>
+                    <p class="text-muted fw-bold lead">
+                      <%- review?.title %>
+                    </p>
+                    <p class="text-muted fw-semibold fs-6 lead">
+                      <%- review.comment %>
+                    </p>
+                    
                   </div>
-                  <div class="mb-4">
-                    <label class="form-label" for="review">Comment </label>
-                    <textarea class="form-control" rows="4" name="review" id="review" placeholder="Enter your review" required="required"></textarea>
-                  </div>
-                  <button class="btn btn-outline-dark" type="submit">
-                    Post review
-                  </button>
-                </form>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="review d-flex justify-content-center text-capitalize text-center">
+                <div class="text-center block-header text-muted fs-3 text-warning">No User reviews yet</div>
               </div>
             <% } %>
           </div>
@@ -356,7 +262,7 @@
             <div class="product">
               <div class="product-image">
                 <!-- <div class="ribbon ribbon-info">Fresh</div> -->
-                <img class="img-fluid" src="/uploads/product-images/<%= prd.primary_image.name %>" alt="product" />
+                <img class="img-fluid" src="/uploads/product-images/crp/<%= prd.primary_image.name %>" alt="product" />
                 <div class="product-hover-overlay">
                   <a class="product-hover-overlay-link" href="/shop/product/<%= prd._id %>"></a>
                   <div class="product-hover-overlay-buttons">
@@ -490,6 +396,10 @@
         li.setAttribute('data-color', variant.color._id); // Store the color
         li.setAttribute('data-size', variant.size._id); // Store the size
 
+        console.log(variant);
+        if (variant.isOutOfStock) {
+          li.setAttribute('data-is-out-of-stock', 'true');
+        }
 
         li.addEventListener('click', function() {
           document.querySelectorAll('.size-option').forEach(function(el) {
@@ -514,11 +424,7 @@
     }
   }
 
-  // function addToCart(variantId) {
-  //      // Implement the logic to add the selected product variant to the cart
-  //      // This could involve making an AJAX request to your backend to update the cart
-  //      console.log('Adding to cart:', variantId);
-  // }
+
 
   // Initial setup to select the first color if available
   if (productData.variants.length > 0) {
