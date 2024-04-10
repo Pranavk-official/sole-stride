@@ -52,10 +52,15 @@ module.exports = {
         .json({ success: false, message: "Missing parameters" });
     }
 
-    if (isNaN(offerDiscountRate) || offerDiscountRate < 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Discount rate should be positive" });
+    if (
+      isNaN(offerDiscountRate) ||
+      offerDiscountRate <= 0 ||
+      offerDiscountRate > 95
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Discount rate should be a positive number between 1 and 95",
+      });
     }
 
     try {
@@ -108,6 +113,12 @@ module.exports = {
         .status(400)
         .json({ success: false, message: "Discount rate should be positive" });
     }
+    if (offerDiscountRate <= 0 || offerDiscountRate > 95) {
+      return res.status(400).json({
+        success: false,
+        message: "Discount rate should be a positive number between 1 and 95",
+      });
+    }
 
     try {
       const category = await Category.findById(categoryId);
@@ -119,21 +130,17 @@ module.exports = {
 
       const productsInCategory = await Product.find({ category: categoryId });
       if (!productsInCategory) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "Products not found in this category",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "Products not found in this category",
+        });
       }
 
       if (productsInCategory.length === 0) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "No products found in this category",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "No products found in this category",
+        });
       }
 
       category.offerDiscountRate = offerDiscountRate;
@@ -157,7 +164,7 @@ module.exports = {
 
       return res
         .status(200)
-        .json({ sucess: true, message: "Offer added successfully" });
+        .json({ success: true, message: "Offer added successfully" });
     } catch (error) {
       console.error(error);
       return res
@@ -180,21 +187,25 @@ module.exports = {
 
       const productsInCategory = await Product.find({ category: categoryId });
       if (!productsInCategory) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "Products not found in this category",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "Products not found in this category",
+        });
       }
 
       if (productsInCategory.length === 0) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: "No products found in this category",
-          });
+        return res.status(404).json({
+          success: false,
+          message: "No products found in this category",
+        });
+      }
+
+
+      if (category.offerDiscountRate <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Discount rate should be a positive number between 1 and 95",
+        });
       }
 
       category.onOffer = !category.onOffer;
@@ -202,16 +213,16 @@ module.exports = {
       await category.save();
 
       for (const product of productsInCategory) {
-        product.onOffer = category.onOffer;
-        await product.save();
+        if (product.offerDiscountRate === category.offerDiscountRate) {
+          product.onOffer = category.onOffer;
+          await product.save();
+        }
       }
 
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: category.onOffer ? "Offer enabled" : "Offer disabled",
-        });
+      return res.status(200).json({
+        success: true,
+        message: category.onOffer ? "Offer enabled" : "Offer disabled",
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -239,16 +250,21 @@ module.exports = {
           .json({ success: false, message: "Product not found" });
       }
 
+      if (product.offerDiscountRate <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Discount rate should be a positive number between 1 and 95",
+        });
+      }
+
       product.onOffer = !product.onOffer;
 
       await product.save();
 
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: product.onOffer ? "Offer enabled" : "Offer disabled",
-        });
+      return res.status(200).json({
+        success: true,
+        message: product.onOffer ? "Offer enabled" : "Offer disabled",
+      });
     } catch (error) {
       console.error(error);
       return res
