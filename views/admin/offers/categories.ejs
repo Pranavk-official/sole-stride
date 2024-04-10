@@ -1,151 +1,192 @@
 <section class="breadcrumb-option">
-    <div class="container">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
-          <li class="breadcrumb-item">
-            <a class="link-body-emphasis" href="/admin">
-              <svg class="bi" width="16" height="16">
-                <use xlink:href="#house-door-fill"></use>
-              </svg>
-              <span class="visually-hidden">Dashboard</span>
-            </a>
-          </li>
-  
-          <li class="breadcrumb-item active" aria-current="page">
-            Category Offers
-          </li>
-        </ol>
-      </nav>
-    </div>
-  </section>
-  
-  <div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><%= locals.title ? locals.title : 'Category Offers' %></h1>
-  
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis" href="/admin">
+            <svg class="bi" width="16" height="16">
+              <use xlink:href="#house-door-fill"></use>
+            </svg>
+            <span class="visually-hidden">Dashboard</span>
+          </a>
+        </li>
+
+        <li class="breadcrumb-item active" aria-current="page">
+          Category Offers
+        </li>
+      </ol>
+    </nav>
   </div>
-  
-  
-  <div class="container text-capitalize">
-    <div class="table-responsive container">
-      <table class="table table-striped table-hover table-sm">
-        <thead>
-          <tr class="text-center">
-            <th>#</th>
-            <th>Category Name</th>
-            <th>Discount Name</th>
-            <th>Offer Status</th>
-            <th>Discount (%)</th>
-            <th>Activate/Deactivate</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (categories !== 'undefined' && categories.length > 0) { %>
-          <% categories.forEach((item, index) => { %>
-          <tr class="align-middle text-center">
-            <td><%- index+1 %></td>
-            <td><%- item.name %></td>
-            <td>
-              <img src="/uploads/category-images/<%- item.image.filename %>" alt="<%- item.name %>" class="img-fluid img-thumbnail" width="90rem">
-            </td>
-            <td>
-              <% if (item.onOffer) { %>
-              <span class="badge bg-success">Active</span>
-              <% } else { %>
-              <span class="badge bg-danger">Not Active</span>
-              <% } %>
-            </td>
-            <td>-<%- item.offerDiscountRate %>%</td>
-            <td>
-              <% if (!item.onOffer) { %>
-              <button onclick="toggleActive('<%- item._id %>','<%- item.name %>', 'true')" class="btn btn-outline-success btn-sm">Activate</button>
-              <% } else { %>
-              <button onclick="toggleActive('<%- item._id %>','<%- item.name %>', 'false')"  class="btn btn-outline-danger btn-sm">Deactivate</button>
-              <% } %>
-            </td>
-            <td>
-              <button type="button" data-bs-toggle="modal" data-category-id="<%- item._id %>" data-bs-target="#offerModal" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Add / Edit </button>
-              
-            </td>
-  
-          </tr>
-          <% }) %>
-          <% } else { %>
-            <tr>
-              <td colspan="9" class="text-danger"> No categories found</td>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
+</section>
+
+<div class="container d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2"><%= locals.title ? locals.title : 'Category Offers' %></h1>
+
+</div>
+
+
+<div class="container text-capitalize">
+  <div class="table-responsive container">
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr class="text-center">
+          <th>#</th>
+          <th>Category Name</th>
+          <th>Discount Name</th>
+          <th>Offer Status</th>
+          <th>Discount (%)</th>
+          <th>Activate/Deactivate</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (categories !== 'undefined' && categories.length > 0) { %>
+        <% categories.forEach((item, index) => { %>
+        <tr class="align-middle text-center">
+          <td><%- index+1 %></td>
+          <td><%- item.name %></td>
+          <td>
+            <img src="/uploads/category-images/<%- item.image.filename %>" alt="<%- item.name %>" class="img-fluid img-thumbnail" width="90rem">
+          </td>
+          <td>
+            <% if (item.onOffer) { %>
+            <span class="badge bg-success">Active</span>
+            <% } else { %>
+            <span class="badge bg-danger">Not Active</span>
+            <% } %>
+          </td>
+          <td>-<%- item.offerDiscountRate %>%</td>
+          <td>
+            <% if (!item.onOffer) { %>
+            <button onclick="toggleActive('<%- item._id %>','<%- item.name %>', 'true')" class="btn btn-outline-success btn-sm">Activate</button>
+            <% } else { %>
+            <button onclick="toggleActive('<%- item._id %>','<%- item.name %>', 'false')" class="btn btn-outline-danger btn-sm">Deactivate</button>
+            <% } %>
+          </td>
+          <td>
+            <button type="button" data-bs-toggle="modal" data-category-id="<%- item._id %>" data-bs-target="#offerModal" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Add / Edit </button>
+
+          </td>
+
+        </tr>
+        <% }) %>
+        <% } else { %>
+        <tr>
+          <td colspan="9" class="text-danger"> No categories found</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
   </div>
-  
-  
-  
-  
-  <!-- Add or Edit Offer Modal -->
-  
-  <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content text-capitalize">
-        <div class="modal-header">
-          <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="card">
-            <form id="offerForm" class="card-body" method="POST">
-              <div class="row">
-                <fieldset class="col card mx-2">
-                  <legend id="category_name">Category : </legend>
-                  <div class="mb-3">
-                    <label for="offerDiscountRate" class="form-label">Offer Discount (%)</label>
-                    <input name="offerDiscountRate" type="number" min="0" class="form-control" id="offerDiscountRate">
-                  </div>
-                </fieldset>
-              </div>
-              <!-- Add more form fields as needed -->
-              <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
-            </form>
-          </div>
+</div>
+
+
+
+
+<!-- Add or Edit Offer Modal -->
+
+<div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content text-capitalize">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <form id="offerForm" class="card-body" method="POST">
+            <div class="row">
+              <fieldset class="col card mx-2">
+                <legend id="category_name">Category : </legend>
+                <div class="mb-3">
+                  <label for="offerDiscountRate" class="form-label">Offer Discount (%)</label>
+                  <input name="offerDiscountRate" type="number" min="0" class="form-control" id="offerDiscountRate">
+                </div>
+              </fieldset>
+            </div>
+            <!-- Add more form fields as needed -->
+            <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  
-  
-  
-  <script defer>
-    const offerModal = document.getElementById('offerModal')
-    offerModal.addEventListener('show.bs.modal', async (e) => {
-      const offerBtn = e.relatedTarget;
-  
-      const categoryId = offerBtn.getAttribute('data-category-id');
-      try {
-        const response = await fetch(`/admin/category-details/${categoryId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch category');
-        }
-        const data = await response.json();
-        const category = data.category;
-        
-        if (data.success) {
-          document.getElementById('category_name').innerText += category.name;
-          document.getElementById('offerDiscountRate').value = category.offerDiscountRate;
-  
-          document.getElementById('offerForm').action = `/admin/category-offer/${category._id}?_method=PATCH`;
-        }
-  
-      } catch (error) {
+</div>
+
+
+
+<script defer>
+  const offerModal = document.getElementById('offerModal')
+  offerModal.addEventListener('show.bs.modal', async (e) => {
+    const offerBtn = e.relatedTarget;
+
+    const categoryId = offerBtn.getAttribute('data-category-id');
+    try {
+      const response = await fetch(`/admin/category-details/${categoryId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch category');
+      }
+      const data = await response.json();
+      const category = data.category;
+
+      if (data.success) {
+        document.getElementById('category_name').innerText += category.name;
+        document.getElementById('offerDiscountRate').value = category.offerDiscountRate;
+
+        document.getElementById('offerForm').action = `/admin/category-offer/${category._id}?_method=PATCH`;
+      }
+
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message
+      });
+    }
+  });
+
+  const offerForm = document.getElementById('offerForm');
+  offerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(offerForm);
+    const body = Object.fromEntries(formData);
+    try {
+      const response = await fetch(offerForm.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      // if (!response.ok) {
+      //   throw new Error("Failed to update offer");
+      // }
+
+      console.log(data);
+      if (data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: data.message,
+        });
+      } else {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: error.message
+          text: data.message
         });
       }
-    });
-    
-    const toggleActive = async (categoryId, categoryName, onOffer) => {
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message
+      });
+    }
+  });
+
+  const toggleActive = async (categoryId, categoryName, onOffer) => {
     try {
       const confirmed = await Swal.fire({
         title: 'Are you sure?',
@@ -195,6 +236,4 @@
       });
     }
   }
-
-
-  </script>
+</script>

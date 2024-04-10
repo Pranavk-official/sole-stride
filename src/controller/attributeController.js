@@ -199,12 +199,18 @@ module.exports = {
         { new: true }
       );
       if (sizeAttr) {
-        res.status(200).json(sizeAttr);
+        // res.status(200).json(sizeAttr);
+        req.flash("success", "Editted Size attribute");
+        res.redirect("/admin/attributes");
       } else {
-        res.status(404).json({ error: "Size not found" });
+        // res.status(404).json({ error: "Size not found" });
+        req.flash("error", "Failed to edit size, Size not found");
+        res.redirect("/admin/attributes");
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to edit size" });
+      // res.status(500).json({ error: "Failed to edit size" });
+      req.flash("error", "Failed to edit size, Internal server error");
+      res.redirect("/admin/attributes");
     }
   },
   editBrand: async (req, res) => {
@@ -221,12 +227,18 @@ module.exports = {
       );
       console.log(newBrand);
       if (newBrand) {
-        res.status(200).json(newBrand);
+        // res.status(200).json(newBrand);
+        req.flash("success", "Editted Brand attribute");
+        res.redirect("/admin/attributes");
       } else {
-        res.status(404).json({ error: "Brand not found" });
+        // res.status(404).json({ error: "Brand not found" });
+        req.flash("error", "Failed to edit brand, Brand not found");
+        res.redirect("/admin/attributes");
       }
     } catch (error) {
-      res.status(500).json({ error: "Failed to edit brand" });
+      // res.status(500).json({ error: "Failed to edit brand" });
+      req.flash("error", "Failed to edit brand, Internal server error");
+      res.redirect("/admin/attributes");
     }
   },
 

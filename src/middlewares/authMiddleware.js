@@ -29,7 +29,7 @@ module.exports = {
     }
   },
   isAdminLoggedOut: (req, res, next) => {
-    if (req.isAuthenticated() && req.user.isAdmin) {
+    if (req.isAuthenticated()) {
       res.redirect("/admin");
     } else {
       next();
@@ -39,7 +39,6 @@ module.exports = {
   // Check Blocked status for users
 
   checkBlockedUser: async (req, res, next) => {
-    
     if (req.isAuthenticated()) {
       // console.log('middleware');
       const user = await User.findOne({ _id: req.user.id });

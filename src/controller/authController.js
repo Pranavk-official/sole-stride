@@ -290,7 +290,6 @@ module.exports = {
               console.log(err);
               return next(err);
             }
-            req.flash("success", "Admin Logged In");
             req.flash("success", "User Successfully Logged In");
             return res.redirect("/");
           });
