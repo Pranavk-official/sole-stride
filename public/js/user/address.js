@@ -77,7 +77,7 @@ async function deleteAddress(addressId) {
         }
 
         Swal.fire("Deleted!", "Your address has been deleted.", "success").then(
-          () => location.assign("/checkout")
+          () => location.reload()
         );
         // Optionally, refresh the page or remove the address from the DOM here
       } catch (error) {

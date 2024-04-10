@@ -21,7 +21,7 @@ var instance = new Razorpay({
 
 // Function to check if a product exists and is active
 const checkProductExistence = async (cartItem) => {
-  const product = await Product.findById(cartItem.product_id);
+  const product = await Product.findById(cartItem.product_id._id);
   if (!product || !product.isActive) {
     throw new Error(`${product.product_name}`);
   }
@@ -30,7 +30,7 @@ const checkProductExistence = async (cartItem) => {
 
 // Function to check if the stock is sufficient for a productExistencePromisesproduct
 const checkStockAvailability = async (cartItem) => {
-  const product = await Product.findById(cartItem.product_id);
+  const product = await Product.findById(cartItem.product_id._id);
   const variant = product.variants.find(
     (variant) => variant._id.toString() === cartItem.variant.toString()
   );

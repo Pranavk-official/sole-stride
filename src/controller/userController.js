@@ -248,7 +248,11 @@ module.exports = {
               if (newPassword !== confirmNewPassword) {
                 req.flash("error", "Passwords Do not Match");
                 return res.redirect("/user/profile");
-              } else {
+              }else if(newPassword === oldPassword) {
+                req.flash("error", "New password cannot be same as old password");
+                return res.redirect("/user/profile")
+              } 
+              else {
                 user.password = newPassword; // Assuming you have a method to hash the password
                 await user.save();
                 // return res.status(200).json({ 'success': 'Password Updated' });
