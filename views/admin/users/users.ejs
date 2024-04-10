@@ -163,7 +163,7 @@
       text: isBlocked == 'true' ? `You want to unblock the user ${username}` : `You want to block the user ${username}`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: isBlocked ? 'Yes, block!' : 'Yes, unblock!',
+      confirmButtonText: isBlocked == 'true' ? 'Yes, block!' : 'Yes, unblock!',
       cancelButtonText: 'No, cancel!',
       reverseButtons: true
     })
