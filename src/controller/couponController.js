@@ -300,7 +300,12 @@ module.exports = {
       }
 
       // Calculate the discount amount based on the coupon's rateOfDiscount
-      const discountAmount = totalPrice * (couponCode.rateOfDiscount / 100);
+      let discountAmount = totalPrice * (couponCode.rateOfDiscount / 100);
+
+      // Check if the discount amount is greater than the maximum discount
+      if (discountAmount > couponCode.maximumDiscount) {
+        discountAmount = couponCode.maximumDiscount;
+      }
 
       userCart.couponDiscount = discountAmount;
       userCart.coupon = couponCode._id;
