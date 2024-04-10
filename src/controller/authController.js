@@ -572,7 +572,20 @@ module.exports = {
         return res.redirect("/reset-password");
       }
 
+      
+
       const user = await User.findById(userId);
+
+      const isSamePassword = await bcrypt.compare(
+        password,
+        user.password
+      );
+
+      if (isSamePassword) {
+        req.flash("error", "New password cannot be same as old password");
+        return res.redirect("/reset-password");
+      }
+
       const hashPwd = await bcrypt.hash(password, 10);
       if (user) {
         const updatedUser = await User.updateOne(

@@ -29,6 +29,7 @@ const checkPassword = () => {
 
   const password = newPasswordEl.value.trim();
 
+
   if (!isRequired(password)) {
     showError(newPasswordEl.parentElement, "Password cannot be blank.");
   } else if (!isPasswordSecure(password)) {
@@ -36,6 +37,8 @@ const checkPassword = () => {
       newPasswordEl.parentElement,
       "Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)"
     );
+  }else if(password === oldPasswordEl.value.trim()){
+    showError(newPasswordEl.parentElement, "New password cannot be same as old password");
   } else {
     showSuccess(newPasswordEl.parentElement);
     valid = true;
