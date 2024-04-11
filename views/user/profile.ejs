@@ -65,19 +65,20 @@
       <!-- Change Password Form -->
       <form action="/user/reset-password" method="POST" id="reset-password-form">
         <hr class="my-4">
-        <div class="bg-secondary-light rounded-3 p-4 mb-4">
+        <div class="block-header bg-secondary-light rounded-3 p-4 pb-3 mb-4">
           <h4>Change Password</h4>
         </div>
-        <div class="col px-5 mx-5">
-          <div class="col-md-12  mb-5 form-group">
+        <div class="col px-3">
+          <div class="col-md-12  mb-3 form-group">
+            <label class="form-label" for="oldPassword">Old Password</label>
             <div class="d-flex align-items-center">
-              <label class="form-label" for="oldPassword">Old Password</label>
               <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="Old Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
               <i class="bi bi-eye-slash" id="toggleOldPassword" style="position: relative;z-index: 8; left: -30px; width: 0%; cursor: pointer;"></i>
             </div>
             <small></small>
           </div>
           <div class="row">
+            <label class="form-label" for="newPassword">New Password</label>
             <div class="col-md-6 mb-3 form-group">
               <div class="d-flex align-items-center">
                 <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
