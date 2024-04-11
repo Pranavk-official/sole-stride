@@ -63,7 +63,7 @@ router.post("/cancel-all-order/:id/", orderController.cancelAllOrders);
 
 
 // invoice
-router.get("/invoice/:id/:itemId", orderController.getInvoice);
+router.get("/invoice/:id/:itemId", orderController.downloadInvoice);
 router.get("/invoice/download/:id/:itemId", orderController.downloadInvoice);
 
 

@@ -253,6 +253,6 @@ router.patch('/toggle-active-product/:id', offerController.toggleActiveProdOffer
 
 router.get('/sales-report', reportsController.getSalesReport)
 router.get('/sales-report/excel', reportsController.salesReportExcel)
-router.get('/sales-report/pdf-download', reportsController.salesReportPdf)
+router.get('/sales-report/pdf-download', reportsController.getSalesReportPdf)
 
 module.exports = router;

@@ -467,11 +467,21 @@ module.exports = {
         $project: {
           _id: 1,
           items: 1,
+          shippingAddress: 1,
+          paymentMethod: 1,
+          totalPrice: 1,
+          coupon: 1,
+          couponDiscount: 1,
+          payable: 1,
+          categoryDiscount: 1,
+          paymentStatus: 1,
+          orderStatus: 1,
+          createdAt: 1,
         },
       },
     ]);
 
-    console.log(order);
+    console.log(order[0].items);
 
     var data = {
       apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
@@ -479,8 +489,6 @@ module.exports = {
       images: {
         // The logo on top of your invoice
         logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
-        // The invoice background
-        background: "https://public.budgetinvoice.com/img/watermark-draft.jpg",
       },
       // Your own data
       sender: {
@@ -489,37 +497,27 @@ module.exports = {
         zip: "1234 AB",
         city: "Sampletown",
         country: "Samplecountry",
-        // custom1: "custom value 1",
-        // custom2: "custom value 2",
-        // custom3: "custom value 3"
       },
       // Your recipient
       client: {
-        company: "Client Corp",
-        address: "Clientstreet 456",
-        zip: "4567 CD",
-        city: "Clientcity",
-        country: "Clientcountry",
-        // custom1: "custom value 1",
-        // custom2: "custom value 2",
-        // custom3: "custom value 3"
+        company: order[0].shippingAddress.name,
+        address: order[0].shippingAddress.address,
+        zip: order[0].shippingAddress.zipcope,
+        city: order[0].shippingAddress.city,
+        country: 'India',
       },
       information: {
         // Invoice number
-        number: "2021.0001",
+        number: order[0].items.orderID,
         // Invoice data
-        date: "12-12-2021",
-        // Invoice due date
-        dueDate: "31-12-2021",
+        date: new Date().toISOString().slice(0, 10),
       },
-      // The products you would like to see on your invoice
-      // Total values are being calculated automatically
       products: [
         {
-          quantity: order.quantity,
-          description: order.product[0].product_name,
+          quantity: order[0].quantity,
+          description: order[0].items.product[0].product_name,
           taxRate: 0,
-          price: order.itemTotal,
+          price: order[0].items.itemTotal,
         },
       ],
       // The message you would like to display on the bottom of your invoice
@@ -527,43 +525,24 @@ module.exports = {
       // Settings to customize your invoice
       settings: {
         currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
-        // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
-        // marginTop: 25, // Defaults to '25'
-        // marginRight: 25, // Defaults to '25'
-        // marginLeft: 25, // Defaults to '25'
-        // marginBottom: 25, // Defaults to '25'
-        // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
-        // height: "1000px", // allowed units: mm, cm, in, px
-        // width: "500px", // allowed units: mm, cm, in, px
-        // orientation: "landscape" // portrait or landscape, defaults to portrait
-      },
-      // Translate your invoice to your preferred language
-      translate: {
-        // invoice: "FACTUUR",  // Default to 'INVOICE'
-        // number: "Nummer", // Defaults to 'Number'
-        // date: "Datum", // Default to 'Date'
-        // dueDate: "Verloopdatum", // Defaults to 'Due Date'
-        // subtotal: "Subtotaal", // Defaults to 'Subtotal'
-        // products: "Producten", // Defaults to 'Products'
-        // quantity: "Aantal", // Default to 'Quantity'
-        // price: "Prijs", // Defaults to 'Price'
-        // productTotal: "Totaal", // Defaults to 'Total'
-        // total: "Totaal", // Defaults to 'Total'
-        // taxNotation: "btw" // Defaults to 'vat'
       },
 
-      // Customize enables you to provide your own templates
-      // Please review the documentation for instructions and examples
-      // "customize": {
-      //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
-      // }
+      
     };
 
     //Create your invoice! Easy!
-    easyinvoice.createInvoice(data, function (result) {
-      //The response will contain a base64 encoded PDF file
-      console.log("PDF base64 string: ", result.pdf);
-    });
+    const result = await easyinvoice.createInvoice(data);
+    console.log("PDF base64 string: ", result.pdf);
+
+    // Convert base64 string to buffer
+    const pdfBuffer = Buffer.from(result.pdf, 'base64');
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${order[0].items.orderID}_invoice_${Date.now()}.pdf`);
+
+    // Send the PDF buffer as a response
+    res.send(pdfBuffer);
   },
 
   // Cancel and Return

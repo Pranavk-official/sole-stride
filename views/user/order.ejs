@@ -73,20 +73,20 @@
 
                   <div class="card-body px-3 m-2 ">
                     <% if (['Delivered', 'In-Return', 'Returned' ].includes(order.items.status) ) { %>
-                      <% if (!order.items.review) { %>
-                        <div style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#reviewModal" class="btn btn-outline-light d-flex justify-content-around hover" data-product-name="<%- order.products.product_name %>" data-product-id="<%- order.products._id %>" data-variant-color="<%- order.variant.name %>" data-variant-size="<%- order.variant.value %>">
-                          <div class="">
-                            <i class="bi-solid  text-warning bi-star-fill"></i>
-                            <i class="bi-solid text-warning bi-star-fill"></i>
-                            <i class="bi-regular text-warning bi-star icon-link-hover"></i>
-                            <i class="bi-regular text-warning bi-star"></i>
-                            <i class="bi-regular text-warning bi-star"></i>
-                            <a class="link text-decoration-none text-primary fw-semibold fs-6">
-                              Rate this?
-                            </a>
-                          </div>
-                        </div>
-                      <% } %>
+                    <% if (!order.items.review) { %>
+                    <div style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#reviewModal" class="btn btn-outline-light d-flex justify-content-around hover" data-product-name="<%- order.products.product_name %>" data-product-id="<%- order.products._id %>" data-variant-color="<%- order.variant.name %>" data-variant-size="<%- order.variant.value %>">
+                      <div class="">
+                        <i class="bi-solid  text-warning bi-star-fill"></i>
+                        <i class="bi-solid text-warning bi-star-fill"></i>
+                        <i class="bi-regular text-warning bi-star icon-link-hover"></i>
+                        <i class="bi-regular text-warning bi-star"></i>
+                        <i class="bi-regular text-warning bi-star"></i>
+                        <a class="link text-decoration-none text-primary fw-semibold fs-6">
+                          Rate this?
+                        </a>
+                      </div>
+                    </div>
+                    <% } %>
                     <% } %>
                   </div>
                 </div>
@@ -525,7 +525,21 @@
     const orderId = e.currentTarget.getAttribute('data-order-id')
     const itemId = e.currentTarget.getAttribute('data-item-id')
     console.log(orderId, itemId);
-    location.assign(`/user/invoice/${orderId}/${itemId}/`)
+    // Show a SweetAlert2 loading message
+    Swal.fire({
+      icon: 'info',
+      title: 'Generating Invoice...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      timer: 1200,
+    }).then(() => {
+      // Redirect after the alert is dismissed
+      location.assign(`/user/invoice/${orderId}/${itemId}/`);
+      // Do it similar to sales report
+    });
   })
 
 
