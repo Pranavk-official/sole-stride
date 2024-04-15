@@ -633,7 +633,7 @@ module.exports = {
           couponId = couponId.coupon._id;
           if (couponId) {
             let updateCoupon = await Coupon.findByIdAndUpdate(
-              { _id: new mongoose.Types.ObjectId(couponId) },
+              { _id: couponId },
               {
                 $push: { usedBy: customer_id },
               },
