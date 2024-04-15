@@ -79,7 +79,7 @@
           <% orders.forEach((order, index) => { %>
           <tr class="text-capitalize">
             <td class="text-center"><%=index+1%></td>
-            <td class="text-center"><%=order._id%></td>
+            <td class="text-center"><%= order._id.toString().slice(-7).toUpperCase() %></td>
             <td class="text-center"><%=order.createdAt.toDateString()%></td>
             <td><%=order.userID[0].username%></td>
             <td>

@@ -147,7 +147,7 @@
           <% for(let i=0; i < orders.length ;i++) { %>
 
           <tr data-id="" class="text-center" style="font-size: medium">
-            <td data-title="Name"><%=orders[i]._id%></td>
+            <td data-title="Name"><%=orders[i]._id.toString().slice(-7).toUpperCase()%></td>
 
             <td style="max-width: 150px" data-title="Name">
               <% const options={ year: 'numeric' , month: 'short' , day:
