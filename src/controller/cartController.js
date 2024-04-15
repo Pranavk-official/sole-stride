@@ -367,7 +367,7 @@ module.exports = {
         $limit: 1,
       },
     ]);
-    let order_id = order[0]._id;
+    let order_id = order[0]._id.toString().slice(-7).toUpperCase();
 
     res.render("shop/orderConfirm", {
       order: order_id,
