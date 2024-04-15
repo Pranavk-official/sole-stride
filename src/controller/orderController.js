@@ -242,7 +242,7 @@ module.exports = {
       }
 
       // console.log(orderDetails);
-
+      
       const isInReturn = await Return.findOne({ order_id: order_id });
       console.log(isInReturn);
       if (isInReturn) {
@@ -300,6 +300,12 @@ module.exports = {
 
   // Get Invoice
   getInvoice: async (req, res) => {
+
+    const invoiceId = `SS${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const locals = {
+      title: `Invoice - ${invoiceId}`,
+    }
     const { id, itemId } = req.params;
 
     console.log(id, itemId);
@@ -334,112 +340,32 @@ module.exports = {
         $project: {
           _id: 1,
           items: 1,
+          shippingAddress: 1,
+          paymentMethod: 1,
+          totalPrice: 1,
+          coupon: 1,
+          couponDiscount: 1,
+          payable: 1,
+          categoryDiscount: 1,
+          paymentStatus: 1,
+          orderStatus: 1,
+          createdAt: 1,
+          updatedAt: 1,
         },
       },
     ]);
 
-    // console.log(order[0].items);
+    console.log(order[0]);
+    // Generate random invoice id on the format SS-XXXX
+    
 
-    let data = {
-      apiKey: "free", // Please register to receive a production apiKey: https://app.budgetinvoice.com/register
-      mode: "development", // Production or development, defaults to production
-      images: {
-        // The logo on top of your invoice
-        logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
-        // The invoice background
-        background: "https://public.budgetinvoice.com/img/watermark-draft.jpg",
-      },
-      // Your own data
-      sender: {
-        company: "SoloStride",
-        address: "Sample Street 123",
-        zip: "1234 AB",
-        city: "Sampletown",
-        country: "Samplecountry",
-        // custom1: "custom value 1",
-        // custom2: "custom value 2",
-        // custom3: "custom value 3"
-      },
-      // Your recipient
-      client: {
-        company: "Client Corp",
-        address: "Clientstreet 456",
-        zip: "4567 CD",
-        city: "Clientcity",
-        country: "Clientcountry",
-        // custom1: "custom value 1",
-        // custom2: "custom value 2",
-        // custom3: "custom value 3"
-      },
-      information: {
-        // Invoice number
-        number: "2021.0001",
-        // Invoice data
-        date: "12-12-2021",
-        // Invoice due date
-        dueDate: "31-12-2021",
-      },
-      // The products you would like to see on your invoice
-      // Total values are being calculated automatically
-      products: [
-        {
-          quantity: order[0].quantity,
-          description: order[0].items.product.product_name,
-          taxRate: 0,
-          price: order[0].items.itemTotal,
-        },
-      ],
-      // The message you would like to display on the bottom of your invoice
-      bottomNotice: "Kindly pay your invoice within 15 days.",
-      // Settings to customize your invoice
-      settings: {
-        currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
-        // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
-        // marginTop: 25, // Defaults to '25'
-        // marginRight: 25, // Defaults to '25'
-        // marginLeft: 25, // Defaults to '25'
-        // marginBottom: 25, // Defaults to '25'
-        // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
-        // height: "1000px", // allowed units: mm, cm, in, px
-        // width: "500px", // allowed units: mm, cm, in, px
-        // orientation: "landscape" // portrait or landscape, defaults to portrait
-      },
-      // Translate your invoice to your preferred language
-      translate: {
-        // invoice: "FACTUUR",  // Default to 'INVOICE'
-        // number: "Nummer", // Defaults to 'Number'
-        // date: "Datum", // Default to 'Date'
-        // dueDate: "Verloopdatum", // Defaults to 'Due Date'
-        // subtotal: "Subtotaal", // Defaults to 'Subtotal'
-        // products: "Producten", // Defaults to 'Products'
-        // quantity: "Aantal", // Default to 'Quantity'
-        // price: "Prijs", // Defaults to 'Price'
-        // productTotal: "Totaal", // Defaults to 'Total'
-        // total: "Totaal", // Defaults to 'Total'
-        // taxNotation: "btw" // Defaults to 'vat'
-      },
-
-      // Customize enables you to provide your own templates
-      // Please review the documentation for instructions and examples
-      // "customize": {
-      //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
-      // }
-    };
-
-    try {
-      let result = await easyinvoice.createInvoice(data);
-      const pdfPath = path.join(
-        __dirname,
-        `../../public/files/invoice-${Date.now()}.pdf`
-      );
-      
-      await fs.writeFile(pdfPath, result.pdf, "base64");
-      
-      res.download(pdfPath);
-    } catch (error) {
-      console.log(error);
-    }
-    //Create your invoice! Easy!
+    res.render("user/invoice-pdf", {
+      order: order[0],
+      user: req.user,
+      invoiceId,
+      locals,
+      layout: './layouts/docs/invoice.ejs',
+    })
   },
 
   downloadInvoice: async (req, res) => {
@@ -644,8 +570,7 @@ module.exports = {
         _id: id,
         "items.orderID": itemId,
       });
-      // console.log(updateOrder, variant);
-      // Assuming you have a Product model and each product has a quantity field
+      console.log(updateOrder, variant);
       for (const item of updateOrder.items) {
         const product = await Product.findById(item.product_id);
         if (product) {
@@ -658,9 +583,10 @@ module.exports = {
           }
 
           console.log(product.variants[variantIndex]);
-
+          
           product.variants[variantIndex].stock += item.quantity;
-
+          
+          console.log(product.variants[variantIndex]);
           // product.stock += item.quantity; // Increment the quantity of the product
           await product.save(); // Save the updated product
         }
