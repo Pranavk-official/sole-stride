@@ -312,7 +312,8 @@ module.exports = {
         return res.status(404).json({ error: "User's cart not found" });
       }
       const status = paymentMethod == "COD" || paymentMethod == "Wallet" ? "Confirmed" : "Pending";
-
+      const paymentStatus = paymentMethod == "COD" || paymentMethod == "Wallet" ? "Paid" : "Pending";
+      
       console.log(userCart.items);
 
       let order;
@@ -326,7 +327,7 @@ module.exports = {
           couponDiscount: userCart.couponDiscount,
           payable: userCart.payable,
           paymentMethod,
-          paymentStatus: status,
+          paymentStatus,
           status,
           shippingAddress,
         });
@@ -341,7 +342,7 @@ module.exports = {
           totalPrice: userCart.totalPrice,
           payable: userCart.payable,
           paymentMethod,
-          paymentStatus: status,
+          paymentStatus,
           status,
           shippingAddress,
         });
