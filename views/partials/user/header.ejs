@@ -120,8 +120,8 @@
             <a href="/user/cart" class="navbar-icon-link">
               <i class="bi bi-cart3 text-warning"></i>
               <% if (typeof cartCount !== 'undefined') { %>
-                <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount ? cartCount : '0' %></div>
-                <% } %>
+              <div id="cartCount" class="navbar-icon-link-badge"><%- cartCount ? cartCount : '0' %></div>
+              <% } %>
               <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">View
                 Cart
               </span>
@@ -132,7 +132,7 @@
           <div class="nav-item dropdown d-none">
             <a class="navbar-icon-link d-lg-none" href="/user/cart">
               <i class="bi bi-cart3"></i>
-              
+
               <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
                 View cart
               </span>
@@ -193,12 +193,12 @@
           <% if (typeof user !=='undefined') { %>
           <% if (user) { %>
           <div class="nav-item navbar-icon-link m-0">
-            <a href="/logout" class="navbar-icon-link text-danger px-2 py-1 align-items-center">
+            <button onclick="logOut()" class="btn btn-outline-light navbar-icon-link text-danger px-2 py-1 align-items-center">
               <i class="bi bi-box-arrow-right align-items-center"></i>
               <span class="text-sm ms-2 ms-lg-0 text-uppercase text-sm fw-bold d-none d-sm-inline d-lg-none">
                 Sign Out
               </span>
-            </a>
+            </button>
           </div>
           <% } %>
           <% } %>
@@ -225,3 +225,23 @@
   </div>
   <!-- /Fullscreen search area-->
 </header>
+
+
+<script defer>
+  //  Log out confirmation
+  const logOut = () => {
+    Swal.fire({
+      title: "Are you sure you want to logout?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Logout!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/logout";
+      }
+    });
+  };
+</script>
