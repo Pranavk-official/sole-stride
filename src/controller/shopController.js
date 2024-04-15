@@ -5,7 +5,9 @@ const Brand = require("../model/attributes/brandSchema");
 const Product = require("../model/productSchema");
 const Address = require("../model/addressSchema");
 const Order = require("../model/orderSchema");
-const User = require("../model/userSchema");
+
+
+const bestSelling = require("../helpers/bestSelling");
 
 module.exports = {
   getHome: async (req, res) => {
@@ -21,14 +23,20 @@ module.exports = {
       .sort({ createdAt: -1 });
     const categories = await Category.find({ isActive: true });
 
+
+    const bestSellingProducts = await bestSelling.getBestSellingProducts();
+    const bestSellingBrands = await bestSelling.getBestSellingBrands();
+    const bestSellingCategories = await bestSelling.getBestSellingCategories();
+
     res.render("index", {
       locals,
       banners,
       categories,
       products,
+      bestSellingProducts,
+      bestSellingBrands,
+      bestSellingCategories,
       user: req.user,
-      error: req.flash("error"),
-      success: req.flash("success"),
     });
   },
   search: async (req, res, next) => {

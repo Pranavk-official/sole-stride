@@ -4,6 +4,9 @@ const User = require("../model/userSchema");
 const Product = require("../model/productSchema");
 const Orders = require("../model/orderSchema");
 
+const bestSelling = require("../helpers/bestSelling");
+
+
 module.exports = {
   getDashboard: async (req, res) => {
     const locals = {
@@ -34,6 +37,27 @@ module.exports = {
       status: "Confirmed",
     }).countDocuments();
 
+    // best selling
+    let bestSellingProducts = await bestSelling.getBestSellingProducts();
+    let bestSellingBrands = await bestSelling.getBestSellingBrands();
+    let bestSellingCategories = await bestSelling.getBestSellingCategories();
+
+    console.log("--------------------------------------------------------\n");
+    bestSellingProducts.forEach((product) => {
+      console.log(`Product: ${product.product_name} \nCount: ${product.count} \n`);
+    })
+    console.log("\n--------------------------------------------------------");
+    console.log("--------------------------------------------------------\n");
+    bestSellingBrands.forEach((brand) => {
+      console.log(`Brand: ${brand.brand_name} \nCount: ${brand.count} \n`);
+    })
+    console.log("\n--------------------------------------------------------");
+    console.log("--------------------------------------------------------\n");
+    bestSellingCategories.forEach((category) => {
+      console.log(`Category: ${category.category_name} \nCount: ${category.count} \n`);
+    })
+    console.log("\n--------------------------------------------------------");
+
     res.render("admin/dashboard", {
       locals,
       users,
@@ -41,6 +65,9 @@ module.exports = {
       usersCount,
       ordersCount,
       productsCount,
+      bestSellingBrands,
+      bestSellingProducts,
+      bestSellingCategories,
       totalRevenue: confirmedOrders[0] ? confirmedOrders[0].totalRevenue : 0,
       admin: req.user,
       layout: adminLayout,

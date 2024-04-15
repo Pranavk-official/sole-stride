@@ -57,7 +57,7 @@
                 <div class="ribbon ribbon-info">On offer <%- category.offerDiscountRate %>%</div>
               <% } %>
               <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
-                <p class="text-muted text-capitalize"><%- category.name %></p>
+                <p class="text-center text-dark fw-semibold fs-5 text-capitalize"><%- category.name %></p>
               </div>
             </a>
             </div>
@@ -69,6 +69,58 @@
   </div>
 </section>
 
+<!-- Top Selling Products -->
+<section class="py-6 bg-gray-100 mb-0 pb-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-8 mx-auto text-center mb-5">
+        <h2 class="text-uppercase">Our Top Selling Products</h2>
+        <p class="lead text-muted"></p>
+      </div>
+    </div>
+    <!-- Products Slider-->
+    <div class="owl-carousel owl-theme product-slider">
+      <!-- product-->
+      <% bestSellingProducts.forEach(element => { %>
+        <div class="product-slider-item">
+          <div class="product">
+            <div class="product-image">
+              <% if (element.product.onOffer) { %>
+                <div class="ribbon ribbon-info">On offer <%- element.product.offerDiscountRate %>%</div>
+              <% } %>
+              <img class="img-fluid" src="/uploads/product-images/<%- element.product.primary_image.name %>" alt="product" />
+              <div class="product-hover-overlay">
+                <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
+                <div class="product-hover-overlay-buttons">
+                  <a class="btn btn-dark btn-buy" href="/shop/product/<%- element.product._id %>"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="py-2 fs-6">
+              <p class="text-muted mb-1"><%- element.product.brand_name %></p>
+              <h3 class="h6 text-uppercase mb-1">
+                <a class="text-dark" href="/shop/product/<%- element.product._id %>"><%- element.product.product_name %></a>
+              </h3>
+              <div class="row g-2">
+                <% if (!element.product.onOffer) { %>
+                  <span class="text-muted text-success col">$<%- element.product.sellingPrice %></span>
+                  <span class="text-muted col"><del>$<%- element.product.actualPrice %></del></span>
+                <% } else { %>   
+                    <span class="text-muted text-success col">$<%- element.product.offerDiscountPrice %></span>
+                    <span class="text-muted col"><del>$<%- element.product.sellingPrice %></del></span>
+                <% } %>
+                <br />
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      <% }) %>
+      <!-- /product-->
+      
+    </div>
+  </div>
+</section>
 <!-- Top Products -->
 <section class="py-6 bg-gray-100">
   <div class="container">
@@ -93,7 +145,7 @@
               <% } %>
               <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
               <div class="product-hover-overlay">
-                <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
+                <a class="product-hover-overlay-link" href="/shop/product/<%- element._id %>"></a>
                 <div class="product-hover-overlay-buttons">
                   <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
                 </div>
@@ -104,38 +156,16 @@
               <h3 class="h6 text-uppercase mb-1">
                 <a class="text-dark" href="/shop/product/<%- element._id %>"><%- element.product_name %></a>
               </h3>
-              <% if (element.onOffer) { %>
-                <span class="text-muted">$<%- element.offerDiscountRate %> </span>
-                <% } else { %>
-                  <span class="text-muted">$<%- element.sellingPrice %> </span>
-              <% } %>
-              <span class="text-bold">Size: <%- element.size %></span>
-              <!-- <span class="text-muted">Color: <%- element.size %></span> -->
-            </div>
-          </div>
-        </div>
-      <% }) %>
-      <!-- /product-->
-      <!-- product-->
-      <% products.forEach(element => { %>
-        <div class="product-slider-item">
-          <div class="product">
-            <div class="product-image">
-              <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
-              <div class="product-hover-overlay">
-                <a class="product-hover-overlay-link" href="https://demo.bootstrapious.com/sell/2-0-1/detail.html"></a>
-                <div class="product-hover-overlay-buttons">
-                  <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>"><i class="fa-search fa"></i><span class="btn-buy-label ms-2">View</span></a>
-                </div>
+              <div class="row g-2">
+                <% if (!element.onOffer) { %>
+                  <span class="text-muted text-success col">$<%- element.sellingPrice %></span>
+                  <span class="text-muted col"><del>$<%- element.actualPrice %></del></span>
+                <% } else { %>   
+                    <span class="text-muted text-success col">$<%- element.offerDiscountPrice %></span>
+                    <span class="text-muted col"><del>$<%- element.sellingPrice %></del></span>
+                <% } %>
+                <br />
               </div>
-            </div>
-            <div class="py-2">
-              <p class="text-muted text-sm mb-1"><%- element.brand_name %></p>
-              <h3 class="h6 text-uppercase mb-1">
-                <a class="text-dark" href="/shop/product/<%- element._id %>"><%- element.product_name %></a>
-              </h3>
-              <span class="text-muted">$<%- element.sellingPrice %></span>
-              <span class="text-bold">Size: <%- element.size %></span>
             </div>
           </div>
         </div>
@@ -149,7 +179,11 @@
 <!-- Banner Section-->
 <section class="py-6 position-relative light-overlay">
   <% if (banners !== 'undefined' && banners.length > 0) { %>
-    <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" />
+    <!-- Random Banner -->
+    <% if (banners.length > 1) { %>
+    <% let random = Math.floor(Math.random() * banners.length); %>
+    <img class="bg-image" src="/uploads/banners/<%- banners[random].image.filename %>" alt="" />
+    <!-- <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" /> -->
     <div class="container">
       <div class="overlay-content text-center text-dark">
         <p class="text-uppercase fw-bold mb-1 letter-spacing-5">
@@ -159,74 +193,60 @@
         <a class="btn btn-dark" href="/shop">Shop Now</a>
       </div>
     </div>
+    <% } %>
   <% } %>
 </section>
+
+<!-- Our Top Selling Categories -->
+
+
+<section class="mt-0 pt-0 brands">
+  <div class="container">
+    <% if (bestSellingCategories !== 'undefined') { %>
+      <h4 class="text-uppercase text-center mb-5">Categories</h4>
+      <!-- Brands Slider-->
+      <div class="owl-carousel owl-theme brands-slider">
+        <!-- item-->
+        <% bestSellingCategories?.forEach((element, index) => { %>
+          <div class="item d-flex align-items-center justify-content-center">
+            <a href="/shop?category=<%- element.category._id %>">
+            <div class="w-8rem">
+              <% if (element.category.onOffer) { %>
+                <div class="ribbon ribbon-info">On offer <%- element.category.offerDiscountRate %>%</div>
+              <% } %>
+              <img class="img-fluid d-block" src="/uploads/category-images/<%- element.category.image.filename %>" alt="<%- element.category.name %>" />
+                <p class="text-muted text-capitalize"><%- element.category.name %></p>
+              </div>
+            </a>
+            </div>
+        <% }) %>
+        
+        
+      </div>
+    <% } %>
+  </div>
+</section>
+
+
 <!-- Brands Section-->
 <section class="py-6 brands">
   <div class="container">
-    <h4 class="text-uppercase text-center mb-5">Our brands</h4>
+    <h4 class="text-uppercase text-center mb-5">Our Top Selling Brands</h4>
     <!-- Brands Slider-->
     <div class="owl-carousel owl-theme brands-slider">
       <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
+      <% bestSellingBrands?.forEach((element, index) => { %>
+        <div class="item d-flex align-items-center justify-content-center">
+          <div class="w-6rem">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <img class="img-fluid" id="brand-img-<%- element.brand_name %>" data-brand-name="<%- element.brand_name %>" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
+              <p class="text-dark text-capitalize py-1"><%= element.brand_name %></p>
+            </div>
+          </div>
         </div>
-      </div>
+      <% }) %>
       <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-2.svg" alt="Brand 2" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-3.svg" alt="Brand 3" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-4.svg" alt="Brand 4" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-5.svg" alt="Brand 5" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-6.svg" alt="Brand 6" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-2.svg" alt="Brand 2" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-3.svg" alt="Brand 3" />
-        </div>
-      </div>
-      <!-- item-->
-      <div class="item d-flex align-items-center justify-content-center">
-        <div class="w-6rem">
-          <img class="img-fluid" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-4.svg" alt="Brand 4" />
-        </div>
-      </div>
+      
     </div>
   </div>
 </section>
