@@ -1,4 +1,4 @@
-<main class="main my-5">
+<main class="main my-5 mt-2">
   <div class="d-column d-lg-flex justify-content-center m-0">
     <div class="col-lg-6 d-flex flex-column flex-sm-row justify-content-around mt-3">
       <div id="usersList" class="col-sm-5 d-flex flex-column justify-content-center align-items-center" style="
@@ -46,6 +46,52 @@
       </div>
     </div>
   </div>
+
+  <!-- Best Selling -->
+
+  <div class="d-flex flex-column">
+    <div class="row m-3 my-5">
+      <h2 class="text-center">Best Selling Products (Top 10)</h2>
+      <% bestSellingProducts.forEach(product => { %>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= product.product_name %></h5>
+              <p class="card-text"><%= product.count %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  
+    <div class="row m-3 my-5">
+      <h2 class="text-center">Best Selling Categories (Top 10)</h2>
+      <% bestSellingCategories.forEach(category => { %>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= category.category_name %></h5>
+              <p class="card-text"><%= category.count %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <div class="row m-3 my-5">
+      <h2 class="text-center">Best Selling Brand (Top 10)</h2>
+      <% bestSellingBrands.forEach(brand => { %>
+        <div class="col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= brand.brand_name %></h5>
+              <p class="card-text"><%= brand.count %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
 
 
   <div class="row">
