@@ -202,9 +202,11 @@ module.exports = {
       console.log("Stuck Here");
       const refferer = await User.findOne({ referralCode: referral });
 
-      console.log({ refferal: refferer, referralCode: referral });
-
-      user.referralToken = refferer._id;
+      if(refferer){
+        console.log({ refferal: refferer, referralCode: referral });
+  
+        user.referralToken = refferer._id;
+      }
     }
 
     let savedUser = await user.save();
