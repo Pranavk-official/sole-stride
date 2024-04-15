@@ -48,15 +48,17 @@
                     </p>
                   </span>
                 </div>
-                <% if (order.coupon) { %>
-                  <div class="coupendetails">
-                    Offer Applied
-                    <div class="bg-warning rounded px-1 text-uppercase"><%= order.coupon.code %> </div>
-                    <div class="fw-bold px-1"><%= order.coupon.rateOfDiscount %>%off</div>
+                <div class="d-flex justify-content-evenly flex-column">
+                  <div class="col status fw-bold lead text-uppercase text-success">
+                    <%= order.status %>
                   </div>
+                  <% if (order.coupon) { %>
+                    <div class="coupendetails col">
+                      Offer Applied
+                      <div class="bg-warning rounded px-1 text-uppercase"><%= order.coupon.code %> </div>
+                      <div class="fw-bold px-1"><%= order.coupon.rateOfDiscount %>%off</div>
+                    </div>
                   <% } %>
-                <div class="status fw-bold lead text-uppercase text-success">
-                  <%= order.status %>
                 </div>
                 
               </div>
