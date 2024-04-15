@@ -5,17 +5,17 @@
       <li class="breadcrumb-item"><a href="/">Home</a></li>
       <li class="breadcrumb-item"><a href="/user/profile">My Account</a></li>
       <li class="breadcrumb-item"><a href="/user/orders">Orders</a></li>
-      <li class="breadcrumb-item active">Order #<%- orderDetails[0]._id %></li>
+      <li class="breadcrumb-item active">Order #<%- orderDetails[0]._id.toString().slice(-7) %></li>
     </ol>
     <!-- Hero Content-->
     <div class="hero-content pb-5 text-center">
       <h1 class="hero-heading h2">
-        Order <span class="text-muted">#<%- orderDetails[0]._id %></span>
+        Order <span class="text-muted">#<%- orderDetails[0]._id.toString().slice(-7) %></span>
       </h1>
       <div class="row">
         <div class="col-xl-8 offset-xl-2">
           <p class="lead text-muted">
-            Order #<%- orderDetails[0]._id %> was placed on
+            Order #<%- orderDetails[0]._id.toString().slice(-7).toUpperCase()%> was placed on
             <strong><%- orderDetails[0].createdAt.toLocaleDateString() %></strong>
             and is currently
             <strong><span class="badge p-2 text-uppercase <% if (orderDetails[0].status === 'Confirmed') { %> badge-primary-light <% } else if (orderDetails[0].status == 'Shipped') { %> badge-info-light <% } else if (orderDetails[0].status == 'Delivered') { %> badge-success-light <% } else if (orderDetails[0].status == 'Cancelled') { %> badge-danger-light <% } else { %> badge-warning-light <% } %>"><%- orderDetails[0].status %></span> </strong>.

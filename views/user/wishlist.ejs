@@ -61,12 +61,17 @@
       <% } else { %>
       <div class="container my-5 mb-6">
         <div class="col my-5 text-center">
-          <h2 class="h1">
+          <h2 class="text-muted">
             Wishlist is empty...
           </h2>
-          <h3 class="my-5">
+          <div class="row">
+            <div class="col-xl-8 offset-xl-2">
+              <p class="lead text-muted">Add items to your wishlist to see them here.</p>
+            </div>
+          </div>
+          <h3 class="my-5 mt-2">
             <a href="/shop">
-              <button class="btn btn-lg btn-primary">Shop Now</button>
+              <button class="btn btn-lg btn-outline-primary">Shop Now</button>
             </a>
           </h3>
         </div>
@@ -159,4 +164,6 @@
       }
     }
   };
+
+
 </script>

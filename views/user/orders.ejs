@@ -20,45 +20,6 @@
     <section class="col-lg-8">
       <% if (orderDetails && orderDetails.length > 0 && orderDetails != 'undefined') { %>
       <div class="container table-responsive">
-        <!-- <table class="table table-hover table-sm">
-            <thead class="bg-secondary-subtle">
-              <tr>
-                <th class="py-4 text-uppercase text-sm">Order #</th>
-                <th class="py-4 text-uppercase text-sm">Date</th>
-                <th class="py-4 text-uppercase text-sm">Total</th>
-                <th class="py-4 text-uppercase text-sm">Status</th>
-                <th class="py-4 text-uppercase text-sm">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (typeof orderDetails !== 'undefined' && orderDetails.length > 0) { %>
-                <% orderDetails.forEach(element => { %>
-                <tr>
-                  <th class="py-4 align-middle">#<%- element._id %></th>
-                  <td class="py-4 align-middle">
-                    <%= element.createdAt.toLocaleDateString('en-GB') %>
-                  </td>
-                  <td class="py-4 align-middle">$<%- element.payable %></td>
-                  <td class="py-4 align-middle">
-                    <span class="badge p-2 text-uppercase <% if (element.orderStatus == 'Placed') { %> badge-primary-light <% } else if (element.orderStatus == 'Shipped') { %> badge-info-light <% } else if (element.orderStatus == 'Delivered') { %> badge-success-light <% } else if (element.orderStatus == 'Cancelled') { %> badge-danger-light <% } else { %> badge-warning-light <% } %>"><%- element.orderStatus %></span>
-                  </td>
-                  <td class="py-4 align-middle">
-                    <% if (element.orderStatus != 'Cancelled' ) { %>
-                    <a href="/user/order/<%- element._id %>">
-                      <button class="btn btn-outline-dark btn-sm">View</button>
-                    </a>
-                    <% } %>
-                  </td>
-                </tr>
-                <% }) %>
-  
-              <% } else { %>
-                <tr class="align-middle text-center text-uppercase">
-                  <td colspan="5"  class="text-bg-danger">No orders found</td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table> -->
         <div class="row col-md-12">
           <% orderDetails.forEach(function(order) { %>
           <a class="text-decoration-none text-capitalize" href="/user/order/<%= order._id %>">
@@ -82,7 +43,7 @@
                       <%= order.shippingAddress?.landmark %>,
                       <%= order.shippingAddress?.state %>
                       <span class="fw-bold">
-                        -<%= order.shippingAddress?.zipcode %>
+                        - <%= order.shippingAddress?.zipcode %>
                       </span>
                     </p>
                   </span>
@@ -163,10 +124,16 @@
       <!-- If orders is empty -->
       <div class="container my-5 mb-6">
         <div class="col my-5 text-center">
-          <h2 class="h1">No Orders Found</h2>
-          <h3 class="my-5">
+          <h2 class="text-muted">No Orders Found</h2>
+          <div class="row">
+            <div class="col-xl-8 offset-xl-2">
+              <p class="lead text-muted">Looks like you haven't placed any orders yet</p>
+              <p class="lead text-muted">Start shopping</p>
+            </div>
+          </div>
+          <h3 class="my-5 mt-0">
             <a href="/shop">
-              <button class="btn btn-lg btn-primary">Shop Now</button>
+              <button class="btn btn-lg btn-outline-primary">Shop Now</button>
             </a>
           </h3>
         </div>
