@@ -585,6 +585,8 @@ module.exports = {
         user.password
       );
 
+      console.log(isSamePassword);
+
       if (isSamePassword) {
         req.flash("error", "New password cannot be same as old password");
         return res.redirect("/reset-password");
