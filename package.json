@@ -22,7 +22,6 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
-    "html-pdf": "^3.0.1",
     "http-errors": "~1.6.3",
     "jsdom": "^24.0.0",
     "marked": "^12.0.1",
