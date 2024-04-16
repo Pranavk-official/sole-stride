@@ -144,6 +144,8 @@ module.exports = {
       title: "SoleStride - Register",
     };
 
+    console.log(req.query);
+
     if (req.query.ref) {
       locals.referralCode = req.query.ref;
     }
