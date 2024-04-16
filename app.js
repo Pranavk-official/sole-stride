@@ -70,6 +70,11 @@ app.use(checkBlockedUser,cartList,(req, res, next) => {
   next();
 });
 
+app.use((req,res,next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+})
 
 app.use("/", authRouter);
 app.use("/user/", usersRouter);
@@ -78,11 +83,7 @@ app.use("/checkout", checkoutRouter);
 app.use("/admin", adminRouter);
 
 
-app.use((req,res,next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
-})
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
