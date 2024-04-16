@@ -77,12 +77,14 @@ module.exports = {
       return res.redirect("/admin/login");
     }
 
+    const hashPwd = await bcrypt.hash(password, 10);
+
     const user = new User({
       username,
       firstName,
       lastName,
       email,
-      password,
+      password: hashPwd,
       isAdmin: true,
       isVerified: true,
     });
@@ -189,6 +191,9 @@ module.exports = {
       req.flash("error", "Passwords do not match");
       return res.redirect("/register");
     }
+
+    const hashPwd = await bcrypt.hash(password, 10);
+
     let referralCode = generateRefferalCode(8);
     console.log("referralCode: " + referralCode);
     const user = new User({
@@ -196,7 +201,7 @@ module.exports = {
       firstName,
       lastName,
       email,
-      password,
+      password: hashPwd,
       referralCode,
     });
 

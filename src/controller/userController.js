@@ -240,43 +240,39 @@ module.exports = {
 
       const user = await User.findById(req.user.id);
       if (user) {
-        bcrypt.compare(
-          oldPassword,
-          user.password,
-          async (err, validOldPass) => {
-            if (validOldPass) {
-              if (newPassword !== confirmNewPassword) {
-                req.flash("error", "Passwords Do not Match");
-                return res.redirect("/user/profile");
-              }else if(newPassword === oldPassword) {
-                req.flash("error", "New password cannot be same as old password");
-                return res.redirect("/user/profile")
-              } 
-              else {
-                const hashPwd = await bcrypt.hash(newPassword, 10);
+        let validOldPass = bcrypt.compare(oldPassword,user.password)
 
-                let updateUser = await User.updateOne(
-                  { _id: user._id },
-                  {
-                    $set: {
-                      password: hashPwd,
-                    },
-                  }
-                )
+          if (validOldPass) {
+            if (newPassword !== confirmNewPassword) {
+              req.flash("error", "Passwords Do not Match");
+              return res.redirect("/user/profile");
+            }else if(newPassword === oldPassword) {
+              req.flash("error", "New password cannot be same as old password");
+              return res.redirect("/user/profile")
+            } 
+            else {
+              const hashPwd = await bcrypt.hash(newPassword, 10);
 
-                console.log(updateUser);
-                // return res.status(200).json({ 'success': 'Password Updated' });
-                
-                req.flash("success", "Password Updated");
-                return res.redirect("/user/profile");
-              }
-            } else {
-              // return res.status(401).json({ 'error': 'Old password is incorrect' });
-              req.flash("error", "Old Password is incorrect");
+              let updateUser = await User.updateOne(
+                { _id: user._id },
+                {
+                  $set: {
+                    password: hashPwd,
+                  },
+                }
+              )
+
+              console.log(updateUser);
+              // return res.status(200).json({ 'success': 'Password Updated' });
+              
+              req.flash("success", "Password Updated");
               return res.redirect("/user/profile");
             }
-          }
-        );
+          } else {
+            // return res.status(401).json({ 'error': 'Old password is incorrect' });
+            req.flash("error", "Old Password is incorrect");
+            return res.redirect("/user/profile");
+          }   
       } else {
         // return res.status(404).json({ 'error': 'User not found' });
         req.flash("error", "User not found");
