@@ -238,7 +238,7 @@ module.exports = {
       // console.log(req.body);
       const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
-      const user = await User.findById(req.user.id);
+      let user = await User.findById(req.user.id);
       if (user) {
         bcrypt.compare(
           oldPassword,
@@ -253,7 +253,8 @@ module.exports = {
                 return res.redirect("/user/profile")
               } 
               else {
-                user.password = newPassword; // Assuming you have a method to hash the password
+                const hashPwd = await bcrypt.hash(newPassword, 10);
+                user.password = hashPwd;
                 await user.save();
                 // return res.status(200).json({ 'success': 'Password Updated' });
                 req.flash("success", "Password Updated");
