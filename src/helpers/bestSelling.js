@@ -109,6 +109,11 @@ module.exports = {
                 $unwind: "$items",
             },
             {
+                $match: {
+                    "items.status": "Delivered",
+                }
+            },
+            {
                 $lookup: {
                     from: "products",
                     localField: "items.product_id",
