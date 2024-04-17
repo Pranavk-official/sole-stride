@@ -45,53 +45,69 @@
       </header>
       <div class="row">
         <!-- product-->
-        <% products?.forEach(element => { %>
-
-        <div class="col-xl-4 col-6">
-          <div class="product">
-            <div class="product-image">
-              <% if (element.onOffer) { %>
-                <div class="ribbon ribbon-info">On offer <%- element.offerDiscountRate %>%</div>
-              <% } %>
-              <!-- <div class="ribbon ribbon-info">Fresh</div> -->
-              <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
-              <div class="product-hover-overlay">
-                <a class="product-hover-overlay-link" href="/shop/product/<%- element._id %>"></a>
-                <div class="product-hover-overlay-buttons">
-                  <!-- <button class="btn btn-outline-primary btn-product-left d-none d-sm-inline-block" <% if (element.variants && element.variants.length >0) { %> onclick="addToCart('<%- element?._id %>','<%- element.variants[0]._id %>','<%- element.variants[0].color %>', '<%- element.variants[0].size %>')" <% } %>>
-                    <i class="bi bi-cart-fill fs-5"></i>
-                  </button> -->
-                  <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>">
-                    <i class="bi bi-search"></i>
-                    <span class="btn-buy-label ms-2">View</span>
-                  </a>
-                  <button id="wishlist-<%- element._id %>" class="btn btn-outline-danger btn-product-right d-none d-sm-inline-block justify-content-center" onclick="addToWishlist('<%- element._id %>')">
-                    <i class="bi bi-heart fs-5"></i>
-                  </button>
+        <% if ( products !== 'undefined' && products?.length > 0) { %>
+          <% products?.forEach(element => { %>
+  
+          <div class="col-xl-4 col-6">
+            <div class="product">
+              <div class="product-image">
+                <% if (element.onOffer) { %>
+                  <div class="ribbon ribbon-info">On offer <%- element.offerDiscountRate %>%</div>
+                <% } %>
+                <!-- <div class="ribbon ribbon-info">Fresh</div> -->
+                <img class="img-fluid" src="/uploads/product-images/<%- element.primary_image.name %>" alt="product" />
+                <div class="product-hover-overlay">
+                  <a class="product-hover-overlay-link" href="/shop/product/<%- element._id %>"></a>
+                  <div class="product-hover-overlay-buttons">
+                    <!-- <button class="btn btn-outline-primary btn-product-left d-none d-sm-inline-block" <% if (element.variants && element.variants.length >0) { %> onclick="addToCart('<%- element?._id %>','<%- element.variants[0]._id %>','<%- element.variants[0].color %>', '<%- element.variants[0].size %>')" <% } %>>
+                      <i class="bi bi-cart-fill fs-5"></i>
+                    </button> -->
+                    <a class="btn btn-dark btn-buy" href="/shop/product/<%- element._id %>">
+                      <i class="bi bi-search"></i>
+                      <span class="btn-buy-label ms-2">View</span>
+                    </a>
+                    <button id="wishlist-<%- element._id %>" class="btn btn-outline-danger btn-product-right d-none d-sm-inline-block justify-content-center" onclick="addToWishlist('<%- element._id %>')">
+                      <i class="bi bi-heart fs-5"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="py-2">
+                <p class="text-muted text-sm mb-1"><%- element.brand_name %></p>
+                <h3 class="h6 text-uppercase mb-1">
+                  <a class="text-dark" href="#"><%- element.product_name %></a>
+                </h3>
+                <div class="row g-2">
+                  <% if (!element.onOffer) { %>
+                    <span class="text-muted col">₹<%- element.sellingPrice %></span>
+                    <span class="text-muted col"><del>₹<%- element.actualPrice %></del></span>
+                  <% } else { %>   
+                      <span class="text-muted col">₹<%- element.offerDiscountPrice %></span>
+                      <span class="text-muted col"><del>₹<%- element.sellingPrice %></del></span>
+                  <% } %>
+                  <br />
+                  <!-- <span class="fw-bold h5 col">Size:
+                    <span class="fw-normal text-muted"><%- element.variants[0].size.value %></span></span> -->
                 </div>
               </div>
             </div>
-            <div class="py-2">
-              <p class="text-muted text-sm mb-1"><%- element.brand_name %></p>
-              <h3 class="h6 text-uppercase mb-1">
-                <a class="text-dark" href="#"><%- element.product_name %></a>
-              </h3>
-              <div class="row g-2">
-                <% if (!element.onOffer) { %>
-                  <span class="text-muted col">₹<%- element.sellingPrice %></span>
-                  <span class="text-muted col"><del>₹<%- element.actualPrice %></del></span>
-                <% } else { %>   
-                    <span class="text-muted col">₹<%- element.offerDiscountPrice %></span>
-                    <span class="text-muted col"><del>₹<%- element.sellingPrice %></del></span>
-                <% } %>
-                <br />
-                <!-- <span class="fw-bold h5 col">Size:
-                  <span class="fw-normal text-muted"><%- element.variants[0].size.value %></span></span> -->
+          </div>
+          <% }) %>
+
+        <% } else { %>
+          
+          <div class="col-xl-4 col-6">
+            <div class="product">
+              <!-- <div class="product-image">
+                <div class="ribbon ribbon-info">No products found</div>
+              </div> -->
+              <div class="py-2">
+                <p class="text-muted text-sm mb-1">No products found</p>
               </div>
             </div>
           </div>
-        </div>
-        <% }) %>
+
+        <% } %>
         <!-- /product-->
       </div>
 
