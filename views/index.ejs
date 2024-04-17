@@ -50,14 +50,18 @@
       <div class="owl-carousel owl-theme brands-slider">
         <!-- item-->
         <% categories?.forEach((category, index) => { %>
-          <div class="item d-flex align-items-center justify-content-center">
+          <div class="item card border-0 d-flex align-items-center justify-content-center">
             <a href="/shop?category=<%- category._id %>">
             <div class="w-8rem">
               <% if (category.onOffer) { %>
                 <div class="ribbon ribbon-info">On offer <%- category.offerDiscountRate %>%</div>
               <% } %>
-              <img class="img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
-                <p class="text-center text-dark fw-semibold fs-5 text-capitalize"><%- category.name %></p>
+              <img class="card-img img-fluid d-block" src="/uploads/category-images/<%- category.image.filename %>" alt="<%- category.name %>" />
+              <div class="card-img-overlay d-flex align-items-top" style="opacity: 90%;">
+                <div class="w-100 py-3">
+                  <p class="display-3 pt-6 text-center text-white fw-semibold fs-3 text-capitalize"><%- category.name %></p>
+                </div>
+              </div>  
               </div>
             </a>
             </div>
