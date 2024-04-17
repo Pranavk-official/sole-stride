@@ -95,6 +95,7 @@ $('#add-category').validate({
                           body: formData,
                       }
                   );
+                  console.log(res);
                   let data = await res.json();
                   if (data.success) {
                       Swal.fire(
