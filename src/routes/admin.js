@@ -222,6 +222,8 @@ router.get('/returns', returnController.getReturnRequests)
 
 router.post('/returns/approve-return', returnController.approveReturn)
 
+router.post('/returns/reject-return', returnController.declineReturn)
+
 
 
 

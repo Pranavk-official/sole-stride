@@ -80,8 +80,7 @@
               <div class="d-flex justify-content-around">
                 <% if (element.status === 'pending') { %>
                 <button type="button" class="btn btn-success" onclick="approveReturn( '<%= element.order_id._id %>' ,'<%= element.variant %>', '<%= element.item_id %>', '<%= element._id %>')">Approve</button>
-                <button type="button" class="btn btn-danger">Reject</button>
-  
+                <button type="button" class="btn btn-danger" onclick="declineReturn( '<%= element.order_id._id %>' ,'<%= element.variant %>', '<%= element.item_id %>', '<%= element._id %>')" >Reject</button>
                 <% } else { %>
                 <button class="btn btn-dark text-uppercase" disabled><%- element.status %></button>
                 <% } %>
@@ -218,8 +217,9 @@
   }
 
 
-  const declineReturn = (id) => {
-    console.log(id);
+  const declineReturn = (order_id, variant, item_id, id) => {
+    console.log(order_id, variant, item_id, id);
+
 
     Swal.fire({
       title: 'Are you sure?',
@@ -233,12 +233,15 @@
       if (result.isConfirmed) {
 
         try {
-          const response = await fetch('/admin/returns/decline-return', {
+          const response = await fetch('/admin/returns/reject-return', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+              order_id,
+              variant,
+              item_id,
               id
             })
           })
