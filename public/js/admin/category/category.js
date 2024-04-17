@@ -88,17 +88,20 @@ $('#add-category').validate({
                   const body = Object.fromEntries(formData);
                   console.log(body)
 
-                  let res = await fetch(
-                      "/admin/category/add-category",
-                      {
-                          method: "POST",
-                          body: formData,
-                          headers: {
-                              "Content-Type": "application/json",
-                          },
-                      }
-                  );
-                  console.log(res);
+                  form.action = "/admin/category/add-category";
+                  form.method = "POST";
+                  form.submit();
+                //   let res = await fetch(
+                //       "/admin/category/add-category",
+                //       {
+                //           method: "POST",
+                //           body: formData,
+                //           headers: {
+                //               "Content-Type": "application/json",
+                //           },
+                //       }
+                //   );
+                //   console.log(res);
                 //   let data = await res.json();
                 //   if (data.success) {
                 //       Swal.fire(
