@@ -81,11 +81,12 @@ $('#add-category').validate({
                   });
                   formData.append("category_image", file);
                   console.log(formData)
+                  const body = Object.fromEntries(formData);
                   let res = await fetch(
                       "/admin/category/add-category",
                       {
                           method: "POST",
-                          body: formData
+                          body: JSON.stringify(body),
                       }
                   );
                   let data = await res.json();
@@ -101,6 +102,7 @@ $('#add-category').validate({
                       throw new Error(data.error);
                   }
               } catch (e) {
+                  console.log(e);
                   Swal.fire("Error!", e.message, "error");
               }
           }
