@@ -99,18 +99,18 @@ $('#add-category').validate({
                       }
                   );
                   console.log(res);
-                  let data = await res.json();
-                  if (data.success) {
-                      Swal.fire(
-                          "Created!",
-                          "New category has been created successfully.",
-                          "success"
-                      ).then(() =>
-                          location.assign("/admin/category")
-                      );
-                  } else {
-                      throw new Error(data.error);
-                  }
+                //   let data = await res.json();
+                //   if (data.success) {
+                //       Swal.fire(
+                //           "Created!",
+                //           "New category has been created successfully.",
+                //           "success"
+                //       ).then(() =>
+                //           location.assign("/admin/category")
+                //       );
+                //   } else {
+                //       throw new Error(data.error);
+                //   }
               } catch (e) {
                   console.log(e);
                   Swal.fire("Error!", e.message, "error");
