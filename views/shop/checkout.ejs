@@ -648,12 +648,26 @@
       if (result.isConfirmed) {
         // If confirmed, send a POST request to the server
         try {
+
+          // should add a loading using sweetalert while the coupon is being removed
+          Swal.fire({
+            icon: 'info',
+            title: 'Removing Coupon',
+            html: 'Please wait while we remove the coupon...',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          })
+
           const response = await fetch('/checkout/remove-coupon', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
           });
+
+          Swal.close();
 
           if (response.ok) {
             const data = await response.json();

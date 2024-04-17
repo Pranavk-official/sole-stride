@@ -437,6 +437,17 @@
       confirmButtonText: 'Yes, toggle it!'
     }).then((result) => {
       if (result.isConfirmed) {
+
+        // show loading using swal
+        Swal.fire({
+          title: "Please wait...",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
         fetch(`/admin/attributes/toggleListing/${type}/${id}`, {
             method: 'PATCH',
             headers: {
@@ -444,6 +455,8 @@
             },
           })
           .then(response => {
+            Swal.close();
+
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
@@ -477,6 +490,7 @@
 
     const colorId = editColorButton.getAttribute('data-color-id');
     try {
+      // show loading using swal
       const response = await fetch(`/admin/attributes/color/${colorId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch color');

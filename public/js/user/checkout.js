@@ -385,6 +385,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const paymentMethod = body.paymentMethod;
             console.log(body);
             try {
+
+              // show loading using swal
+              Swal.fire({
+                title: "Please wait...",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                  Swal.showLoading();
+                },
+              });
+
               const response = await fetch("/user/place-order", {
                 method: "POST",
                 headers: {
@@ -392,6 +403,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify(body),
               });
+
+              Swal.close();
+              
               console.log(response);
               const data = await response.json();
               console.log(data);
