@@ -48,7 +48,7 @@ module.exports = {
     });
   },
   addCategory: async (req, res) => {
-    // console.log(req.body, req.files);
+    console.log(req.body, req.files);
     try {
       const name = String(req.body.category_name).toLowerCase();
       const category = await Category.findOne({ name: name });
