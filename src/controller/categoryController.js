@@ -49,26 +49,31 @@ module.exports = {
   },
   addCategory: async (req, res) => {
     // console.log(req.body, req.files);
-    const name = String(req.body.category_name).toLowerCase();
-    const category = await Category.findOne({ name: name });
-    if (category) {
-      return res.json({ error: "Category Already Exist!!" });
-    } else {
-      // console.log(req.body, req.files);
-      const newCategory = new Category({
-        name: name,
-        image: {
-          filename: req.files.category_image[0].filename,
-          originalname: req.files.category_image[0].originalname,
-          path: req.files.category_image[0].path,
-        },
-      });
-      const addCategory = newCategory.save();
-      if (addCategory) {
-        res.json({
-          success: true,
+    try {
+      const name = String(req.body.category_name).toLowerCase();
+      const category = await Category.findOne({ name: name });
+      if (category) {
+        return res.json({ error: "Category Already Exist!!" });
+      } else {
+        // console.log(req.body, req.files);
+        const newCategory = new Category({
+          name: name,
+          image: {
+            filename: req.files.category_image[0].filename,
+            originalname: req.files.category_image[0].originalname,
+            path: req.files.category_image[0].path,
+          },
         });
+        const addCategory = newCategory.save();
+        if (addCategory) {
+          res.json({
+            success: true,
+          });
+        }
       }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   },
   editCategory: async (req, res) => {
