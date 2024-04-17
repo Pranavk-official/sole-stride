@@ -142,6 +142,7 @@ module.exports = {
           // If the brand does not exist, proceed to create and save the new brand
           const newBrand = new Brand({
             name: brand.toLowerCase(),
+            isActive: true,
           });
 
           await newBrand.save();
