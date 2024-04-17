@@ -217,7 +217,7 @@ module.exports = {
       isActive: true,
       minPurchaseAmount: { $lte: totalPriceBeforeOffer },
       expirationDate: { $gte: Date.now() },
-      // usedBy: [{ $not: req.user.id }],
+      usedBy: [{ $not: req.user.id }],
     });
     // console.log(coupons);
 
