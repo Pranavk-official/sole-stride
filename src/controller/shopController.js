@@ -57,7 +57,7 @@ module.exports = {
       const categoryID = req.query.category;
       const brandID = req.query.brand;
 
-      const limit = 9;
+      const limit = 12;
 
       const sortBy = req.query.sortBy;
 
