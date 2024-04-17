@@ -79,7 +79,7 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending' || orderDetails.items.status === 'Delivered' ) { %>
+                <% if (orderDetails.items.status === 'Cancelled' || orderDetails.items.status === 'Pending' || orderDetails.items.status === 'Delivered' || orderDetails.items.status === 'Returned' ) { %>
 
                 <a href="/admin/orders"><input type="none" value="Back To Orders" class="form-control btn" readonly></a>
 
