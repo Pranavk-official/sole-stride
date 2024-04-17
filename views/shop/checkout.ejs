@@ -50,7 +50,7 @@
               <h6 class="my-0">Coupon code</h6>
               <small class="text-uppercase" id="coupon"><%- userCart.coupon.code %></small>
             </div>
-            <span class="text-success" id="discountAmount">−₹<%- userCart.couponDiscount %></span>
+            <span class="text-success" id="discountAmount">−₹<%- userCart.couponDiscount.toFixed(2) %></span>
           </li>
           <% } %>
 

@@ -249,19 +249,19 @@ module.exports = {
           .json({ success: false, message: "Coupon not found." });
       }
 
-      // Check if the coupon is used by the user
-      const userHasUsedCoupon = couponCode.usedBy.some((user) =>
-        user.userId.equals(req.user.id)
-      );
+      // // Check if the coupon is used by the user
+      // const userHasUsedCoupon = couponCode.usedBy.some((user) =>
+      //   user.userId.equals(req.user.id)
+      // );
 
-      if (userHasUsedCoupon) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Coupon has already been used by this user.",
-          });
-      }
+      // if (userHasUsedCoupon) {
+      //   return res
+      //     .status(400)
+      //     .json({
+      //       success: false,
+      //       message: "Coupon has already been used by this user.",
+      //     });
+      // }
 
       const currentDate = new Date();
       const expirationDate = new Date(couponCode.expirationDate);
