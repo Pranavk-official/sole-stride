@@ -97,7 +97,7 @@ module.exports = {
       const count = await Product.find(filterQuery).countDocuments();
 
       const categories = await Category.find({ isActive: true });
-      const brands = await Brand.find({});
+      const brands = await Brand.find({}).sort({ name: 1 });
       return res.render("shop/search.ejs", {
         sortBy,
         brandID,
