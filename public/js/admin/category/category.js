@@ -81,12 +81,18 @@ $('#add-category').validate({
                   });
                   formData.append("category_image", file);
                   console.log(formData)
+                  //   log the form data to the console using loop
+                  for (const [key, value] of formData.entries()) {
+                      console.log(`${key}: ${value}`);
+                  }
                   const body = Object.fromEntries(formData);
+                  console.log(body)
+
                   let res = await fetch(
                       "/admin/category/add-category",
                       {
                           method: "POST",
-                          body: JSON.stringify(body),
+                          body: formData,
                       }
                   );
                   let data = await res.json();
