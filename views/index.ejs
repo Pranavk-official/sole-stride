@@ -107,11 +107,11 @@
               </h3>
               <div class="row g-2">
                 <% if (!element.product.onOffer) { %>
-                  <span class="text-muted text-success col">$<%- element.product.sellingPrice %></span>
-                  <span class="text-muted col"><del>$<%- element.product.actualPrice %></del></span>
+                  <span class="text-muted text-success col">₹<%- element.product.sellingPrice %></span>
+                  <span class="text-muted col"><del>₹<%- element.product.actualPrice %></del></span>
                 <% } else { %>   
-                    <span class="text-muted text-success col">$<%- element.product.offerDiscountPrice %></span>
-                    <span class="text-muted col"><del>$<%- element.product.sellingPrice %></del></span>
+                    <span class="text-muted text-success col">₹<%- element.product.offerDiscountPrice %></span>
+                    <span class="text-muted col"><del>₹<%- element.product.sellingPrice %></del></span>
                 <% } %>
                 <br />
               </div>
@@ -161,11 +161,11 @@
               </h3>
               <div class="row g-2">
                 <% if (!element.onOffer) { %>
-                  <span class="text-muted text-success col">$<%- element.sellingPrice %></span>
-                  <span class="text-muted col"><del>$<%- element.actualPrice %></del></span>
+                  <span class="text-muted text-success col">₹<%- element.sellingPrice %></span>
+                  <span class="text-muted col"><del>₹<%- element.actualPrice %></del></span>
                 <% } else { %>   
-                    <span class="text-muted text-success col">$<%- element.offerDiscountPrice %></span>
-                    <span class="text-muted col"><del>$<%- element.sellingPrice %></del></span>
+                    <span class="text-muted text-success col">₹<%- element.offerDiscountPrice %></span>
+                    <span class="text-muted col"><del>₹<%- element.sellingPrice %></del></span>
                 <% } %>
                 <br />
               </div>

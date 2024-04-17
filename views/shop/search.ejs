@@ -79,11 +79,11 @@
               </h3>
               <div class="row g-2">
                 <% if (!element.onOffer) { %>
-                  <span class="text-muted col">$<%- element.sellingPrice %></span>
-                  <span class="text-muted col"><del>$<%- element.actualPrice %></del></span>
+                  <span class="text-muted col">₹<%- element.sellingPrice %></span>
+                  <span class="text-muted col"><del>₹<%- element.actualPrice %></del></span>
                 <% } else { %>   
-                    <span class="text-muted col">$<%- element.offerDiscountPrice %></span>
-                    <span class="text-muted col"><del>$<%- element.sellingPrice %></del></span>
+                    <span class="text-muted col">₹<%- element.offerDiscountPrice %></span>
+                    <span class="text-muted col"><del>₹<%- element.sellingPrice %></del></span>
                 <% } %>
                 <br />
                 <!-- <span class="fw-bold h5 col">Size:
