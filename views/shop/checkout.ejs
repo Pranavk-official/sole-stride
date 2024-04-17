@@ -64,7 +64,7 @@
           <label class="form-label text-dark" for="couponCode">Apply Coupon Code</label>
           <fieldset>
             <div class="input-group">
-              <input  <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon ) { %> disabled="disabled" <% } %> id="couponCode" name="code" type="text" class="form-control text-uppercase" placeholder="Coupon code" <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon ) { %> value="<%- userCart.coupon.code %>" <% } %>>
+              <input <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon ) { %> disabled="disabled" <% } %> id="couponCode" name="code" type="text" class="form-control text-uppercase" placeholder="Coupon code" <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon ) { %> value="<%- userCart.coupon.code %>" <% } %>>
               <button <% if (typeof userCart.coupon !== 'undefined' && userCart.coupon ) { %> disabled="disabled" <% } %> type="submit" class="btn btn-outline-primary <%- (typeof userCart.coupon !== 'undefined' && userCart.coupon ) ? 'd-none' : ''  %>">Apply</button>
               <button onclick="removeCoupon()" type="button" class="btn btn-outline-warning <%- (typeof userCart.coupon !== 'undefined' && userCart.coupon ) ? '' : 'd-none'  %>">Remove Coupon</button>
             </div>
@@ -74,41 +74,38 @@
         <div id="couponsAccordion" class="text-capitalize accordion mt-4">
           <h6 class="mb-3 fs-5">Available Coupons</h6>
           <% if (typeof coupons !== 'undefined' && coupons.length > 0) { %>
-            <% coupons.forEach(function(coupon, index) { %>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="heading<%= index %>">
-                  <button class="accordion-button collapsed text-uppercase text-success" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapse<%= index %>" aria-expanded="false"
-                    aria-controls="collapse<%= index %>">
-                    <%= coupon.code %>
-                  </button>
-                </h2>
-                <div id="collapse<%= index %>" class="accordion-collapse collapse"
-                  aria-labelledby="heading<%= index %>" data-bs-parent="#couponsAccordion">
-                  <div class="accordion-body">
-                    <!-- Coupon Card -->
-                    <div class="coupon-card">
-                      <h4 class="coupon-title">
-                        <%= coupon.Description %>
-                      </h4>
-                      <p>Discount:
-                        <%=   coupon.rateOfDiscount + '%' %>
-                      </p>
-                      <p>Min Order Amount: <%= coupon.minPurchaseAmount %>
-                      </p>
-                      <p>Expiry Date: <%= coupon.expirationDate.toDateString() %>
-                      </p>
-                      <button type="button" onclick="copyCode('<%= coupon.code %>')" class="btn btn-primary btn-sm">Copy Code</button>
-  
-                    </div>
-                  </div>
+          <% coupons.forEach(function(coupon, index) { %>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%= index %>">
+              <button class="accordion-button collapsed text-uppercase text-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="false" aria-controls="collapse<%= index %>">
+                <%= coupon.code %>
+              </button>
+            </h2>
+            <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#couponsAccordion">
+              <div class="accordion-body">
+                <!-- Coupon Card -->
+                <div class="coupon-card">
+                  <h4 class="coupon-title">
+                    <%= coupon.Description %>
+                  </h4>
+                  <p>Discount:
+                    <%=   coupon.rateOfDiscount + '%' %>
+                  </p>
+                  <p>Min Order Amount: <%= coupon.minPurchaseAmount %>
+                  </p>
+                  <p>Expiry Date: <%= coupon.expirationDate.toDateString() %>
+                  </p>
+                  <button type="button" onclick="copyCode('<%= coupon.code %>')" class="btn btn-primary btn-sm">Copy Code</button>
+
                 </div>
               </div>
-            <% }); %>
+            </div>
+          </div>
+          <% }); %>
           <% } else { %>
-            <p class="lead text-warning">No Coupons Available</p>
+          <p class="lead text-warning">No Coupons Available</p>
           <% } %>
-          
+
         </div>
       </div>
       <div class="col-md-7 col-lg-8">
@@ -144,9 +141,7 @@
 
                       <td class="py-3 align-middle text-capitalize">
                         <div class="d-flex align-items-center">
-                          <input autocomplete="false" required class="mx-2" type="radio" <% if (index === 0) { %>
-                           checked
-                          <% } %> id="address-<%= index %>" name="address" value="<%= item._id %>">
+                          <input autocomplete="false" required class="mx-2" type="radio" <% if (index === 0) { %> checked <% } %> id="address-<%= index %>" name="address" value="<%= item._id %>">
                           <label class="" for="address-<%= index %>">
                             <%- item.name.toLowerCase() + ', ' + item.house_name + ', ' + item.town + ', ' + item.state + ', PIN: ' + item.zipcode + ', PH:' + item.phone %>
                           </label>
@@ -181,7 +176,7 @@
               </div>
             </section>
           </div>
-          
+
           <!-- <div class="my-3">
             <div class="form-check">
               <input id="credit" name="paymentMethod" type="radio" class="form-check-input" value="COD" checked required>
@@ -208,39 +203,35 @@
 
           <div class="mb-5">
             <div id="accordion" role="tablist">
-              
+
               <div class="block mb-3">
                 <div class="block-header" id="headingThree" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Pay on delivery</a></strong></div>
                 <div class="collapse show" id="collapseThree" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                   <div class="block-body py-5 d-flex align-items-center">
-                    <input type="radio" name="paymentMethod" id="payment-method-1" value="COD" <% if (isCOD) { %>
-                     checked
-                    <% } else { %>
-                     disabled
-                    <% } %>>
+                    <input type="radio" name="paymentMethod" id="payment-method-1" value="COD" <% if (isCOD) { %> checked <% } else { %> disabled <% } %>>
                     <label class="ms-3" for="payment-method-1">
                       <strong class="d-block text-uppercase mb-2"> Pay on delivery</strong>
                       <!-- <span class="text-muted text-sm">Pay on delivery is available for orders above ₹1000 only.    </span>
                       <br> -->
                       <% if (!isCOD) { %>
-                        <span class="text-muted text-danger text-sm">Pay on delivery is not available for orders above ₹1000.</span>
+                      <span class="text-muted text-danger text-sm">Pay on delivery is not available for orders above ₹1000.</span>
                       <% } %>
                     </label>
                   </div>
                 </div>
               </div>
               <div class="block mb-3">
-                <div class="block-header" id="headingOne" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Wallet     <% if (!wallet.isInsufficient) { %>
-                  <span class="text-muted">Balance: <span class="text-success fw-semibold">₹<%- wallet.balance %></span></span> 
-                <% } %></a></strong></div>
+                <div class="block-header" id="headingOne" role="tab"><strong><a class="accordion-link collapsed" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Wallet <% if (!wallet.isInsufficient) { %>
+                      <span class="text-muted">Balance: <span class="text-success fw-semibold">₹<%- wallet.balance %></span></span>
+                      <% } %></a></strong></div>
                 <div class="collapse show" id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                   <div class="block-body py-5 d-flex align-items-center">
-                    <input <%- wallet.isInsufficient ? 'disabled' : '' %> type="radio" name="paymentMethod" id="payment-method-2" value="Wallet" >
+                    <input <%- wallet.isInsufficient ? 'disabled' : '' %> type="radio" name="paymentMethod" id="payment-method-2" value="Wallet">
                     <label class="ms-3" for="payment-method-2"><strong class="d-block text-uppercase mb-2"> Pay using Wallet</strong>
                       <span class="text-muted fw-semibold text-sm">Your Wallet Balance: </span><span class="text-muted text-success fw-semibold text-sm">₹<%- wallet.balance %> </span>
-                      <br> 
+                      <br>
                       <% if (wallet.isInsufficient) { %>
-                        <span class="text-muted text-danger text-sm">Your wallet has insufficient balance.</span>
+                      <span class="text-muted text-danger text-sm">Your wallet has insufficient balance.</span>
                       <% } %>
                     </label>
                   </div>
@@ -556,7 +547,7 @@
   const couponCodeVal = document.getElementById('couponCode').value;
   document.querySelector('#applyCoupon').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the form from submitting normally
-    
+
     // Get the coupon code from the input field
     const couponCodeInput = document.getElementById('couponCode');
     const couponCodeVal = document.getElementById('couponCode').value;
@@ -574,6 +565,16 @@
       if (result.isConfirmed) {
         // If confirmed, send a POST request to the server
         try {
+          // should add a loading using sweetalert while the coupon is being applied
+          Swal.fire({
+            title: 'Applying Coupon',
+            html: 'Please wait while we verify and apply the coupon...',
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+              Swal.showLoading();
+            }
+          });
+
           const response = await fetch('/checkout/verify-coupon', {
             method: 'POST',
             headers: {
@@ -583,6 +584,8 @@
               code: couponCodeVal.toLowerCase()
             }),
           });
+
+          Swal.close();
 
           if (response.ok) {
             const data = await response.json();
@@ -603,7 +606,7 @@
               'Applied!',
               data.message,
               'success'
-            ).then(() =>{
+            ).then(() => {
               location.reload()
             });
           } else {
@@ -657,7 +660,7 @@
               'Removed!',
               data.message,
               'success'
-            ).then(() =>{
+            ).then(() => {
               location.reload()
             });
           } else {
@@ -667,7 +670,7 @@
               'Error!',
               errorData.message || 'There was an error removing the coupon.',
               'error'
-            ).then(() =>{
+            ).then(() => {
               location.reload()
             });
           }
