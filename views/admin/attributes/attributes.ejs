@@ -58,9 +58,9 @@
                   <div class="btn-group">
                     <button data-color-id="<%- color._id %>" data-bs-target="#editColorModal" data-bs-toggle="modal" type="button" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
                     <% if (color.isDeleted) { %>
-                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i> List</button>
                     <% } else { %>
-                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <button id="toggleListColor" onclick="toggleListing('<%- color._id %>', 'color')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i> Unlist</button>
                     <% } %>
                     <button type="button" onclick="deleteAttribute('<%- color._id%>','color','<%- color.name%>')" class="btn btn-sm btn-danger" data-color-id="<%- color._id %>"><i class="bi bi-trash"></i></button>
                   </div>
@@ -91,9 +91,9 @@
                   <div class="btn-group">
                     <button id="editSizeButton" type="button" class="btn btn-sm btn-warning" data-size-id="<%- size._id %>" data-bs-toggle="modal" data-bs-target="#editSizeModal"><i class="bi bi-pencil"></i></button>
                     <% if (size.isDeleted) { %>
-                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i> List</button>
                     <% } else { %>
-                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <button id="toggleListSize" onclick="toggleListing('<%- size._id %>', 'size')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i> Unlist</button>
                     <% } %>
                     <button type="button" onclick="deleteAttribute('<%- size._id%>','size','<%- size.value%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                   </div>
@@ -124,9 +124,9 @@
                   <div class="btn-group">
                     <button id="editBrandButton" type="button" class="btn btn-sm btn-warning" data-brand-id="<%- brand._id %>" data-bs-toggle="modal" data-bs-target="#editBrandModal"><i class="bi bi-pencil"></i></button>
                     <% if (brand.isActive) { %>
-                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i></button>
+                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-success"><i class="bi bi-bookmark-plus"></i> List</button>
                     <% } else { %>
-                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i></button>
+                    <button id="toggleListBrand" onclick="toggleListing('<%- brand._id %>', 'brand')" type="button" class="btn btn-sm btn-outline-danger"><i class="bi bi-bookmark-dash"></i> Unlist</button>
                     <% } %>
                     <button type="button" onclick="deleteAttribute('<%- brand._id%>','brand','<%- brand.name%>')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                   </div>
