@@ -98,7 +98,7 @@
                       </p>
                       <p>Expiry Date: <%= coupon.expirationDate.toDateString() %>
                       </p>
-                      <button type="button" class="btn btn-primary btn-sm">Copy Code</button>
+                      <button type="button" onclick="copyCode('<%= coupon.code %>')" class="btn btn-primary btn-sm">Copy Code</button>
   
                     </div>
                   </div>
@@ -544,6 +544,15 @@
 <script defer src="/js/user/checkout.js"></script>
 
 <script>
+  const copyCode = async (code) => {
+    await navigator.clipboard.writeText(code);
+    Swal.fire({
+      icon: 'success',
+      title: 'Coupon Code Copied!',
+    })
+  }
+
+
   const couponCodeVal = document.getElementById('couponCode').value;
   document.querySelector('#applyCoupon').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the form from submitting normally
