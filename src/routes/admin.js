@@ -28,8 +28,8 @@ router.use(isAdmin, (req, res, next) => {
   if (req.user.isAdmin) {
     res.locals.admin = req.user;
   }
-  // res.locals.success = req.flash("success");
-  // res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 
