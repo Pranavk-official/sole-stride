@@ -248,41 +248,18 @@ module.exports = {
         }
 
         if (newPassword !== confirmNewPassword) {
-          req.flash("error", "Passwords Do not Match");
+          req.flash("error", "Passwords do not match");
           return res.redirect("/user/profile");
-        }else if(newPassword === oldPassword) {
-          req.flash("error", "New password cannot be same as old password");
-          return res.redirect("/user/profile")
-        }else if (bcrypt.compareSync(oldPassword, user.password)) {
-          req.flash("error", "New password cannot be same as old password");
-          return res.redirect("/user/profile")
-        } 
-        else {
-          const hashPwd = await bcrypt.hash(newPassword, 10);
+        }
 
-          let updateUser = await User.updateOne(
-            { _id: user._id },
-            {
-              $set: {
-                password: hashPwd,
-              },
-            }
-          )
-
-          user.password = hashPwd
-
-          await user.save()
-
-          console.log(updateUser);
-          // return res.status(200).json({ 'success': 'Password Updated' });
-          
-          req.flash("success", "Password Updated");
-          return res.redirect("/user/profile");
-        }   
-      } else {
-        // return res.status(404).json({ 'error': 'User not found' });
-        req.flash("error", "User not found");
+        const hashPwd = await bcrypt.hash(newPassword, 10);
+        user.password = hashPwd;
+        console.log(user);
+        await user.save();
+        console.log(user);
+        req.flash("success", "Password Updated");
         return res.redirect("/user/profile");
+
       }
     } catch (error) {
       // return res.status(500).json({ 'error': 'Internal server error' });
