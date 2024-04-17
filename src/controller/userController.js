@@ -242,6 +242,11 @@ module.exports = {
       if (user) {
         let validOldPass = bcrypt.compare(oldPassword,user.password)
 
+        if (!validOldPass) {
+          req.flash("error", "Invalid Old Password");
+          return res.redirect("/user/profile");
+        }
+
         if (newPassword !== confirmNewPassword) {
           req.flash("error", "Passwords Do not Match");
           return res.redirect("/user/profile");
