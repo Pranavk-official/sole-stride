@@ -71,11 +71,13 @@ router.route("/category").get(categoryController.getAllCategory);
 router
   .route("/category/add-category")
   .get(categoryController.getAddCategory)
-  .post(
-    categoryValidation,
-    categoryUpload.fields([{ name: "category_image" }]),
-    categoryController.addCategory
-  );
+
+router.post(
+  "/category/add-category",
+  categoryValidation,
+  categoryUpload.fields([{ name: "category_image" }]),
+  categoryController.addCategory
+);
 
 router
   .route("/category/edit-category/:id")
