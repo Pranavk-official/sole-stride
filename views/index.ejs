@@ -187,11 +187,10 @@
     <% if (banners.length > 1) { %>
     <% let random = Math.floor(Math.random() * banners.length); %>
     <img class="bg-image" src="/uploads/banners/<%- banners[random].image.filename %>" alt="" />
-    <!-- <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" /> -->
     <div class="container">
       <div class="overlay-content text-center text-dark">
         <p class="text-uppercase fw-bold mb-1 letter-spacing-5">
-          <%- banners[1].name %>
+          <%- banners[random].name %>
         </p>
         <h3 class="display-1 fw-bold text-serif mb-4">Summer Sales</h3>
         <a class="btn btn-dark" href="/shop">Shop Now</a>
