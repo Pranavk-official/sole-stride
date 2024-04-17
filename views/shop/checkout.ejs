@@ -567,12 +567,14 @@
         try {
           // should add a loading using sweetalert while the coupon is being applied
           Swal.fire({
+            icon: 'info',
             title: 'Applying Coupon',
             html: 'Please wait while we verify and apply the coupon...',
             allowOutsideClick: false,
-            onBeforeOpen: () => {
+            didOpen: () => {
               Swal.showLoading();
-            }
+            },
+            timer: 4200,
           });
 
           const response = await fetch('/checkout/verify-coupon', {
