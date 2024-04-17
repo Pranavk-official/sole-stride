@@ -181,12 +181,12 @@
 </section>
 
 <!-- Banner Section-->
-<section class="py-6 position-relative light-overlay">
+<section class="py-6 position-relative light-overlay mb-2">
   <% if (banners !== 'undefined' && banners.length > 0) { %>
     <!-- Random Banner -->
     <% if (banners.length > 1) { %>
     <% let random = Math.floor(Math.random() * banners.length); %>
-    <img class="bg-image" src="/uploads/banners/<%- banners[0].image.filename %>" alt="" />
+    <img class="bg-image" src="/uploads/banners/<%- banners[random].image.filename %>" alt="" />
     <!-- <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" /> -->
     <div class="container">
       <div class="overlay-content text-center text-dark">
@@ -244,7 +244,7 @@
           <div class="w-6rem">
             <div class="d-flex flex-column justify-content-center align-items-center">
               <!-- <img class="img-fluid" id="brand-img-<%- element.brand_name %>" data-brand-name="<%- element.brand_name %>" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" /> -->
-              <p class="text-dark display-3 text-uppercase py-1"><%= element.brand_name %></p>
+              <p class="text-dark display-3 fw-bold text-uppercase py-1"><%= element.brand_name %></p>
             </div>
           </div>
         </div>
