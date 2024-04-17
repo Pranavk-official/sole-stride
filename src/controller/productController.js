@@ -85,6 +85,16 @@ module.exports = {
     try {
       console.log(req.body, req.files);
 
+      // check if the product already exists
+      const productExists = await Product.findOne({
+        product_name: req.body.product_name.toLowerCase(),
+      });
+      if (productExists) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Product already exists." });
+      }
+
       const variants = [];
 
       // Iterate over the keys in the request body
@@ -168,8 +178,10 @@ module.exports = {
             PrimaryImage.name
         );
 
+      
+
       const product = new Product({
-        product_name: req.body.product_name,
+        product_name: req.body.product_name.toLowerCase(),
         brand: req.body.brand,
         markdown1: req.body.description,
         markdown2: req.body.details,
