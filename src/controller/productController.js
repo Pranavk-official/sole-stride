@@ -23,7 +23,17 @@ module.exports = {
     let perPage = 9;
     let page = req.query.page || 1;
 
-    const products = await Product.aggregate([{ $sort: { createdAt: -1 } }])
+    const products = await Product.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+    ])
       .skip(perPage * page - perPage)
       .limit(perPage)
       .exec();
@@ -429,7 +439,10 @@ module.exports = {
       if (orders.length > 0) {
         return res
           .status(400)
-          .json({ message: "Cannot delete product as it is used in an order, you can only delete products which are not used in any order" });
+          .json({
+            message:
+              "Cannot delete product as it is used in an order, you can only delete products which are not used in any order",
+          });
       }
 
       // Delete primary image
