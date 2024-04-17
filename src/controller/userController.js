@@ -238,7 +238,7 @@ module.exports = {
       // console.log(req.body);
       const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
-      const user = await User.findById(req.user.id);
+      let user = await User.findById(req.user.id);
       if (user) {
         let validOldPass = bcrypt.compare(oldPassword,user.password)
 
