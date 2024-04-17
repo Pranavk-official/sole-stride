@@ -90,6 +90,7 @@ $('#add-category').validate({
 
                   form.action = "/admin/category/add-category";
                   form.method = "POST";
+                  form.formData = formData;
                   form.submit();
                 //   let res = await fetch(
                 //       "/admin/category/add-category",
