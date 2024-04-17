@@ -51,6 +51,7 @@
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Image</th>
+        <th scope="col">Category</th>
         <th scope="col">Status</th>
         <th scope="col" class="text-center">List/Unlist</th>
         <th scope="col" class="text-center">Actions</th>
@@ -68,6 +69,9 @@
           </td>
           <td class="justify-content-center">
             <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image ? product.primary_image.name : product.secondary_images[0].name %>" width="70rem" alt="">
+          </td>
+          <td>
+            <%= product.category %>
           </td>
           <td >
             <% if (product.isActive) { %>
