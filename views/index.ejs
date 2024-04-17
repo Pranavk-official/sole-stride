@@ -186,7 +186,7 @@
     <!-- Random Banner -->
     <% if (banners.length > 1) { %>
     <% let random = Math.floor(Math.random() * banners.length); %>
-    <img class="bg-image" src="/uploads/banners/<%- banners[random].image.filename %>" alt="" />
+    <img class="bg-image" src="/uploads/banners/<%- banners[0].image.filename %>" alt="" />
     <!-- <img class="bg-image" src="/uploads/banners/<%- banners[1].image.filename %>" alt="" /> -->
     <div class="container">
       <div class="overlay-content text-center text-dark">
@@ -243,8 +243,8 @@
         <div class="item d-flex align-items-center justify-content-center">
           <div class="w-6rem">
             <div class="d-flex flex-column justify-content-center align-items-center">
-              <img class="img-fluid" id="brand-img-<%- element.brand_name %>" data-brand-name="<%- element.brand_name %>" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" />
-              <p class="text-dark text-capitalize py-1"><%= element.brand_name %></p>
+              <!-- <img class="img-fluid" id="brand-img-<%- element.brand_name %>" data-brand-name="<%- element.brand_name %>" src="https://demo.bootstrapious.com/sell/2-0-1/img/brand/brand-1.svg" alt="Brand 1" /> -->
+              <p class="text-dark display-3 text-capitalize py-1"><%= element.brand_name %></p>
             </div>
           </div>
         </div>
