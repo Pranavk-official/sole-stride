@@ -93,6 +93,9 @@ $('#add-category').validate({
                       {
                           method: "POST",
                           body: formData,
+                          headers: {
+                              "Content-Type": "application/json",
+                          },
                       }
                   );
                   console.log(res);
