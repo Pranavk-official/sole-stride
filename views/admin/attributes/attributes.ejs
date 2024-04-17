@@ -405,7 +405,7 @@
             }).then(() => {
               if (responseData.success) {
                 // Optionally, close the modal and refresh the page or update the UI
-                location.assign('/admin/attributes');
+                location.reload();
               }
             });
           } catch (error) {
@@ -451,7 +451,7 @@
               title: 'Success',
               text: data.message.toUpperCase(),
             }).then(() => {
-              location.assign('/admin/attributes')
+              location.reload();
             });
           })
           .catch(error => {
