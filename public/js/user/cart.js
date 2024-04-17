@@ -67,9 +67,9 @@ const increaseCartQuantity = async (productID, variantId) => {
     const cartTotal = document.querySelector(`#cartTotal`);
     const grandTotal = document.querySelector(`#grandTotal`);
 
-    grandTotal.innerHTML = `$${data.totalPrice}`;
-    itemTotal.innerHTML = `$${cart.itemTotal}`;
-    cartTotal.innerHTML = `$${data.totalPrice}`;
+    grandTotal.innerHTML = `₹${data.totalPrice}`;
+    itemTotal.innerHTML = `₹${cart.itemTotal}`;
+    cartTotal.innerHTML = `₹${data.totalPrice}`;
   } else {
     Swal.fire({
       icon: "error",
@@ -111,9 +111,9 @@ const decreaseCartQuantity = async (productId, variantId) => {
     const itemTotal = document.querySelector(
       `#itemTotal-${productId}-${variantId}`
     );
-    cartTotal.innerHTML = `$${data.totalPrice}`;
-    grandTotal.innerHTML = `$${data.totalPrice}`;
-    itemTotal.innerHTML = `$${cart.itemTotal}`;
+    cartTotal.innerHTML = `₹${data.totalPrice}`;
+    grandTotal.innerHTML = `₹${data.totalPrice}`;
+    itemTotal.innerHTML = `₹${cart.itemTotal}`;
   } else {
     Swal.fire({
       icon: "error",
