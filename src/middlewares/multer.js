@@ -4,7 +4,7 @@ const path = require('path')
 
 const storage = multer.diskStorage({
     destination : ( req, file, cb ) => {
-        cb( null, path.join(__dirname,'./public/uploads/images/'))
+        cb( null, path.join(__dirname,'../../public/uploads/images/'))
     },
     filename : ( req, file, cb ) => {
         const uniqueName = Date.now() + '-' + file.originalname
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 const categoryStorage = multer.diskStorage({
     destination : ( req, file, cb ) => {
-        cb( null, path.join(__dirname,'./public/uploads/category-images/'))
+        cb( null, path.join(__dirname,'../../public/uploads/category-images/'))
     },
     filename : ( req, file, cb ) => {
 
@@ -26,7 +26,7 @@ const categoryStorage = multer.diskStorage({
 
 const profileStorage = multer.diskStorage({
     destination : ( req, file, cb ) => {
-        cb( null, path.join(__dirname,'./public/uploads/profile-images/'))
+        cb( null, path.join(__dirname,'../../public/uploads/profile-images/'))
     },
     filename : ( req, file, cb ) => {
         const filename = file.originalname
@@ -37,7 +37,7 @@ const profileStorage = multer.diskStorage({
 
 const productStorage = multer.diskStorage({
     destination : ( req, file, cb ) => {
-        cb( null, path.join(__dirname,'./public/uploads/product-images/'))
+        cb( null, path.join(__dirname,'../../public/uploads/product-images/'))
     },
     filename : ( req, file, cb ) => {
         const uniqueName = Date.now() + '-' + file.originalname
@@ -46,7 +46,7 @@ const productStorage = multer.diskStorage({
 })
 const bannerStorage = multer.diskStorage({
     destination : ( req, file, cb ) => {
-        cb( null, path.join(__dirname,'./public/uploads/banners/'))
+        cb( null, path.join(__dirname,'../../public/uploads/banners/'))
     },
     filename : ( req, file, cb ) => {
         const uniqueName = Date.now() + '-' + file.originalname
