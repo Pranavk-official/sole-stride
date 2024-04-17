@@ -335,6 +335,7 @@ module.exports = {
         order.items.forEach((item) => {
           item.status = status;
         });
+
       } else {
         order = new Order({
           customer_id: user._id,
@@ -417,6 +418,15 @@ module.exports = {
                 .status(500)
                 .json({ error: "Failed to clear user's cart" });
             });
+
+
+            // coupon is used
+            if (order.coupon) {
+              await Coupon.findOneAndUpdate(
+                { _id: userCart.coupon },
+                { $push: { usedBy: { userId: req.user.id } } }
+              );
+            }
 
             return res.status(200).json({
               success: true,
@@ -523,6 +533,14 @@ module.exports = {
             });
 
             await orderCreate.save();
+
+            // coupon is used
+            if (order.coupon) {
+              await Coupon.findOneAndUpdate(
+                { _id: userCart.coupon },
+                { $push: { usedBy: { userId: req.user.id } } }
+              );
+            }
 
 
             return res.status(200).json({
