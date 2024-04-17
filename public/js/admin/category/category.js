@@ -70,11 +70,17 @@ document.getElementById('add-category').addEventListener('submit', async (event)
           type: 'image/png',
         });
         formData.set('category_image', file);
-        form.formData = formData;
-        form.action = '/admin/category/add-category';
-        form.method = 'POST';
-        form.enctype = 'multipart/form-data';
-        form.submit();
+        // form.formData = formData;
+        // form.action = '/admin/category/add-category';
+        // form.method = 'POST';
+        // form.enctype = 'multipart/form-data';
+        // form.submit();
+        const response = await fetch('/admin/category/add-category', {
+          method: 'POST',
+          body: formData,
+        })
+        console.log(response);
+        
       } catch (e) {
         console.log(e);
         Swal.fire('Error!', e.message, 'error');
