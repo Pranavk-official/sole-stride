@@ -39,55 +39,83 @@ $('#category_image').on('change', (e) => {
 });
 
 // add new category
-document.getElementById('add-category').addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const form = event.target;
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'You want to add new Category?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#0061bc',
-    cancelButtonColor: 'rgb(128, 128, 128)',
-    confirmButtonText: 'Yes',
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const formData = new FormData(form);
-        const base64String = document.getElementById('cropped_category').value;
-        const base64Data = base64String.split(',')[1];
-        const binaryData = atob(base64Data);
-        const uint8Array = new Uint8Array(
-          binaryData.length
-        );
-        for (let i = 0; i < binaryData.length; i++) {
-          uint8Array[i] = binaryData.charCodeAt(i);
-        }
-        const blob = new Blob([uint8Array], {
-          type: 'image/png',
-        });
-        const file = new File([blob], 'image.png', {
-          type: 'image/png',
-        });
-        formData.set('category_image', file);
-        // form.formData = formData;
-        // form.action = '/admin/category/add-category';
-        // form.method = 'POST';
-        // form.enctype = 'multipart/form-data';
-        // form.submit();
-        const response = await fetch('/admin/category/add-category', {
-          method: 'POST',
-          body: formData,
-        })
-        console.log(response);
-        
-      } catch (e) {
-        console.log(e);
-        Swal.fire('Error!', e.message, 'error');
-      }
-    }
-  });
-});
+$('#add-category').validate({
+  rules: {
+      category_name: {
+          required: true,
+          maxlength: 20
+      },
+      category_image: {
+          required: true
+      },
+  },
+  submitHandler: function (form) {
+      Swal.fire({
+          title: "Are you sure?",
+          text: "You want to add new Category?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0061bc",
+          cancelButtonColor: "rgb(128, 128, 128)",
+          confirmButtonText: "Yes",
+      }).then(async (result) => {
+          if (result.isConfirmed) {
+              const form = document.getElementById("add-category");
+              try {
+                  const formData = new FormData(form);
+                  console.log(formData)
+                  const base64String = document.getElementById("cropped_category").value;
+                  const base64Data = base64String.split(",")[1];
+                  const binaryData = atob(base64Data);
+                  const uint8Array = new Uint8Array(
+                      binaryData.length
+                  );
+                  for (let i = 0; i < binaryData.length; i++) {
+                      uint8Array[i] = binaryData.charCodeAt(i);
+                  }
+                  const blob = new Blob([uint8Array], {
+                      type: "image/png",
+                  });
+                  const file = new File([blob], "image.png", {
+                      type: "image/png",
+                  });
+                  formData.append("category_image", file);
+                  console.log(formData)
+                  //   log the form data to the console using loop
+                  for (const [key, value] of formData.entries()) {
+                      console.log(`${key}: ${value}`);
+                  }
+                  const body = Object.fromEntries(formData);
+                  console.log(body)
+
+                  let res = await fetch(
+                      "/admin/category/add-category",
+                      {
+                          method: "POST",
+                          body: formData,
+                      }
+                  );
+                  console.log(res);
+                  let data = await res.json();
+                  if (data.success) {
+                      Swal.fire(
+                          "Created!",
+                          "New category has been created successfully.",
+                          "success"
+                      ).then(() =>
+                          location.assign("/admin/category")
+                      );
+                  } else {
+                      throw new Error(data.error);
+                  }
+              } catch (e) {
+                  console.log(e);
+                  Swal.fire("Error!", e.message, "error");
+              }
+          }
+      });
+  }
+})
 
 // edit category
 $('#edit-category').validate({
