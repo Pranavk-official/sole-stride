@@ -337,6 +337,7 @@
 
       // Collect form data
       let data;
+      let modal;
 
       switch (type) {
         case 'size':
@@ -344,6 +345,7 @@
           data = {
             size: parseInt(size)
           };
+          modal = document.getElementById('addSizeModal');
           break;
         case 'color':
           const color = document.getElementById('colorName').value;
@@ -352,6 +354,7 @@
             color,
             colorHex
           };
+          modal = document.getElementById('addColorModal');
           break;
         case 'brand':
           const brand = document.getElementById('brand').value; // Assuming 'brand' is an input element
@@ -359,6 +362,7 @@
           data = {
             brand
           };
+          modal = document.getElementById('addBrandModal');
           break;
         default:
           // Optional: Handle the case where 'type' is not 'size', 'color', or 'brand'
@@ -405,6 +409,7 @@
             }).then(() => {
               if (responseData.success) {
                 // Optionally, close the modal and refresh the page or update the UI
+                modal.hide();
                 location.reload();
               }
             });
