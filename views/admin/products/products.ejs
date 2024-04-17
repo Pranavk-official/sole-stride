@@ -71,7 +71,7 @@
             <img class="img-fluid img-thumbnail" src="/uploads/product-images/<%- product.primary_image ? product.primary_image.name : product.secondary_images[0].name %>" width="70rem" alt="">
           </td>
           <td>
-            <%= product.category %>
+            <%= product.category.name %>
           </td>
           <td >
             <% if (product.isActive) { %>
