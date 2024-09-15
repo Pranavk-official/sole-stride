@@ -1,0 +1,4 @@
+node_modules
+cleanup_k8.sh
+deploy.sh
+temp

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solestride
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: solestride
+  template:
+    metadata:
+      labels:
+        app: solestride
+    spec:
+      containers:
+        - name: solestride
+          image: archlad/solestride:latest
+          ports:
+            - containerPort: 3000
